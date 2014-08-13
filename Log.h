@@ -178,12 +178,12 @@ public:
 #else
 				char output[MAX_OUTPUT_LEN];
 				if(Utf16ToAnsiUseCharArray(buf, m_ansiBuf, MAX_OUTPUT_LEN)){
-					WORD out_len = plog->FormatBuf(m_ansiBuf, output);
-					plog->Output(output, out_len);
+					plog->FormatBuf(m_ansiBuf, output);
+					plog->Output(output);
 				}else{
 					char *ansiOut = Utf16ToAnsi(buf);
-					WORD out_len = plog->FormatBuf(ansiOut, output);
-					plog->Output(output, out_len);
+					plog->FormatBuf(ansiOut, output);
+					plog->Output(output);
 					SAFEDELETEARR(ansiOut);
 				}
 #endif
@@ -229,8 +229,8 @@ public:
 				}			
 #else
 				char output[MAX_OUTPUT_LEN];
-				WORD out_len = plog->FormatBuf(buf, output);
-				plog->Output(output, out_len);
+				plog->FormatBuf(buf, output);
+				plog->Output(output);
 #endif
 			}
 		}
@@ -327,7 +327,7 @@ protected:
 				SAFEDELETEARR(ansiOut);
 			}
 #else
-			fwrite(buf, 1, buf_len, m_pLogFile);
+			fwrite(buf, 1, strlen(buf), m_pLogFile);
 #endif
 			fflush(m_pLogFile);
 		}

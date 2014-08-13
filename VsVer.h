@@ -23,6 +23,6 @@
 #define _stprintf_s(buff, format, arg1, arg2) _stprintf(buff, format, arg1, arg2)
 #define strcat_s(dst, len, src) strcat(dst, src)
 #define _countof sizeof
-
+#define memcpy_s(dst, size, src, len) memcpy(dst, src, len)
 #endif
 /***************************************/
