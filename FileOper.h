@@ -89,7 +89,7 @@ public:
 		}
 		SAFEDELETEARR(cpath);
 #else
-		fopen_s(&p, cpath, "r");
+		fopen_s(&p, path, "r");
 		if(p == NULL)
 			return 0;
 #endif

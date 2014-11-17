@@ -24,5 +24,6 @@
 #define strcat_s(dst, len, src) strcat(dst, src)
 #define _countof sizeof
 #define memcpy_s(dst, size, src, len) memcpy(dst, src, len)
+#define strnlen_s(src, size) strlen(src)
 #endif
 /***************************************/
