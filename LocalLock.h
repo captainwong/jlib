@@ -28,13 +28,27 @@ private:
 class CLock
 {
 public:
-	CLock()
+	/*CLock(PCRITICAL_SECTION cs) : m_cs(cs), bNullInit(FALSE)
 	{
+		if (m_cs == NULL) {
+			bNullInit = TRUE;
+			m_cs = new CRITICAL_SECTION();
+		}
+		InitializeCriticalSection(m_cs);
+	}*/
+	CLock()/* : m_cs(NULL), bNullInit(FALSE)*/
+	{
+		/*if (m_cs == NULL) {
+			m_cs = new CRITICAL_SECTION();
+		}*/
 		InitializeCriticalSection(&m_cs);
 	}
 	~CLock()
 	{
 		DeleteCriticalSection(&m_cs);
+		/*if (bNullInit) {
+			delete m_cs;
+		}*/
 	}
 	void Lock()
 	{
@@ -44,8 +58,11 @@ public:
 	{
 		LeaveCriticalSection(&m_cs);
 	}
+
+	const LPCRITICAL_SECTION GetObject() { return &m_cs; }
 private:
 	CRITICAL_SECTION m_cs;
+	//BOOL bNullInit;
 };
 
 

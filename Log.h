@@ -22,6 +22,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <assert.h>
+
 //#include "dbghlpapi.h"
 
 #ifdef TRACE
@@ -33,7 +35,8 @@
 	CRITICAL_SECTION CLog::m_cs;\
 	CLock CLog::m_lockForSingleton;\
 	char CLog::m_ansiBuf[MAX_OUTPUT_LEN];\
-	wchar_t CLog::m_utf16Buf[MAX_OUTPUT_LEN];
+	wchar_t CLog::m_utf16Buf[MAX_OUTPUT_LEN];\
+	CLog* CLog::m_pInstance = NULL;
 
 /*
 #define TRACEFUNCNAME \
@@ -66,12 +69,13 @@ private:
 	static CLock m_lockForSingleton;
 	static char m_ansiBuf[MAX_OUTPUT_LEN];
 	static wchar_t m_utf16Buf[MAX_OUTPUT_LEN];
+	static CLog* m_pInstance;
 public:
-	static CString GetPrivateLogPath(){
-		static CString strPrivateMapFolder = _T("");
+	static const wchar_t* GetPrivateLogPath(){
+		static wchar_t strPrivateMapFolder[1024] = { 0 };
 		static BOOL b = TRUE;
 		if(b){
-			strPrivateMapFolder.Format(_T("%s\\Log"), GetModuleFilePath());
+			wsprintf(strPrivateMapFolder, _T("%s\\Log"), GetModuleFilePath());
 			b = FALSE;
 		}
 		return strPrivateMapFolder;
@@ -79,9 +83,12 @@ public:
 
 	static CLog* GetInstance(){
 		m_lockForSingleton.Lock();
-		static CLog log;
+		if (CLog::m_pInstance == NULL) {
+			static CLog log;
+			CLog::m_pInstance = &log;
+		}
 		m_lockForSingleton.UnLock();
-		return &log;
+		return CLog::m_pInstance;
 	}
 
 	~CLog(){
@@ -148,8 +155,7 @@ public:
 			}
 		}
 		catch(...){
-			AfxMessageBox(_T("CLog::WriteLog"));
-			ASSERT(0);
+			assert(0);
 		}
 	}
 
@@ -190,8 +196,7 @@ public:
 			}
 		}
 		catch(...){
-			AfxMessageBox(_T("CLog::WriteLog"));
-			ASSERT(0);
+			assert(0);
 		}
 	}
 
@@ -235,8 +240,7 @@ public:
 			}
 		}
 		catch(...){
-			AfxMessageBox(_T("CLog::WriteLog"));
-			ASSERT(0);
+			assert(0);
 		}
 	}
 
@@ -361,14 +365,16 @@ protected:
 		if(pfile == NULL){
 			_tfopen_s(&pfile, g_szFileName, _T("wb"));
 			if(pfile == NULL){
-				AfxMessageBox(_T("Create log file failed."));
+				MessageBox(NULL, _T("Create log file failed."), NULL, 0);
+				ASSERT(0);
 				return NULL;
 			}
 		}else{
 			fclose(pfile);
 			_tfopen_s(&pfile, g_szFileName, _T("ab"));
 			if(pfile == NULL){
-				AfxMessageBox(_T("Open log file failed."));
+				MessageBox(NULL, _T("Open log file failed."), NULL, 0);
+				ASSERT(0);
 				return NULL;
 			}
 		}
@@ -380,11 +386,15 @@ protected:
 	void CreateFileName(){
 		SYSTEMTIME st;
 		GetLocalTime(&st);
-		CString path = GetPrivateLogPath();
+		const wchar_t* path = GetPrivateLogPath();
 		CreateDirectory(path, NULL);
-		wsprintf(g_szFileName, _T("%s\\%04d-%02d-%02d-w%d-%02d-%02d-%02d"),	path, 
-			st.wYear, st.wMonth, st.wDay, (st.wDayOfWeek != 0) ? st.wDayOfWeek : 7, 
-			st.wHour, st.wMinute, st.wSecond);
+		wchar_t exe[1024] = { 0 };
+		GetModuleFileName(NULL, exe, 1023);
+		wsprintf(g_szFileName, _T("%s\\%s-%04d-%02d-%02d-w%d-%02d-%02d-%02d"), 
+				 path, CFileOper::GetFileNameFromPathName(exe),
+				 st.wYear, st.wMonth, st.wDay,
+				 (st.wDayOfWeek != 0) ? st.wDayOfWeek : 7,
+				 st.wHour, st.wMinute, st.wSecond);
 		lstrcat(g_szFileName, _T(".log"));
 	}
 
