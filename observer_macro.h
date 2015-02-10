@@ -14,6 +14,7 @@ protected: \
 	typedef callback _callback; \
 	typedef param_type _param_type; \
 	std::list<_callbackInfo *> _observerList; \
+	CLock _lock4ObserverList; \
 public: \
 	void RegisterObserver(void* udata, callback cb); \
 	void UnRegisterObserver(void* udata); \
@@ -24,19 +25,23 @@ public: \
 #define IMPLEMENT_OBSERVER(class_name) \
 void class_name::RegisterObserver(void* udata, _callback cb) \
 { \
+	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
 		_callbackInfo* observer = *iter; \
 		if (observer->_udata == udata) { \
+			_lock4ObserverList.UnLock(); \
 			return; \
 		} \
 		iter++; \
 	} \
 	_callbackInfo *observer = new _callbackInfo(udata, cb); \
 	_observerList.insert(iter, observer); \
+	_lock4ObserverList.UnLock(); \
 } \
 void class_name::UnRegisterObserver(void* udata) \
 { \
+	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
 		_callbackInfo* observer = *iter; \
@@ -47,14 +52,17 @@ void class_name::UnRegisterObserver(void* udata) \
 		} \
 		iter++; \
 	} \
+	_lock4ObserverList.UnLock(); \
 } \
 void class_name::NotifyObservers(_param_type param) \
 { \
+	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
 		_callbackInfo * observer = *iter++; \
 		observer->_on_result(observer->_udata, param); \
 	} \
+	_lock4ObserverList.UnLock(); \
 }
 
 
