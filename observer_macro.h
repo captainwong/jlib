@@ -2,17 +2,16 @@
 // place this macro in your class's header file, in your class's definition
 #define DECLARE_OBSERVER(callback, param_type) \
 protected: \
+	typedef callback _callback; \
+	typedef param_type _param_type; \
 	typedef struct callback##Info { \
 		DECLARE_UNCOPYABLE(callback##Info) \
 	public: \
 		callback##Info() : _udata(NULL), _on_result(NULL) {} \
-		callback##Info(void* udata, callback on_result) : _udata(udata), _on_result(on_result) {} \
+		callback##Info(void* udata, _callback on_result) : _udata(udata), _on_result(on_result) {} \
 		void* _udata; \
-		callback _on_result; \
-	}callback##Info; \
-	typedef callback##Info _callbackInfo; \
-	typedef callback _callback; \
-	typedef param_type _param_type; \
+		_callback _on_result; \
+	}_callbackInfo; \
 	std::list<_callbackInfo *> _observerList; \
 	CLock _lock4ObserverList; \
 public: \
