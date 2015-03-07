@@ -26,10 +26,10 @@
 
 //#include "dbghlpapi.h"
 
-#ifdef TRACE
-#undef TRACE
-#define TRACE CLog::WriteLog
-#endif
+//#ifdef TRACE
+//#undef TRACE
+//#define TRACE CLog::WriteLog
+//#endif
 
 #define IMPLEMENT_CLASS_LOG_STATIC_MEMBER \
 	CRITICAL_SECTION CLog::m_cs;\
