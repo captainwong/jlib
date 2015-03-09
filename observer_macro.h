@@ -3,7 +3,7 @@
 #define DECLARE_OBSERVER(callback, param_type) \
 protected: \
 	typedef callback _callback; \
-	typedef param_type _param_type; \
+	typedef const param_type _param_type; \
 	typedef struct callback##Info { \
 		DECLARE_UNCOPYABLE(callback##Info) \
 	public: \
@@ -24,22 +24,15 @@ public: \
 #define IMPLEMENT_OBSERVER(class_name) \
 void class_name::RegisterObserver(void* udata, _callback cb) \
 { \
+	LOG_FUNCTION_AUTO; \
 	_lock4ObserverList.Lock(); \
-	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
-	while (iter != _observerList.end()) { \
-		_callbackInfo* observer = *iter; \
-		if (observer->_udata == udata) { \
-			_lock4ObserverList.UnLock(); \
-			return; \
-		} \
-		iter++; \
-	} \
 	_callbackInfo *observer = new _callbackInfo(udata, cb); \
-	_observerList.insert(iter, observer); \
+	_observerList.push_back(observer); \
 	_lock4ObserverList.UnLock(); \
 } \
 void class_name::UnRegisterObserver(void* udata) \
 { \
+	LOG_FUNCTION_AUTO; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
@@ -55,6 +48,7 @@ void class_name::UnRegisterObserver(void* udata) \
 } \
 void class_name::NotifyObservers(_param_type param) \
 { \
+	LOG_FUNCTION_AUTO; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
