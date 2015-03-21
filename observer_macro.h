@@ -24,7 +24,7 @@ public: \
 #define IMPLEMENT_OBSERVER(class_name) \
 void class_name::RegisterObserver(void* udata, _callback cb) \
 { \
-	LOG_FUNCTION_AUTO; \
+	AUTO_LOG_FUNCTION; \
 	_lock4ObserverList.Lock(); \
 	_callbackInfo *observer = new _callbackInfo(udata, cb); \
 	_observerList.push_back(observer); \
@@ -32,7 +32,7 @@ void class_name::RegisterObserver(void* udata, _callback cb) \
 } \
 void class_name::UnRegisterObserver(void* udata) \
 { \
-	LOG_FUNCTION_AUTO; \
+	AUTO_LOG_FUNCTION; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
@@ -48,7 +48,7 @@ void class_name::UnRegisterObserver(void* udata) \
 } \
 void class_name::NotifyObservers(_param_type param) \
 { \
-	LOG_FUNCTION_AUTO; \
+	AUTO_LOG_FUNCTION; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
@@ -62,6 +62,7 @@ void class_name::NotifyObservers(_param_type param) \
 // place this macro in your class's destruct function.
 #define DESTROY_OBSERVER \
 { \
+	AUTO_LOG_FUNCTION; \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
 		_callbackInfo * observer = *iter++; \

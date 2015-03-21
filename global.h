@@ -19,7 +19,7 @@ public:
 };
 
 #define LOG_FUNCTION(func_name) LogFunction _log_function_object(func_name);
-#define LOG_FUNCTION_AUTO LOG_FUNCTION(__FUNCTION__)
+#define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__)
 
 #include "C:/Global/MyWSAError.h"
 #include "c:/Global/observer_macro.h"
@@ -30,7 +30,6 @@ public:
 private:\
 	classname(const classname&) {}\
 	classname& operator=(const classname&) {}
-
 
 // singleton
 #define DECLARE_SINGLETON(class_name) \
@@ -64,11 +63,11 @@ public: \
 		val = param;\
 	}
 
-#define DEALARE_GETTER_SETTER(type, val) \
+#define DECLARE_GETTER_SETTER(type, val) \
 	DECLARE_GETTER(type, val) \
 	DECLARE_SETTER(type, val)
 
-#define DEALARE_GETTER_SETTER_INT(val) \
+#define DECLARE_GETTER_SETTER_INT(val) \
 	DECLARE_GETTER(int, val) \
 	DECLARE_SETTER(int, val)
 
