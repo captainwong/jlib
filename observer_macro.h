@@ -48,7 +48,6 @@ void class_name::UnRegisterObserver(void* udata) \
 } \
 void class_name::NotifyObservers(_param_type param) \
 { \
-	AUTO_LOG_FUNCTION; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
@@ -62,7 +61,6 @@ void class_name::NotifyObservers(_param_type param) \
 // place this macro in your class's destruct function.
 #define DESTROY_OBSERVER \
 { \
-	AUTO_LOG_FUNCTION; \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
 		_callbackInfo * observer = *iter++; \

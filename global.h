@@ -32,6 +32,14 @@ private:\
 	classname& operator=(const classname&) {}
 
 // singleton
+//class CSingletonClassReleaseHelper {
+//public:
+//	CSingletonClassReleaseHelper() {}
+//	~CSingletonClassReleaseHelper() {}
+//private:
+//
+//};
+
 #define DECLARE_SINGLETON(class_name) \
 private: \
 	class_name(); \
@@ -41,12 +49,15 @@ public: \
 	static class_name* GetInstance() { \
 		m_lock4Instance.Lock(); \
 		if (m_pInstance == NULL){ \
-			static class_name obj; \
-			m_pInstance = &obj; \
+			m_pInstance = new class_name(); \
 		} \
 		m_lock4Instance.UnLock(); \
 		return m_pInstance; \
+	} \
+	static void ReleaseObject() { \
+		if (m_pInstance) { delete m_pInstance; m_pInstance = NULL; } \
 	}
+
 
 #define IMPLEMENT_SINGLETON(class_name) \
 	class_name* class_name::m_pInstance = NULL; \
