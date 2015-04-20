@@ -59,6 +59,11 @@ public:
 		LeaveCriticalSection(&m_cs);
 	}
 
+	BOOL TryLock()
+	{
+		return ::TryEnterCriticalSection(&m_cs);
+	}
+
 	const LPCRITICAL_SECTION GetObject() { return &m_cs; }
 private:
 	CRITICAL_SECTION m_cs;

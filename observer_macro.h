@@ -48,6 +48,7 @@ void class_name::UnRegisterObserver(void* udata) \
 } \
 void class_name::NotifyObservers(_param_type param) \
 { \
+	AUTO_LOG_FUNCTION; \
 	_lock4ObserverList.Lock(); \
 	std::list<_callbackInfo *>::iterator iter = _observerList.begin(); \
 	while (iter != _observerList.end()) { \
