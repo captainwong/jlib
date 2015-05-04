@@ -9,6 +9,7 @@
 #define LOG CLog::WriteLog
 #define LOGA CLog::WriteLogA
 #define LOGW CLog::WriteLogW
+#define LOGB(b, l) CLog::Dump(b, l)
 
 class LogFunction {
 private:
