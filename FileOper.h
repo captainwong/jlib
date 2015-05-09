@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include <stdio.h>
+#include <shellapi.h>
 #include <Shlobj.h>
 
 

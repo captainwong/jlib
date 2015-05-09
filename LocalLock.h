@@ -64,7 +64,7 @@ public:
 		return ::TryEnterCriticalSection(&m_cs);
 	}
 
-	const LPCRITICAL_SECTION GetObject() { return &m_cs; }
+	LPCRITICAL_SECTION GetLockObject() { return &m_cs; }
 private:
 	CRITICAL_SECTION m_cs;
 	//BOOL bNullInit;

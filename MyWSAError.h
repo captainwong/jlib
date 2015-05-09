@@ -72,8 +72,10 @@ inline wchar_t* FormatWSAError(int errornumber)
 		case WSAETIMEDOUT:
 			return L"The connection has been dropped, because of a network failure or because the system on the other end went down without notice. ";
 			break;
-		default:
-			return L"Unknown socket error.";
-			break;
+		default:{
+			static wchar_t buf[1024] = { 0 };
+			swprintf_s(buf, L"Unknown socket error %d.", errornumber);
+			return buf;
+		}break;
 	}
 }
