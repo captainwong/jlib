@@ -233,6 +233,15 @@ __forceinline wchar_t* Utf8ToUtf16(PCSTR ansiSrc)
 	return pWide;
 }
 
+__inline const char* Utf16ToUtf8(const wchar_t* utf16, int& out_len)
+{
+	out_len = ::WideCharToMultiByte(CP_UTF8, 0, utf16, -1, NULL, 0, 0, 0);
+	char *p8 = new  char[out_len + 1];
+	memset(p8, 0, (out_len + 1) * sizeof(wchar_t));
+	::WideCharToMultiByte(CP_UTF8, 0, utf16, -1, p8, out_len, 0, 0);
+	return p8;
+}
+
 /*
 __forceinline CString GetFileVersion()
 {   

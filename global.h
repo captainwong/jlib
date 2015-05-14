@@ -1,7 +1,7 @@
 #pragma once
 
 
-
+#include "C:/Global/utf8.h"
 #include "C:/Global/LocalLock.h"
 #include "C:/Global/mtverify.h"
 #include "C:/Global/FileOper.h"
@@ -23,7 +23,7 @@ public:
 #define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__)
 
 #include "C:/Global/MyWSAError.h"
-#include "c:/Global/observer_macro.h"
+#include "C:/Global/observer_macro.h"
 
 #define NAMESPACE_END };
 
@@ -32,14 +32,6 @@ private:\
 	classname(const classname&) {}\
 	classname& operator=(const classname&) {}
 
-// singleton
-//class CSingletonClassReleaseHelper {
-//public:
-//	CSingletonClassReleaseHelper() {}
-//	~CSingletonClassReleaseHelper() {}
-//private:
-//
-//};
 
 #define DECLARE_SINGLETON(class_name) \
 private: \
