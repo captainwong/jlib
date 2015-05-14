@@ -1,11 +1,11 @@
 #pragma once
 
 
-#include "C:/Global/utf8.h"
-#include "C:/Global/LocalLock.h"
-#include "C:/Global/mtverify.h"
-#include "C:/Global/FileOper.h"
-#include "C:/Global/Log.h"
+#include "utf8.h"
+#include "LocalLock.h"
+#include "mtverify.h"
+#include "FileOper.h"
+#include "Log.h"
 #define LOG CLog::WriteLog
 #define LOGA CLog::WriteLogA
 #define LOGW CLog::WriteLogW
@@ -22,8 +22,8 @@ public:
 #define LOG_FUNCTION(func_name) LogFunction _log_function_object(func_name);
 #define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__)
 
-#include "C:/Global/MyWSAError.h"
-#include "C:/Global/observer_macro.h"
+#include "MyWSAError.h"
+#include "observer_macro.h"
 
 #define NAMESPACE_END };
 
