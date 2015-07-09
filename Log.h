@@ -147,7 +147,7 @@ public:
 				swprintf_s(c, L"len %d\n", buff_len);
 				wcscat_s(output, output_len, c);
 				for (size_t i = 0; i < buff_len; i++) {
-					swprintf_s(c, L"%02X ", buff[i]);
+					swprintf_s(c, L"%02X ", static_cast<unsigned char>(buff[i]));
 					wcscat_s(output, output_len, c);
 					if (i > 0 && (i + 1) % 16 == 0) {
 						wcscat_s(output, output_len, L"\n");

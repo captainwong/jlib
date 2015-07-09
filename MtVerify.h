@@ -242,6 +242,13 @@ __inline const char* Utf16ToUtf8(const wchar_t* utf16, int& out_len)
 	return p8;
 }
 
+
+__inline const char* Utf16ToGbk(const wchar_t* utf16)
+{
+	//WideCharToMultiByte(CP_GBK)
+}
+
+
 /*
 __forceinline CString GetFileVersion()
 {   
