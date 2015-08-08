@@ -36,7 +36,8 @@
 	CLock CLog::m_lockForSingleton;\
 	char CLog::m_ansiBuf[MAX_OUTPUT_LEN];\
 	wchar_t CLog::m_utf16Buf[MAX_OUTPUT_LEN];\
-	CLog* CLog::m_pInstance = NULL;
+	CLog* CLog::m_pInstance = NULL;\
+	TCHAR CLog::g_szFileName[1024] = { 0 };
 
 /*
 #define TRACEFUNCNAME \
@@ -46,9 +47,9 @@
 	OutputDebugString(str);\
 	UNINIT_SYM();\
 */
-#define MAX_OUTPUT_LEN 4096
-#define MAX_FILE_LEN 1024 * 1024 * 10
-static TCHAR g_szFileName[1024] = {0};
+#define MAX_OUTPUT_LEN (1024 * 64)
+#define MAX_FILE_LEN (1024 * 1024 * 10)
+//static TCHAR g_szFileName[1024] = {0};
 
 class CLog
 {
@@ -65,6 +66,7 @@ private:
 	BOOL m_bRunning;
 	FILE *m_pLogFile;
 	PROCESS_INFORMATION pi;
+	static TCHAR g_szFileName[1024];
 	static CRITICAL_SECTION m_cs;
 	static CLock m_lockForSingleton;
 	static char m_ansiBuf[MAX_OUTPUT_LEN];
@@ -323,7 +325,8 @@ protected:
 		}
 	}
 
-	WORD FormatBuf(const TCHAR *oldBuf, TCHAR *newBuf, WORD max_new_buff_len = MAX_OUTPUT_LEN){
+	DWORD FormatBuf(const TCHAR *oldBuf, TCHAR *newBuf, DWORD max_new_buff_len = MAX_OUTPUT_LEN)
+	{
 		static SYSTEMTIME st;
 		static TCHAR sztime[128];
 		memset(sztime, 0, sizeof sztime);
@@ -332,10 +335,10 @@ protected:
 			st.wYear, st.wMonth, st.wDay, (st.wDayOfWeek != 0) ? st.wDayOfWeek : 7, 
 			st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 		lstrcpy(newBuf, sztime);
-		if(lstrlen(sztime) + lstrlen(oldBuf) < max_new_buff_len){
+		if(static_cast<DWORD>(lstrlen(sztime) + lstrlen(oldBuf)) < max_new_buff_len){
 			lstrcat(newBuf, oldBuf);
 		}
-		return static_cast<unsigned short>(lstrlen(newBuf));
+		return static_cast<DWORD>(lstrlen(newBuf));
 	}
 
 	void OutputFile(const TCHAR *buf){
