@@ -63,6 +63,11 @@ public: \
 	}
 
 #define DECLARE_SETTER(type, val) \
+	void set##val(const type& param) { \
+		val = param;\
+	}
+
+#define DECLARE_SETTER_NONE_CONST(type, val) \
 	void set##val(type param) { \
 		val = param;\
 	}
