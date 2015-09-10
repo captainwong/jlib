@@ -28,9 +28,8 @@ public:
 #define NAMESPACE_END };
 
 #define DECLARE_UNCOPYABLE(classname) \
-private:\
-	classname(const classname&) {}\
-	classname& operator=(const classname&) {}
+	classname(const classname&) = delete; \
+	classname& operator=(const classname&) = delete;
 
 
 #define DECLARE_SINGLETON(class_name) \
