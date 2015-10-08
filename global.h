@@ -10,6 +10,7 @@
 #define LOGA CLog::WriteLogA
 #define LOGW CLog::WriteLogW
 #define LOGB(b, l) CLog::Dump(b, l)
+#define LOGASC(b, l) CLog::DumpAsc(b, l)
 
 class LogFunction {
 private:

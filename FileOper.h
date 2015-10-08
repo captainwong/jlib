@@ -101,7 +101,8 @@ public:
 	}
 
 	// 获取路径中最右的文件夹名称，如D:\A\B,返回B
-	static CString GetCurFolderFromFullPath(CString strpath){
+	static CString GetCurFolderFromFullPath(const CString& strpath)
+	{
 		int pos = -1;
 		pos = strpath.ReverseFind(_T('\\'));
 		if(pos != -1)
@@ -109,8 +110,19 @@ public:
 		return _T("");
 	}
 
+	// 获取文件路径中的文件夹路径，如D:/A/B.TXT, 返回D:/A
+	static CString GetFolderPathFromFilePath(const CString& strpath)
+	{
+		int pos = -1;
+		pos = strpath.ReverseFind(_T('\\'));
+		if (pos != -1)
+			return strpath.Left(pos);
+		return _T("");
+	}
+
 	// 复制文件夹到目的，并弹出文件夹复制对话框
-	static BOOL CopyFolder(CString dstFolder, CString srcFolder, HWND hWnd){
+	static BOOL CopyFolder(const CString& dstFolder, const CString& srcFolder, HWND hWnd)
+	{
 		TCHAR szDst[MAX_PATH], szSrc[MAX_PATH];
 		ZeroMemory(szDst, MAX_PATH);
 		ZeroMemory(szSrc, MAX_PATH);

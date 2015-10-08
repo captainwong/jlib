@@ -15,7 +15,7 @@ protected: \
 	std::list<_callbackInfo *> _observerList; \
 	CLock _lock4ObserverList; \
 public: \
-	void RegisterObserver(void* udata, callback cb); \
+	void RegisterObserver(void* udata, _callback cb); \
 	void UnRegisterObserver(void* udata); \
 	void NotifyObservers(_param_type param);
 	

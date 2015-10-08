@@ -164,6 +164,36 @@ public:
 		}
 	}
 
+	static void DumpAsc(const char* buff, size_t buff_len)
+	{
+		try {
+			CLog* plog = CLog::GetInstance();
+			if (plog == NULL)
+				return;
+			CLocalLock lock(&m_cs);
+			if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
+				size_t output_len = buff_len * 6 + 64;
+				wchar_t* output = new wchar_t[output_len];
+				output[0] = 0;
+				wchar_t c[64] = { 0 };
+				swprintf_s(c, L"len %d\n", buff_len);
+				wcscat_s(output, output_len, c);
+				for (size_t i = 0; i < buff_len; i++) {
+					swprintf_s(c, L"%C ", static_cast<unsigned char>(buff[i]));
+					wcscat_s(output, output_len, c);
+					if (i > 0 && (i + 1) % 16 == 0) {
+						wcscat_s(output, output_len, L"\n");
+					}
+				}
+				wcscat_s(output, output_len, L"\n");
+				plog->Output(output);
+				delete[] output;
+			}
+		} catch (...) {
+			assert(0);
+		}
+	}
+
 	static void WriteLog(const TCHAR* format, ...)	{
 		try{
 			CLog* plog = CLog::GetInstance();
