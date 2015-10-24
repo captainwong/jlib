@@ -1,4 +1,6 @@
+#pragma once
 
+namespace jlib {
 // place this macro in your class's header file, in your class's definition
 #define DECLARE_OBSERVER(callback, param_type) \
 protected: \
@@ -70,7 +72,7 @@ void class_name::NotifyObservers(_param_type param) \
 	_observerList.clear(); \
 }
 
-
+};
 
 	
 	

@@ -6,25 +6,26 @@
 #include "mtverify.h"
 #include "FileOper.h"
 #include "Log.h"
-#define LOG CLog::WriteLog
-#define LOGA CLog::WriteLogA
-#define LOGW CLog::WriteLogW
-#define LOGB(b, l) CLog::Dump(b, l)
-#define LOGASC(b, l) CLog::DumpAsc(b, l)
+#include "MyWSAError.h"
+#include "observer_macro.h"
+
+namespace jlib {
+#define JLOG CLog::WriteLog
+#define JLOGA CLog::WriteLogA
+#define JLOGW CLog::WriteLogW
+#define JLOGB(b, l) CLog::Dump(b, l)
+#define JLOGASC(b, l) CLog::DumpAsc(b, l)
 
 class LogFunction {
 private:
 	const char* _func_name;
 public:
-	LogFunction(const char* func_name) : _func_name(func_name) { LOGA("%s in\n", _func_name); }
-	~LogFunction() { LOGA("%s out\n", _func_name); }
+	LogFunction(const char* func_name) : _func_name(func_name) { JLOGA("%s in\n", _func_name); }
+	~LogFunction() { JLOGA("%s out\n", _func_name); }
 };
 
 #define LOG_FUNCTION(func_name) LogFunction _log_function_object(func_name);
 #define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__)
-
-#include "MyWSAError.h"
-#include "observer_macro.h"
 
 #define NAMESPACE_END };
 
@@ -105,3 +106,5 @@ public: \
 
 
 #define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = 0; }
+
+};
