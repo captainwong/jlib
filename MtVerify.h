@@ -1,3 +1,4 @@
+#pragma once
 #pragma comment(lib, "USER32" )
 #include <crtdbg.h>
 #include <tchar.h>
@@ -227,6 +228,7 @@ __forceinline wchar_t* Utf8ToUtf16(PCSTR ansiSrc)
 	::MultiByteToWideChar(CP_UTF8, 0, ansiSrc, -1, (LPWSTR)pWide, iUnicodeLen);
 	return pWide;
 }
+
 
 __inline const char* Utf16ToUtf8(const wchar_t* utf16, int& out_len)
 {

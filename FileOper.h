@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <shellapi.h>
 #include <Shlobj.h>
-
+#include "MtVerify.h"
 
 static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lParam,LPARAM lpData)
 {
