@@ -57,6 +57,7 @@ namespace jlib
 	class CLog
 	{
 	private:
+#pragma region private members
 		double exe_time;
 		LARGE_INTEGER freq;
 		LARGE_INTEGER start_t, stop_t;
@@ -75,17 +76,12 @@ namespace jlib
 		static char m_ansiBuf[MAX_OUTPUT_LEN];
 		static wchar_t m_utf16Buf[MAX_OUTPUT_LEN];
 		static CLog* m_pInstance;
+#pragma endregion
+
 	public:
-		static const wchar_t* GetPrivateLogPath()
-		{
-			static wchar_t strPrivateMapFolder[1024] = { 0 };
-			static BOOL b = TRUE;
-			if (b) {
-				wsprintf(strPrivateMapFolder, _T("%s\\Log"), GetModuleFilePath());
-				b = FALSE;
-			}
-			return strPrivateMapFolder;
-		}
+#pragma region public functions
+
+		static const wchar_t* GetLogFilePath() { return g_szFileName; }
 
 		static CLog* GetInstance()
 		{
@@ -313,7 +309,10 @@ namespace jlib
 			}
 		}
 
+#pragma endregion
+
 	protected:
+#pragma region protected functions
 		CLog() : m_pLogFile(NULL), m_bOutputLogFile(FALSE), m_bOutputDbgView(FALSE),
 			m_bOutputConsole(FALSE), m_bConsoleOpened(FALSE), m_bDbgviewOpened(FALSE),
 			m_bLogFileOpened(FALSE), m_bRunning(TRUE)
@@ -346,6 +345,17 @@ namespace jlib
 			double ms = exe_time - (int)(exe_time)+((int)(exe_time) % 1000);
 			wsprintf(szTime, _T("%dday%02d:%02d:%02ds.%3.6fms"), day, hour, min, sec, ms);
 			return szTime;
+		}
+
+		static const wchar_t* GetPrivateLogPath()
+		{
+			static wchar_t strPrivateMapFolder[1024] = { 0 };
+			static BOOL b = TRUE;
+			if (b) {
+				wsprintf(strPrivateMapFolder, _T("%s\\Log"), GetModuleFilePath());
+				b = FALSE;
+			}
+			return strPrivateMapFolder;
 		}
 
 		void Output(const TCHAR *out)
@@ -527,6 +537,7 @@ namespace jlib
 		}
 	};
 
+#pragma endregion
 };
 //CRITICAL_SECTION CLog::m_cs;
 //int CLog::m_nRef = 0;
