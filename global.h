@@ -1,8 +1,9 @@
 #pragma once
 
 #include <chrono>
+#include <mutex>
 #include "utf8.h"
-#include "LocalLock.h"
+//#include "LocalLock.h"
 #include "mtverify.h"
 #include "FileOper.h"
 #include "Log.h"
@@ -45,14 +46,13 @@ public:
 private: \
 	class_name(); \
 	static class_name* m_pInstance; \
-	static CLock m_lock4Instance; \
+	static std::mutex m_lock4Instance; \
 public: \
 	static class_name* GetInstance() { \
-		m_lock4Instance.Lock(); \
+		std::lock_guard<std::mutex> lock(m_lock4Instance); \
 		if (m_pInstance == NULL){ \
 			m_pInstance = new class_name(); \
 		} \
-		m_lock4Instance.UnLock(); \
 		return m_pInstance; \
 	} \
 	static void ReleaseObject() { \
@@ -62,7 +62,7 @@ public: \
 
 #define IMPLEMENT_SINGLETON(class_name) \
 	class_name* class_name::m_pInstance = NULL; \
-	CLock class_name::m_lock4Instance;
+	std::mutex class_name::m_lock4Instance;
 
 // getter & setter
 #define DECLARE_GETTER(type, val) \
@@ -108,8 +108,8 @@ public: \
 	}
 
 #define DECLARE_GETTER_SETTER_STRING(val) \
-	DECLARE_GETTER_STRING(val); \
-	DECLARE_SETTER_STRING(val);
+	DECLARE_GETTER(CString, val); \
+	DECLARE_SETTER(CString, val);
 
 
 #define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = 0; }

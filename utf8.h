@@ -28,7 +28,23 @@ DEALINGS IN THE SOFTWARE.
 #ifndef UTF8_FOR_CPP_2675DCD0_9480_4c0c_B92A_CC14C027B731
 #define UTF8_FOR_CPP_2675DCD0_9480_4c0c_B92A_CC14C027B731
 
+#include <string>
 #include "utf8/checked.h"
 #include "utf8/unchecked.h"
+
+
+namespace utf8 {
+	inline std::string w2a(const std::wstring& w) {
+		std::string a;
+		utf8::utf16to8(w.begin(), w.end(), std::back_inserter(a));
+		return a;
+	}
+
+	inline std::wstring a2w(const std::string& a) {
+		std::wstring w;
+		utf8::utf8to16(a.begin(), a.end(), std::back_inserter(w));
+		return w;
+	}
+}
 
 #endif // header guard

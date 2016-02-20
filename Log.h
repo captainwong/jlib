@@ -23,6 +23,7 @@
 #endif // _MSC_VER > 1000
 
 #include <assert.h>
+#include <mutex>
 
 //#include "dbghlpapi.h"
 
@@ -35,8 +36,8 @@ namespace jlib
 {
 
 #define IMPLEMENT_CLASS_LOG_STATIC_MEMBER \
-	CRITICAL_SECTION CLog::m_cs;\
-	CLock CLog::m_lockForSingleton;\
+	std::mutex CLog::m_cs;\
+	std::mutex CLog::m_lockForSingleton;\
 	char CLog::m_ansiBuf[MAX_OUTPUT_LEN];\
 	wchar_t CLog::m_utf16Buf[MAX_OUTPUT_LEN];\
 	CLog* CLog::m_pInstance = NULL;\
@@ -71,8 +72,8 @@ namespace jlib
 		FILE *m_pLogFile;
 		PROCESS_INFORMATION pi;
 		static TCHAR g_szFileName[1024];
-		static CRITICAL_SECTION m_cs;
-		static CLock m_lockForSingleton;
+		static std::mutex m_cs;
+		static std::mutex m_lockForSingleton;
 		static char m_ansiBuf[MAX_OUTPUT_LEN];
 		static wchar_t m_utf16Buf[MAX_OUTPUT_LEN];
 		static CLog* m_pInstance;
@@ -85,12 +86,11 @@ namespace jlib
 
 		static CLog* GetInstance()
 		{
-			m_lockForSingleton.Lock();
+			std::lock_guard<std::mutex> lock(m_lockForSingleton);
 			if (CLog::m_pInstance == NULL) {
 				static CLog log;
 				CLog::m_pInstance = &log;
 			}
-			m_lockForSingleton.UnLock();
 			return CLog::m_pInstance;
 		}
 
@@ -104,7 +104,7 @@ namespace jlib
 				OpenDbgview(FALSE);
 			if (m_bLogFileOpened)
 				CloseLogFile();
-			DeleteCriticalSection(&m_cs);
+			//DeleteCriticalSection(&m_cs);
 #ifdef _DEBUG
 			TCHAR buf[1024], out[1024];
 			wsprintf(buf, _T("%s\n"), _T("CLog::~CLog() destruction"));
@@ -146,7 +146,7 @@ namespace jlib
 				CLog* plog = CLog::GetInstance();
 				if (plog == NULL)
 					return;
-				CLocalLock lock(&m_cs);
+				std::lock_guard<std::mutex> lock(m_cs);
 				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
 					size_t output_len = buff_len * 6 + 64;
 					wchar_t* output = new wchar_t[output_len];
@@ -176,7 +176,7 @@ namespace jlib
 				CLog* plog = CLog::GetInstance();
 				if (plog == NULL)
 					return;
-				CLocalLock lock(&m_cs);
+				std::lock_guard<std::mutex> lock(m_cs);
 				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
 					size_t output_len = buff_len * 6 + 64;
 					wchar_t* output = new wchar_t[output_len];
@@ -206,7 +206,7 @@ namespace jlib
 				CLog* plog = CLog::GetInstance();
 				if (plog == NULL)
 					return;
-				CLocalLock lock(&m_cs);
+				std::lock_guard<std::mutex> lock(m_cs);
 				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
 					static TCHAR buf[MAX_OUTPUT_LEN], output[MAX_OUTPUT_LEN], *p;
 					p = buf;
@@ -233,7 +233,7 @@ namespace jlib
 				CLog* plog = CLog::GetInstance();
 				if (plog == NULL)
 					return;
-				CLocalLock lock(&m_cs);
+				std::lock_guard<std::mutex> lock(m_cs);
 				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
 					static wchar_t buf[MAX_OUTPUT_LEN], *p;
 					p = buf;
@@ -274,7 +274,7 @@ namespace jlib
 				CLog* plog = CLog::GetInstance();
 				if (plog == NULL)
 					return;
-				CLocalLock lock(&m_cs);
+				std::lock_guard<std::mutex> lock(m_cs);
 				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
 					static char buf[MAX_OUTPUT_LEN], *p;
 					p = buf;
@@ -325,7 +325,7 @@ namespace jlib
 			wsprintf(out, _T("CLog construction addr: %p\n"), this);
 			OutputDebugString(out);
 			memset(&pi, 0, sizeof(pi));
-			InitializeCriticalSection(&m_cs);
+			//InitializeCriticalSection(&m_cs);
 		}
 
 		LPCTSTR GetAppRunTime()
