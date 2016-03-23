@@ -35,6 +35,20 @@ public:
 #define LOG_FUNCTION(func_name) LogFunction _log_function_object(func_name);
 #define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__)
 
+class range_log
+{
+private:
+	std::wstring _msg;
+	std::chrono::system_clock::time_point _begin;
+public:
+	range_log(const std::wstring& msg) : _msg(msg) { JLOG((_msg + L" in").c_str()); _begin = std::chrono::system_clock::now(); }
+	~range_log() {
+		auto diff = std::chrono::system_clock::now() - _begin;
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+		JLOG(L"%s out, duration: %d(ms)\n", _msg.c_str(), msec.count());
+	}
+};
+
 #define NAMESPACE_END };
 
 #define DECLARE_UNCOPYABLE(classname) \
