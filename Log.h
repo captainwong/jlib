@@ -200,7 +200,7 @@ namespace jlib
 			}
 		}
 
-		static void WriteLog(const TCHAR* format, ...)
+		/*static void WriteLog(const TCHAR* format, ...)
 		{
 			try {
 				CLog* plog = CLog::GetInstance();
@@ -212,7 +212,7 @@ namespace jlib
 					p = buf;
 					va_list args;
 					va_start(args, format);
-					p += _vsntprintf_s(p, sizeof(buf) - 1, sizeof(buf) - 1, format, args);
+					p += _vsntprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
 					va_end(args);
 					while ((p > buf) && _istspace(*(p - 1)))
 						*--p = _T('\0');
@@ -225,7 +225,7 @@ namespace jlib
 			} catch (...) {
 				assert(0);
 			}
-		}
+		}*/
 
 		static void WriteLogW(const wchar_t* format, ...)
 		{
@@ -239,7 +239,7 @@ namespace jlib
 					p = buf;
 					va_list args;
 					va_start(args, format);
-					p += _vsnwprintf_s(p, sizeof(buf) - 1, sizeof(buf) - 1, format, args);
+					p += _vsnwprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
 					va_end(args);
 					while ((p > buf) && iswspace(*(p - 1)))
 						*--p = '\0';
@@ -280,7 +280,7 @@ namespace jlib
 					p = buf;
 					va_list args;
 					va_start(args, format);
-					p += _vsnprintf_s(p, sizeof(buf) - 1, sizeof(buf) - 1, format, args);
+					p += _vsnprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
 					va_end(args);
 					while ((p > buf) && _istspace(*(p - 1)))
 						*--p = '\0';

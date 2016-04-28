@@ -11,7 +11,7 @@
 #include "observer_macro.h"
 
 namespace jlib {
-#define JLOG CLog::WriteLog
+#define JLOG CLog::WriteLogW
 #define JLOGA CLog::WriteLogA
 #define JLOGW CLog::WriteLogW
 #define JLOGB(b, l) CLog::Dump(b, l)
