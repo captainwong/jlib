@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <chrono>
 #include <mutex>
 #include "utf8.h"
@@ -127,5 +128,14 @@ public: \
 
 
 #define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = 0; }
+
+
+inline std::wstring get_exe_path()
+{
+	wchar_t path[1024] = { 0 };
+	GetModuleFileName(nullptr, path, 1024);
+	std::wstring::size_type pos = std::wstring(path).find_last_of(L"\\/");
+	return std::wstring(path).substr(0, pos);
+}
 
 };
