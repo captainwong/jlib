@@ -3,8 +3,8 @@
 #include <string>
 #include <chrono>
 #include <mutex>
+#include <boost/noncopyable.hpp>
 #include "utf8.h"
-//#include "LocalLock.h"
 #include "mtverify.h"
 #include "FileOper.h"
 #include "Log.h"
