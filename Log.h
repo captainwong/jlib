@@ -1,547 +1,320 @@
-// Log.h: interface for the CLog class.
-//
-//////////////////////////////////////////////////////////////////////
-/*
-日志类CLog
-简述：单例的日志输出类，使用时会自动构造，但因为要保证日志类最后一个析构，需要手动释放
-功能：写日志，输出TRACE内容到dbgview,console。
-使用：
-	使用函数
-		static void SetOutputLogFileName(LPCTSTR szFileName);
-		static void SetOutputConsole(BOOL bFlag);
-		static void SetOutputDbgView(BOOL bFlag);
-		static void SetOutputLogFile(BOOL bFlag);
-		来设置输出日志的方式
-	使用TRACE或使用函数static void WriteLog(const char* format, ...);写日志，可接受可变参数
-释放：在程序退出时（ExitInstance()函数的最后）调用CLog::Release()释放引用计数
-*/
-#if !defined(AFX_ERRORLOG_H__46D664F1_E737_46B7_9813_2EF1415FF884__INCLUDED_)
-#define AFX_ERRORLOG_H__46D664F1_E737_46B7_9813_2EF1415FF884__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+
+#ifdef WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#include <Windows.h>
+#endif
+
+/*
+Warnning: 
+The singleton pattern that log implemented is not thread-safe,
+you should call log::get_instance() once in your main thread,
+or else it might cause multiple constructions.
+*/
 
 #include <assert.h>
 #include <mutex>
-
-//#include "dbghlpapi.h"
-
-//#ifdef TRACE
-//#undef TRACE
-//#define TRACE CLog::WriteLog
-//#endif
+#include <fstream>
+#include <string>
+#include <memory>
+#include <cstring>
+#include <stdint.h>
+#include <stdarg.h>
+#include <algorithm>
+#include <boost/noncopyable.hpp>
+#include "utf8.h"
+#include "chrono_wrapper.h"
 
 namespace jlib
 {
 
-#define IMPLEMENT_CLASS_LOG_STATIC_MEMBER \
-	std::mutex CLog::m_cs;\
-	std::mutex CLog::m_lockForSingleton;\
-	char CLog::m_ansiBuf[MAX_OUTPUT_LEN];\
-	wchar_t CLog::m_utf16Buf[MAX_OUTPUT_LEN];\
-	CLog* CLog::m_pInstance = NULL;\
-	TCHAR CLog::g_szFileName[1024] = { 0 };
+#define JLOG jlib::log::log_utf16
+#define JLOGA jlib::log::log_utf8
+#define JLOGW jlib::log::log_utf16
+#define JLOGB(b, l) jlib::log::dump_hex(b, l)
+#define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
 
-	/*
-	#define TRACEFUNCNAME \
-	CString str = _T("");\
-	INIT_SYM(TRUE);\
-	str.Format("File %s, line %d, funcname %s\n", __FILE__, __LINE__, __FUNCNAME__);\
-	OutputDebugString(str);\
-	UNINIT_SYM();\
-	*/
-#define MAX_OUTPUT_LEN (1024 * 64)
-#define MAX_FILE_LEN (1024 * 1024 * 10)
-	//static TCHAR g_szFileName[1024] = {0};
+#define IMPLEMENT_CLASS_LOG_STATIC_MAMBER jlib::log* jlib::log::instance_ = nullptr;
 
-	class CLog
+class log : private boost::noncopyable
+{
+	enum { max_output_size = 1024 * 64, max_single_log_file_size = 1024 * 1024 * 10 };
+
+private:
+	bool log_to_file_ = false;
+	bool log_to_dbg_view_ = true;
+	bool running_ = false;
+	std::ofstream log_file_;
+	std::string log_file_foler_ = "";
+	std::string log_file_path_ = "";
+	std::string line_prefix_ = "";
+	std::mutex lock_;
+	static log* instance_;	
+
+public:
+	// initializers, they should be called right after get_instance
+	void set_line_prifix(const std::string& prefix) { line_prefix_ = prefix; }
+
+	void set_output_to_dbg_view(bool b = true) { log_to_dbg_view_ = b; }
+
+	void set_log_file_foler(const std::string& folder_path) { log_file_foler_ = folder_path.empty() ? "" : folder_path + "\\"; }
+
+	void set_output_to_file(bool b = true) { log_to_file_ = b; if (b) create_file_name(); }
+
+	auto get_log_file_path() const { return log_file_path_; }
+
+public:
+	
+	static log* get_instance()
 	{
-	private:
-#pragma region private members
-		double exe_time;
-		LARGE_INTEGER freq;
-		LARGE_INTEGER start_t, stop_t;
-		BOOL m_bOutputLogFile;
-		BOOL m_bOutputDbgView;
-		BOOL m_bOutputConsole;
-		BOOL m_bConsoleOpened;
-		BOOL m_bDbgviewOpened;
-		BOOL m_bLogFileOpened;
-		BOOL m_bRunning;
-		FILE *m_pLogFile;
-		PROCESS_INFORMATION pi;
-		static TCHAR g_szFileName[1024];
-		static std::mutex m_cs;
-		static std::mutex m_lockForSingleton;
-		static char m_ansiBuf[MAX_OUTPUT_LEN];
-		static wchar_t m_utf16Buf[MAX_OUTPUT_LEN];
-		static CLog* m_pInstance;
-#pragma endregion
+		/*
+		Warnning:
+		The singleton pattern that log implemented is not thread-safe,
+		you should call log::get_instance() once in your main thread,
+		or else it might cause multiple constructions.
+		*/
+		if (log::instance_ == nullptr) {
+			static log log_;
+			log::instance_ = &log_;
+		}
+		return log::instance_;
+	}
 
-	public:
-#pragma region public functions
+	~log()
+	{
+		running_ = false;
 
-		static const wchar_t* GetLogFilePath() { return g_szFileName; }
-
-		static CLog* GetInstance()
-		{
-			std::lock_guard<std::mutex> lock(m_lockForSingleton);
-			if (CLog::m_pInstance == NULL) {
-				static CLog log;
-				CLog::m_pInstance = &log;
-			}
-			return CLog::m_pInstance;
+		if (log_file_.is_open()) {
+			log_file_.close();
 		}
 
-		~CLog()
-		{
-			m_bRunning = FALSE;
-			//WaitTillThreadExited(m_handle);
-			if (m_bConsoleOpened)
-				OpenConsole(FALSE);
-			if (m_bDbgviewOpened)
-				OpenDbgview(FALSE);
-			if (m_bLogFileOpened)
-				CloseLogFile();
-			//DeleteCriticalSection(&m_cs);
 #ifdef _DEBUG
-			TCHAR buf[1024], out[1024];
-			wsprintf(buf, _T("%s\n"), _T("CLog::~CLog() destruction"));
-			FormatBuf(buf, out, 1024);
-			OutputDebugString(out);
+		output_to_dbg_view("log::~log\n");
 #endif
-		}
+	}
 
-		static void SetOutputLogFileName(LPCTSTR szLastName)
-		{
-			lstrcpy(g_szFileName, szLastName);
-		}
+public:
 
-		static void SetOutputConsole(BOOL bFlag)
-		{
-			CLog* plog = CLog::GetInstance();
-			plog->m_bOutputConsole = bFlag;
-			plog->OpenConsole(bFlag);
-		}
+	// static operations
 
-		static void SetOutputDbgView(BOOL bFlag)
-		{
-			CLog* plog = CLog::GetInstance();
-			plog->m_bOutputDbgView = bFlag;
-			//plog->OpenDbgview(bFlag);
-		}
+	static void dump_hex(const char* buff, size_t buff_len)
+	{
+		try {
+			log* instance = log::get_instance();
 
-		static void SetOutputLogFile(BOOL bFlag)
-		{
-			CLog* plog = CLog::GetInstance();
-			plog->m_bOutputLogFile = bFlag;
-			if (plog->m_bOutputLogFile && lstrlen(g_szFileName) == 0)
-				plog->CreateFileName();
-		}
-
-		static void Dump(const char* buff, size_t buff_len)
-		{
-			try {
-				CLog* plog = CLog::GetInstance();
-				if (plog == NULL)
-					return;
-				std::lock_guard<std::mutex> lock(m_cs);
-				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
-					size_t output_len = buff_len * 6 + 64;
-					wchar_t* output = new wchar_t[output_len];
-					output[0] = 0;
-					wchar_t c[64] = { 0 };
-					swprintf_s(c, L"len %d\n", buff_len);
-					wcscat_s(output, output_len, c);
-					for (size_t i = 0; i < buff_len; i++) {
-						swprintf_s(c, L"%02X ", static_cast<unsigned char>(buff[i]));
-						wcscat_s(output, output_len, c);
-						if (i > 0 && (i + 1) % 16 == 0) {
-							wcscat_s(output, output_len, L"\n");
-						}
+			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+				size_t output_len = buff_len * 6 + 64;
+				std::unique_ptr<char[]> output = std::unique_ptr<char[]>(new char[output_len]);
+				output[0] = 0;
+				char c[64] = { 0 };
+				std::sprintf(c, "len %d\n", buff_len);
+				std::strcat(output.get(), c);
+				for (size_t i = 0; i < buff_len; i++) {
+					std::sprintf(c, "%02X ", static_cast<unsigned char>(buff[i]));
+					std::strcat(output.get(), c);
+					if (i > 0 && (i + 1) % 16 == 0) {
+						std::strcat(output.get(), "\n");
 					}
-					wcscat_s(output, output_len, L"\n");
-					plog->Output(output);
-					delete[] output;
 				}
-			} catch (...) {
-				assert(0);
+				std::strcat(output.get(), "\n");
+				instance->output(output.get());
 			}
+		} catch (...) {
+			assert(0);
 		}
+	}
 
-		static void DumpAsc(const char* buff, size_t buff_len)
-		{
-			try {
-				CLog* plog = CLog::GetInstance();
-				if (plog == NULL)
-					return;
-				std::lock_guard<std::mutex> lock(m_cs);
-				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
-					size_t output_len = buff_len * 6 + 64;
-					wchar_t* output = new wchar_t[output_len];
-					output[0] = 0;
-					wchar_t c[64] = { 0 };
-					swprintf_s(c, L"len %d\n", buff_len);
-					wcscat_s(output, output_len, c);
-					for (size_t i = 0; i < buff_len; i++) {
-						swprintf_s(c, L"%C ", static_cast<unsigned char>(buff[i]));
-						wcscat_s(output, output_len, c);
-						if (i > 0 && (i + 1) % 16 == 0) {
-							wcscat_s(output, output_len, L"\n");
-						}
+	static void dump_ascii(const char* buff, size_t buff_len)
+	{
+		try {
+			log* instance = log::get_instance();
+
+			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+				size_t output_len = buff_len * 6 + 64;
+				std::unique_ptr<char[]> output = std::unique_ptr<char[]>(new char[output_len]);
+				output[0] = 0;
+				char c[64] = { 0 };
+				std::sprintf(c, "len %d\n", buff_len);
+				std::strcat(output.get(), c);
+				for (size_t i = 0; i < buff_len; i++) {
+					std::sprintf(c, "%C ", static_cast<unsigned char>(buff[i]));
+					std::strcat(output.get(), c);
+					if (i > 0 && (i + 1) % 16 == 0) {
+						std::strcat(output.get(), "\n");
 					}
-					wcscat_s(output, output_len, L"\n");
-					plog->Output(output);
-					delete[] output;
 				}
-			} catch (...) {
-				assert(0);
+				std::strcat(output.get(), "\n");
+				instance->output(output.get());
+			}
+		} catch (...) {
+			assert(0);
+		}
+	}
+
+	static void log_utf16(const wchar_t* format, ...)
+	{
+		try {
+			log* instance = log::get_instance();
+
+			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+				static wchar_t buf[max_output_size], *p;
+				p = buf;
+				va_list args;
+				va_start(args, format);
+				p += _vsnwprintf_s(p, max_output_size - 1, max_output_size - 1, format, args);
+				va_end(args);
+				while ((p > buf) && iswspace(*(p - 1)))
+					*--p = '\0';
+				*p++ = '\r';
+				*p++ = '\n';
+				*p = '\0';
+
+				instance->output(instance->format_msg(utf8::w2a(buf)));
+			}
+		} catch (...) {
+			assert(0);
+		}
+	}
+
+	static void log_utf8(const char* format, ...)
+	{
+		try {
+			log* instance = log::get_instance();
+
+			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+				static char buf[max_output_size], *p;
+				p = buf;
+				va_list args;
+				va_start(args, format);
+				p += _vsnprintf_s(p, max_output_size - 1, max_output_size - 1, format, args);
+				va_end(args);
+				while ((p > buf) && isspace(*(p - 1)))
+					*--p = '\0';
+				*p++ = '\r';
+				*p++ = '\n';
+				*p = '\0';
+
+				instance_->output(instance->format_msg(buf));
+			}
+		} catch (...) {
+			assert(0);
+		}
+	}
+
+
+protected:
+
+	log() {
+		running_ = true;
+		char out[128] = { 0 };
+		sprintf(out, "log construction addr: %p\n", this);
+		output_to_dbg_view(out);
+	}
+
+	bool open_log_file() {
+		if (!log_file_.is_open()) {
+			log_file_.open(log_file_path_);
+		}
+		return log_file_.is_open();
+	}
+
+	void create_file_name() {
+		auto s = now_to_string();
+		std::replace(s.begin(), s.end(), ' ', '_');
+		std::replace(s.begin(), s.end(), ':', '-');
+		log_file_path_ = log_file_foler_ + s + ".log";
+	}
+
+	std::string format_msg(const std::string& msg) {
+		return line_prefix_ + " " + now_to_string(true) + " ---- " + msg;
+	}
+
+	void output(const std::string& msg) {
+		std::lock_guard<std::mutex> lock(lock_);
+		if (log_to_file_) {
+			output_to_log_file(msg);
+		}
+
+		if (log_to_dbg_view_) {
+			output_to_dbg_view(msg);
+		}
+	}
+
+	void output_to_log_file(const std::string& msg) {
+		if (log_file_.is_open()) {
+			auto size = log_file_.tellp();
+			if (size > max_single_log_file_size) {
+				log_file_.close();
+				create_file_name();
+				open_log_file();
 			}
 		}
 
-		/*static void WriteLog(const TCHAR* format, ...)
-		{
-			try {
-				CLog* plog = CLog::GetInstance();
-				if (plog == NULL)
-					return;
-				std::lock_guard<std::mutex> lock(m_cs);
-				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
-					static TCHAR buf[MAX_OUTPUT_LEN], output[MAX_OUTPUT_LEN], *p;
-					p = buf;
-					va_list args;
-					va_start(args, format);
-					p += _vsntprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
-					va_end(args);
-					while ((p > buf) && _istspace(*(p - 1)))
-						*--p = _T('\0');
-					*p++ = _T('\r');
-					*p++ = _T('\n');
-					*p = _T('\0');
-					plog->FormatBuf(buf, output);
-					plog->Output(output);
-				}
-			} catch (...) {
-				assert(0);
-			}
-		}*/
+		if (!log_file_.is_open()) {
+			open_log_file();
+		}
 
-		static void WriteLogW(const wchar_t* format, ...)
-		{
-			try {
-				CLog* plog = CLog::GetInstance();
-				if (plog == NULL)
-					return;
-				std::lock_guard<std::mutex> lock(m_cs);
-				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
-					static wchar_t buf[MAX_OUTPUT_LEN], *p;
-					p = buf;
-					va_list args;
-					va_start(args, format);
-					p += _vsnwprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
-					va_end(args);
-					while ((p > buf) && iswspace(*(p - 1)))
-						*--p = '\0';
-					*p++ = '\r';
-					*p++ = '\n';
-					*p = '\0';
-#if defined(_UNICODE) || defined(UNICODE)
-					wchar_t output[MAX_OUTPUT_LEN];
-					plog->FormatBuf(buf, output);
-					plog->Output(output);
+		if (log_file_.is_open()) {
+			log_file_.write(msg.c_str(), msg.size());
+		}
+	}
+
+	void output_to_dbg_view(const std::string& msg) {
+#ifdef WIN32
+		OutputDebugStringA(msg.c_str());
 #else
-					char output[MAX_OUTPUT_LEN];
-					if(Utf16ToAnsiUseCharArray(buf, m_ansiBuf, MAX_OUTPUT_LEN)){
-						plog->FormatBuf(m_ansiBuf, output);
-						plog->Output(output);
-					}else{
-						char *ansiOut = Utf16ToAnsi(buf);
-						plog->FormatBuf(ansiOut, output);
-						plog->Output(output);
-						SAFEDELETEARR(ansiOut);
-					}
+		std::printf(msg.c_str());
 #endif
-				}
-			} catch (...) {
-				assert(0);
-			}
-		}
+	}
 
-		static void WriteLogA(const char* format, ...)
-		{
-			try {
-				CLog* plog = CLog::GetInstance();
-				if (plog == NULL)
-					return;
-				std::lock_guard<std::mutex> lock(m_cs);
-				if (plog->m_bOutputLogFile || plog->m_bOutputDbgView || plog->m_bOutputConsole) {
-					static char buf[MAX_OUTPUT_LEN], *p;
-					p = buf;
-					va_list args;
-					va_start(args, format);
-					p += _vsnprintf_s(p, MAX_OUTPUT_LEN - 1, MAX_OUTPUT_LEN - 1, format, args);
-					va_end(args);
-					while ((p > buf) && _istspace(*(p - 1)))
-						*--p = '\0';
-					*p++ = '\r';
-					*p++ = '\n';
-					*p = '\0';
-#if defined(_UNICODE) || defined(UNICODE)
-					wchar_t output[MAX_OUTPUT_LEN];
-					if (AnsiToUtf16Array(buf, m_utf16Buf, MAX_OUTPUT_LEN)) {
-						plog->FormatBuf(m_utf16Buf, output);
-						plog->Output(output);
-					} else {
-						wchar_t *wBuf = AnsiToUtf16(buf);
-						plog->FormatBuf(wBuf, output);
-						plog->Output(output);
-						SAFEDELETEARR(wBuf);
-					}
-#else
-					char output[MAX_OUTPUT_LEN];
-					plog->FormatBuf(buf, output);
-					plog->Output(output);
-#endif
-				}
-			} catch (...) {
-				assert(0);
-			}
-		}
+	
 
-#pragma endregion
-
-	protected:
-#pragma region protected functions
-		CLog() : m_pLogFile(NULL), m_bOutputLogFile(FALSE), m_bOutputDbgView(FALSE),
-			m_bOutputConsole(FALSE), m_bConsoleOpened(FALSE), m_bDbgviewOpened(FALSE),
-			m_bLogFileOpened(FALSE), m_bRunning(TRUE)
-		{
-			QueryPerformanceFrequency(&freq);
-			//OutputDebugString(_T("The frequency of your pc is 0x%X.\n"), freq.QuadPart); 
-			QueryPerformanceCounter(&start_t);
-			memset(g_szFileName, 0, sizeof(g_szFileName));
-			TCHAR out[128] = { 0 };
-			wsprintf(out, _T("CLog construction addr: %p\n"), this);
-			OutputDebugString(out);
-			memset(&pi, 0, sizeof(pi));
-			//InitializeCriticalSection(&m_cs);
-		}
-
-		LPCTSTR GetAppRunTime()
-		{
-			static TCHAR szTime[128];
-			memset(szTime, 0, sizeof szTime);
-
-			QueryPerformanceCounter(&stop_t);
-			exe_time = 1e3*(stop_t.QuadPart - start_t.QuadPart) / freq.QuadPart;
-			WORD day, hour, min, sec;
-
-			sec = static_cast<unsigned short>(static_cast<unsigned long>(exe_time / 1000) % 60);
-			min = static_cast<unsigned short>(static_cast<unsigned long>(exe_time / 1000 / 60) % 60);
-			hour = static_cast<unsigned short>((exe_time / 1000 / 60) / 60);
-			day = static_cast<unsigned short>(exe_time / 1000.0 / 60.0 / 60.0 / 24);
-
-			double ms = exe_time - (int)(exe_time)+((int)(exe_time) % 1000);
-			wsprintf(szTime, _T("%dday%02d:%02d:%02ds.%3.6fms"), day, hour, min, sec, ms);
-			return szTime;
-		}
-
-		static const wchar_t* GetPrivateLogPath()
-		{
-			static wchar_t strPrivateMapFolder[1024] = { 0 };
-			static BOOL b = TRUE;
-			if (b) {
-				wsprintf(strPrivateMapFolder, _T("%s\\Log"), GetModuleFilePath());
-				b = FALSE;
-			}
-			return strPrivateMapFolder;
-		}
-
-		void Output(const TCHAR *out)
-		{
-			if (m_bOutputLogFile) {
-				OutputFile(out);
-			}
-#ifdef _DEBUG
-			OutputDebugString(out);
-#else
-			if(m_bOutputDbgView){
-				OutputDebugString(out);
-			}
-#endif
-			if (m_bOutputConsole) {
-				_tprintf(out);
-			}
-		}
-
-		DWORD FormatBuf(const TCHAR *oldBuf, TCHAR *newBuf, DWORD max_new_buff_len = MAX_OUTPUT_LEN)
-		{
-			static SYSTEMTIME st;
-			static TCHAR sztime[128];
-			memset(sztime, 0, sizeof sztime);
-			GetLocalTime(&st);
-			wsprintf(sztime, _T("HB %04d-%02d-%02d-w%d %02d:%02d:%02d.%03d ---- "),
-					 st.wYear, st.wMonth, st.wDay, (st.wDayOfWeek != 0) ? st.wDayOfWeek : 7,
-					 st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-			lstrcpy(newBuf, sztime);
-			if (static_cast<DWORD>(lstrlen(sztime) + lstrlen(oldBuf)) < max_new_buff_len) {
-				lstrcat(newBuf, oldBuf);
-			}
-			return static_cast<DWORD>(lstrlen(newBuf));
-		}
-
-		void OutputFile(const TCHAR *buf)
-		{
-			if (m_pLogFile == NULL)
-				m_pLogFile = OpenLogFile();
-			if (m_pLogFile != NULL) {
-				fseek(m_pLogFile, 0, SEEK_END);
-				long filelen = ftell(m_pLogFile);
-				if (filelen >= MAX_FILE_LEN) {
-					fclose(m_pLogFile);
-					CreateFileName();
-					m_pLogFile = OpenLogFile();
-				}
-			}
-			if (m_pLogFile != NULL) {
-				fseek(m_pLogFile, 0, SEEK_END);
-#if defined(_UNICODE) || defined(UNICODE)
-				if (Utf16ToAnsiUseCharArray(buf, m_ansiBuf, MAX_OUTPUT_LEN)) {
-					fwrite(m_ansiBuf, 1, strlen(m_ansiBuf), m_pLogFile);
-				} else {
-					char *ansiOut = Utf16ToAnsi(buf);
-					fwrite(ansiOut, 1, strlen(ansiOut), m_pLogFile);
-					SAFEDELETEARR(ansiOut);
-				}
-#else
-				fwrite(buf, 1, strlen(buf), m_pLogFile);
-#endif
-				fflush(m_pLogFile);
-			}
-		}
-
-		BOOL OpenDbgview(BOOL bOpen)
-		{
-			static STARTUPINFO si;
-			static LPCTSTR lpszAppName = _T("dbgview.exe");
-			if (bOpen) {
-				if (!m_bDbgviewOpened) {
-					memset(&si, 0, sizeof(STARTUPINFO));
-					si.cb = sizeof(STARTUPINFO);
-					si.dwFlags = STARTF_USESHOWWINDOW;
-					si.wShowWindow = SW_SHOW;
-					if (CreateProcess(lpszAppName, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-						m_bDbgviewOpened = TRUE;
-					}
-				}
-			} else if (m_bDbgviewOpened) {
-				CloseHandle(pi.hThread);
-				CloseHandle(pi.hProcess);
-				m_bDbgviewOpened = FALSE;
-			}
-
-			return bOpen ? m_bDbgviewOpened : !m_bDbgviewOpened;
-		}
-
-		FILE* OpenLogFile()
-		{
-			FILE *pfile = NULL;
-			_tfopen_s(&pfile, g_szFileName, _T("r"));
-			if (pfile == NULL) {
-				_tfopen_s(&pfile, g_szFileName, _T("wb"));
-				if (pfile == NULL) {
-					MessageBox(NULL, _T("Create log file failed."), NULL, 0);
-					ASSERT(0);
-					return NULL;
-				}
-			} else {
-				fclose(pfile);
-				_tfopen_s(&pfile, g_szFileName, _T("ab"));
-				if (pfile == NULL) {
-					MessageBox(NULL, _T("Open log file failed."), NULL, 0);
-					ASSERT(0);
-					return NULL;
-				}
-			}
-			if (pfile != NULL)
-				m_bLogFileOpened = TRUE;
-			return pfile;
-		}
-
-		void CreateFileName()
-		{
-			SYSTEMTIME st;
-			GetLocalTime(&st);
-			const wchar_t* path = GetPrivateLogPath();
-			CreateDirectory(path, NULL);
-			wchar_t exe[1024] = { 0 };
-			GetModuleFileName(NULL, exe, 1023);
-			wsprintf(g_szFileName, _T("%s\\%s-%04d-%02d-%02d-w%d-%02d-%02d-%02d"),
-					 path, CFileOper::GetFileNameFromPathName(exe),
-					 st.wYear, st.wMonth, st.wDay,
-					 (st.wDayOfWeek != 0) ? st.wDayOfWeek : 7,
-					 st.wHour, st.wMinute, st.wSecond);
-			lstrcat(g_szFileName, _T(".log"));
-		}
-
-		void CloseLogFile()
-		{
-			if (m_pLogFile != NULL) {
-				fflush(m_pLogFile);
-				fclose(m_pLogFile);
-				m_pLogFile = NULL;
-			}
-		}
-
-		BOOL OpenConsole(BOOL bOpen)
-		{
-			static FILE *pConsole = NULL;
-			if (bOpen) {
-				if (!m_bConsoleOpened) {
-					if (AllocConsole()) {
-						SetConsoleTitle(_T("output"));
-						/*COORD coord;
-						coord.X = 120;
-						coord.Y = 60;
-						HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-						FillConsoleOutputAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
-						120, coord, NULL);
-						SetConsoleScreenBufferSize(hStdOut, coord);
-						SMALL_RECT se;
-						se.Left = 0;
-						se.Top = 0;
-						se.Right = 100;
-						se.Bottom = 100;
-						SetConsoleWindowInfo(hStdOut, FALSE, &se);
-						*/
-						_tfreopen_s(&pConsole, _T("CONOUT$"), _T("w"), stdout);
-						m_bConsoleOpened = TRUE;
-					}
-				}
-				return m_bConsoleOpened;
-			} else {
-				if (m_bConsoleOpened) {
-					fclose(pConsole);
-					if (FreeConsole()) {
-						m_bConsoleOpened = FALSE;
-					}
-				}
-				return !m_bConsoleOpened;
-			}
-		}
-
-		LPCTSTR GetLastTimeLogFileName()
-		{
-			return g_szFileName;
-		}
-	};
-
-#pragma endregion
 };
-//CRITICAL_SECTION CLog::m_cs;
-//int CLog::m_nRef = 0;
-//char CLog::m_ansiBuf[MAX_OUTPUT_LEN] = {0};
-//CLock CLog::m_lockForSingleton;
 
-#endif // !defined(AFX_ERRORLOG_H__46D664F1_E737_46B7_9813_2EF1415FF884__INCLUDED_)
+
+class LogFunction {
+private:
+	const char* func_name_;
+	std::chrono::steady_clock::time_point begin_;
+public:
+	LogFunction(const char* func_name) : func_name_(func_name) {
+		JLOGA("%s in\n", func_name_); begin_ = std::chrono::steady_clock::now();
+	}
+	~LogFunction() {
+		auto diff = std::chrono::steady_clock::now() - begin_;
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+		JLOGA("%s out, duration: %d(ms)\n", func_name_, msec.count());
+	}
+};
+
+#define LOG_FUNCTION(func_name) jlib::LogFunction __log_function_object__(func_name);
+#define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__);
+
+class range_log
+{
+private:
+	std::string msg_;
+	std::chrono::steady_clock::time_point begin_;
+
+public:
+	range_log(const std::string& msg) : msg_(msg) {
+		JLOGA((msg_ + " in").c_str());
+		begin_ = std::chrono::steady_clock::now();
+	}
+
+	range_log(const std::wstring& msg) : msg_() { 
+		msg_ = utf8::w2a(msg); 
+		JLOGA((msg_ + " in").c_str());
+		begin_ = std::chrono::steady_clock::now(); 
+	}
+
+	~range_log() {
+		auto diff = std::chrono::steady_clock::now() - begin_;
+		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+		JLOGA("%s out, duration: %d(ms)\n", msg_.c_str(), msec.count());
+	}
+};
+
+
+
+};
