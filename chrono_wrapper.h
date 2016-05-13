@@ -8,7 +8,7 @@
 
 namespace jlib {
 
-std::string time_point_to_string(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
+inline std::string time_point_to_string(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
 {
 	std::stringstream ss;
 	auto t = std::chrono::system_clock::to_time_t(tp);
@@ -22,7 +22,7 @@ std::string time_point_to_string(const std::chrono::system_clock::time_point& tp
 	return ss.str();
 }
 
-std::chrono::system_clock::time_point string_to_time_point(const std::string& s) 
+inline std::chrono::system_clock::time_point string_to_time_point(const std::string& s)
 {
 	std::tm tm = { 0 };
 	std::istringstream ss(s);
@@ -30,7 +30,7 @@ std::chrono::system_clock::time_point string_to_time_point(const std::string& s)
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
-std::string now_to_string(bool with_milliseconds = false)
+inline std::string now_to_string(bool with_milliseconds = false)
 {
 	return time_point_to_string(std::chrono::system_clock::now(), with_milliseconds);
 }

@@ -34,7 +34,7 @@ namespace jlib
 #define JLOGB(b, l) jlib::log::dump_hex(b, l)
 #define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
 
-#define IMPLEMENT_CLASS_LOG_STATIC_MAMBER jlib::log* jlib::log::instance_ = nullptr;
+#define IMPLEMENT_CLASS_LOG_STATIC_MEMBER jlib::log* jlib::log::instance_ = nullptr;
 
 class log : private boost::noncopyable
 {
@@ -157,19 +157,32 @@ public:
 			log* instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
-				static wchar_t buf[max_output_size], *p;
+				wchar_t buf[max_output_size], *p;
 				p = buf;
 				va_list args;
 				va_start(args, format);
 				p += _vsnwprintf_s(p, max_output_size - 1, max_output_size - 1, format, args);
 				va_end(args);
-				while ((p > buf) && iswspace(*(p - 1)))
+				while ((p > buf) && (*(p - 1) == '\r' || *(p - 1) == '\n'))
 					*--p = '\0';
 				*p++ = '\r';
 				*p++ = '\n';
 				*p = '\0';
 
-				instance->output(instance->format_msg(utf8::w2a(buf)));
+				//instance->output(instance->format_msg(utf8::w2a(buf)));
+				std::lock_guard<std::mutex> lock(instance->lock_);
+				auto msg = instance->format_msg(utf8::w2a(buf));
+				if (instance->log_to_file_) {
+					instance->output_to_log_file(msg);
+				}
+
+				if (instance->log_to_dbg_view_) {
+#ifdef WIN32
+					OutputDebugStringW(buf);
+#else
+					std::printf(msg.c_str());
+#endif	
+				}
 			}
 		} catch (...) {
 			assert(0);
@@ -182,13 +195,13 @@ public:
 			log* instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
-				static char buf[max_output_size], *p;
+				char buf[max_output_size], *p;
 				p = buf;
 				va_list args;
 				va_start(args, format);
 				p += _vsnprintf_s(p, max_output_size - 1, max_output_size - 1, format, args);
 				va_end(args);
-				while ((p > buf) && isspace(*(p - 1)))
+				while ((p > buf) && (*(p - 1) == '\r' || *(p - 1) == '\n'))
 					*--p = '\0';
 				*p++ = '\r';
 				*p++ = '\n';
@@ -261,7 +274,8 @@ protected:
 
 	void output_to_dbg_view(const std::string& msg) {
 #ifdef WIN32
-		OutputDebugStringA(msg.c_str());
+		USES_CONVERSION;
+		OutputDebugStringW(A2W(msg.c_str()));
 #else
 		std::printf(msg.c_str());
 #endif
