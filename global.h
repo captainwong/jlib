@@ -21,13 +21,13 @@ namespace jlib {
 class LogFunction {
 private:
 	const char* _func_name;
-	std::chrono::system_clock::time_point _begin;
+	std::chrono::steady_clock::time_point _begin;
 public:
 	LogFunction(const char* func_name) : _func_name(func_name) {
-		JLOGA("%s in\n", _func_name); _begin = std::chrono::system_clock::now();
+		JLOGA("%s in\n", _func_name); _begin = std::chrono::steady_clock::now();
 	}
 	~LogFunction() { 
-		auto diff = std::chrono::system_clock::now() - _begin;
+		auto diff = std::chrono::steady_clock::now() - _begin;
 		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
 		JLOGA("%s out, duration: %d(ms)\n", _func_name, msec.count()); 
 	}
@@ -40,11 +40,11 @@ class range_log
 {
 private:
 	std::wstring _msg;
-	std::chrono::system_clock::time_point _begin;
+	std::chrono::steady_clock::time_point _begin;
 public:
-	range_log(const std::wstring& msg) : _msg(msg) { JLOG((_msg + L" in").c_str()); _begin = std::chrono::system_clock::now(); }
+	range_log(const std::wstring& msg) : _msg(msg) { JLOG((_msg + L" in").c_str()); _begin = std::chrono::steady_clock::now(); }
 	~range_log() {
-		auto diff = std::chrono::system_clock::now() - _begin;
+		auto diff = std::chrono::steady_clock::now() - _begin;
 		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
 		JLOG(L"%s out, duration: %d(ms)\n", _msg.c_str(), msec.count());
 	}
