@@ -1,7 +1,9 @@
 #pragma once
 
 #ifdef WIN32
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
 #include <Windows.h>
 #endif
 
@@ -43,6 +45,7 @@ class log : private boost::noncopyable
 private:
 	bool log_to_file_ = false;
 	bool log_to_dbg_view_ = true;
+	bool log_to_console_ = true;
 	bool running_ = false;
 	std::ofstream log_file_;
 	std::string log_file_foler_ = "";
@@ -56,6 +59,8 @@ public:
 	void set_line_prifix(const std::string& prefix) { line_prefix_ = prefix; }
 
 	void set_output_to_dbg_view(bool b = true) { log_to_dbg_view_ = b; }
+	
+	void set_output_to_console(bool b = true) { log_to_console_ = b; }
 
 	void set_log_file_foler(const std::string& folder_path) { log_file_foler_ = folder_path.empty() ? "" : folder_path + "\\"; }
 
@@ -102,7 +107,7 @@ public:
 		try {
 			log* instance = log::get_instance();
 
-			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				size_t output_len = buff_len * 6 + 64;
 				std::unique_ptr<char[]> output = std::unique_ptr<char[]>(new char[output_len]);
 				output[0] = 0;
@@ -129,7 +134,7 @@ public:
 		try {
 			log* instance = log::get_instance();
 
-			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				size_t output_len = buff_len * 6 + 64;
 				std::unique_ptr<char[]> output = std::unique_ptr<char[]>(new char[output_len]);
 				output[0] = 0;
@@ -156,7 +161,7 @@ public:
 		try {
 			log* instance = log::get_instance();
 
-			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				wchar_t buf[max_output_size], *p;
 				p = buf;
 				va_list args;
@@ -183,6 +188,10 @@ public:
 					std::printf(msg.c_str());
 #endif	
 				}
+
+				if (instance->log_to_console_) {
+					std::wprintf(L"%s", buf);
+				}
 			}
 		} catch (...) {
 			assert(0);
@@ -194,7 +203,7 @@ public:
 		try {
 			log* instance = log::get_instance();
 
-			if (instance->log_to_file_ || instance->log_to_dbg_view_) {
+			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				char buf[max_output_size], *p;
 				p = buf;
 				va_list args;
@@ -251,6 +260,10 @@ protected:
 		if (log_to_dbg_view_) {
 			output_to_dbg_view(msg);
 		}
+
+		if (log_to_console_) {
+			std::printf(msg.c_str());
+		}
 	}
 
 	void output_to_log_file(const std::string& msg) {
@@ -269,13 +282,13 @@ protected:
 
 		if (log_file_.is_open()) {
 			log_file_.write(msg.c_str(), msg.size());
+			log_file_.flush();
 		}
 	}
 
 	void output_to_dbg_view(const std::string& msg) {
 #ifdef WIN32
-		USES_CONVERSION;
-		OutputDebugStringW(A2W(msg.c_str()));
+		OutputDebugStringA(msg.c_str());
 #else
 		std::printf(msg.c_str());
 #endif
@@ -286,22 +299,24 @@ protected:
 };
 
 
-class LogFunction {
+class log_function {
 private:
 	const char* func_name_;
 	std::chrono::steady_clock::time_point begin_;
+
 public:
-	LogFunction(const char* func_name) : func_name_(func_name) {
+	log_function(const char* func_name) : func_name_(func_name) {
 		JLOGA("%s in\n", func_name_); begin_ = std::chrono::steady_clock::now();
 	}
-	~LogFunction() {
+
+	~log_function() {
 		auto diff = std::chrono::steady_clock::now() - begin_;
 		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
 		JLOGA("%s out, duration: %d(ms)\n", func_name_, msec.count());
 	}
 };
 
-#define LOG_FUNCTION(func_name) jlib::LogFunction __log_function_object__(func_name);
+#define LOG_FUNCTION(func_name) jlib::log_function __log_function_object__(func_name);
 #define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__);
 
 class range_log

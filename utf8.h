@@ -45,6 +45,15 @@ namespace utf8 {
 		utf8::utf8to16(a.begin(), a.end(), std::back_inserter(w));
 		return w;
 	}
+
+	inline bool mbcs_to_u16(const char* mbcs, wchar_t* u16buffer, size_t u16size) {
+		size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs, -1, NULL, 0);
+		if (1 < request_size && request_size < u16size) {
+			MultiByteToWideChar(CP_ACP, 0, mbcs, -1, u16buffer, request_size);
+			return true;
+		}
+		return false;
+	};
 }
 
 #endif // header guard
