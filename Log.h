@@ -26,6 +26,7 @@ or else it might cause multiple constructions.
 #include <boost/noncopyable.hpp>
 #include "utf8.h"
 #include "chrono_wrapper.h"
+#include "singleton.h"
 
 namespace jlib
 {
@@ -36,9 +37,9 @@ namespace jlib
 #define JLOGB(b, l) jlib::log::dump_hex(b, l)
 #define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
 
-#define IMPLEMENT_CLASS_LOG_STATIC_MEMBER jlib::log* jlib::log::instance_ = nullptr;
+//#define IMPLEMENT_CLASS_LOG_STATIC_MEMBER jlib::log* jlib::log::instance_ = nullptr;
 
-class log : private boost::noncopyable
+class log : public dp::singleton<log>
 {
 	enum { max_output_size = 1024 * 64, max_single_log_file_size = 1024 * 1024 * 10 };
 
@@ -52,7 +53,7 @@ private:
 	std::string log_file_path_ = "";
 	std::string line_prefix_ = "";
 	std::mutex lock_;
-	static log* instance_;	
+	//static log* instance_;	
 
 public:
 	// initializers, they should be called right after get_instance
@@ -70,20 +71,20 @@ public:
 
 public:
 	
-	static log* get_instance()
-	{
-		/*
-		Warnning:
-		The singleton pattern that log implemented is not thread-safe,
-		you should call log::get_instance() once in your main thread,
-		or else it might cause multiple constructions.
-		*/
-		if (log::instance_ == nullptr) {
-			static log log_;
-			log::instance_ = &log_;
-		}
-		return log::instance_;
-	}
+	//static log* get_instance()
+	//{
+	//	/*
+	//	Warnning:
+	//	The singleton pattern that log implemented is not thread-safe,
+	//	you should call log::get_instance() once in your main thread,
+	//	or else it might cause multiple constructions.
+	//	*/
+	//	if (log::instance_ == nullptr) {
+	//		static log log_;
+	//		log::instance_ = &log_;
+	//	}
+	//	return log::instance_;
+	//}
 
 	~log()
 	{
@@ -105,7 +106,7 @@ public:
 	static void dump_hex(const char* buff, size_t buff_len)
 	{
 		try {
-			log* instance = log::get_instance();
+			auto instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				size_t output_len = buff_len * 6 + 64;
@@ -132,7 +133,7 @@ public:
 	static void dump_ascii(const char* buff, size_t buff_len)
 	{
 		try {
-			log* instance = log::get_instance();
+			auto instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				size_t output_len = buff_len * 6 + 64;
@@ -159,7 +160,7 @@ public:
 	static void log_utf16(const wchar_t* format, ...)
 	{
 		try {
-			log* instance = log::get_instance();
+			auto instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				wchar_t buf[max_output_size], *p;
@@ -201,7 +202,7 @@ public:
 	static void log_utf8(const char* format, ...)
 	{
 		try {
-			log* instance = log::get_instance();
+			auto instance = log::get_instance();
 
 			if (instance->log_to_file_ || instance->log_to_dbg_view_ || instance->log_to_console_) {
 				char buf[max_output_size], *p;
@@ -216,7 +217,7 @@ public:
 				*p++ = '\n';
 				*p = '\0';
 
-				instance_->output(instance->format_msg(buf));
+				instance->output(instance->format_msg(buf));
 			}
 		} catch (...) {
 			assert(0);
