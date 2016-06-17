@@ -2,6 +2,48 @@
 
 #include <windows.h>
 #include <string>
+#include "utf8.h"
+
+namespace utf8 {
+
+inline bool mbcs_to_u16(const char* mbcs, wchar_t* u16buffer, size_t u16size) {
+	size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs, -1, NULL, 0);
+	if (0 < request_size && request_size < u16size) {
+		MultiByteToWideChar(CP_ACP, 0, mbcs, -1, u16buffer, request_size);
+		return true;
+	}
+	return false;
+};
+
+inline std::wstring mbcs_to_u16(const std::string& mbcs) {
+	std::wstring res = L"";
+	size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, NULL, 0);
+	if (0 < request_size) {
+		auto u16buffer = new wchar_t[request_size];
+		MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, u16buffer, request_size);
+		res = u16buffer;
+		delete[] u16buffer;
+	}
+	return res;
+}
+
+inline std::string u16_to_mbcs(const std::wstring& u16) {
+	std::string res = "";
+	size_t request_size = WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, 0, 0, 0, 0);
+	if (0 < request_size) {
+		auto mbcs_buffer = new char[request_size];
+		WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, mbcs_buffer, request_size, 0, 0);
+		res = mbcs_buffer;
+		delete[] mbcs_buffer;
+	}
+	return res;
+}
+
+
+};
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 namespace jlib {
 
