@@ -40,6 +40,18 @@ inline std::string u16_to_mbcs(const std::wstring& u16) {
 }
 
 
+inline std::string mbcs_to_utf8(const std::wstring& mbcs) {
+	std::string res = "";
+	size_t request_size = WideCharToMultiByte(CP_UTF8, 0, mbcs.c_str(), -1, 0, 0, 0, 0);
+	if (0 < request_size) {
+		auto mbcs_buffer = new char[request_size];
+		WideCharToMultiByte(CP_UTF8, 0, mbcs.c_str(), -1, mbcs_buffer, request_size, 0, 0);
+		res = mbcs_buffer;
+		delete[] mbcs_buffer;
+	}
+	return res;
+}
+
 };
 
 

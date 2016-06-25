@@ -13,6 +13,6 @@
 //#include "micro_singleton.h"
 #include "singleton.h"
 #include "win32.h"
-
+#include "ping.h"
 
 
