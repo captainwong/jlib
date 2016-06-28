@@ -36,6 +36,8 @@ public:
 		}
 	}
 
+	bool quiting() const { return quiting_; }
+
 private:
 	void start_send()
 	{
