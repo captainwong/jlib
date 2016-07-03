@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/noncopyable.hpp>
 #include <windows.h>
 #include <string>
 #include <vector>
@@ -135,8 +136,37 @@ public:
 	}
 };
 
-// 将矩形平均分割成n份
+
+namespace detail {
+
+inline auto Width(LPCRECT rc) {
+	return rc->right - rc->left;
+}
+
+inline auto Height(LPCRECT rc) {
+	return rc->bottom - rc->top;
+}
+
+inline void DeflateRect(LPRECT rc, int l, int t, int r, int b) {
+	rc->left += l;
+	rc->top += t;
+	rc->right += r;
+	rc->bottom += b;
+}
+
+inline void InflateRect(LPRECT rc, int l, int t, int r, int b) {
+	rc->left -= l;
+	rc->top -= t;
+	rc->right -= r;
+	rc->bottom -= b;
+}
+
+}
+
+// 将矩形平均分割成n份,间距2*gap, n is x^2, x={1,2,3...}
 inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
+	using namespace detail;
+
 	std::vector<RECT> v;
 	for (int i = 0; i < n; i++) {
 		v.push_back(*rc);
@@ -145,22 +175,88 @@ inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 	double l = sqrt(n);
 	int line = int(l);
 
-	int col_step = (int)((rc->right - rc->left) / line);
-	int row_step = (int)((rc->bottom - rc->top) / line);
+	int col_step = (int)(detail::Width(rc) / line);
+	int row_step = (int)(detail::Height(rc) / line);
 
 	for (int i = 0; i < n; i++) {
 		v[i].left = rc->left + (i % line) * col_step;
 		v[i].right = v[i].left + col_step;
 		v[i].top = rc->top + (i / line) * row_step;
 		v[i].bottom = v[i].top + row_step;
-		//v[i].DeflateRect(gap, gap, gap, gap);
-		v[i].left += gap;
-		v[i].top += gap;
-		v[i].right -= gap;
-		v[i].bottom -= gap;
+		detail::DeflateRect(&v[i], gap, gap, gap, gap);
 	}
 
 	return v;
 };
+
+// 将矩形水平平均分割为n份矩形，间距为wgap
+inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50) {
+	using namespace detail;
+	std::vector<RECT> v;
+	double ratio = (rc->right - rc->left) * 1.0 / (rc->bottom - rc->top);
+	int w = (Width(rc) - (n + 1) * wgap) / n;
+	int h = static_cast<int>(w / ratio);
+	int hgap = (Height(rc) - h) / 2;
+
+	for (int i = 0; i < n; i++) {
+		RECT r = *rc;
+		r.left += i*w + (i + 1)*wgap;
+		r.right = r.left + w;
+		r.top = rc->top + hgap;
+		r.bottom = rc->bottom - hgap;
+		v.push_back(r);
+	}
+	
+	return v;
+}
+
+// rc's width / spliter = (rc's width - hexagon's side length) / 2
+inline std::vector<POINT> get_hexagon_vertexes_from_rect(LPCRECT rc, float spliter = 3.0) {
+	if (!rc) {
+		return std::vector<POINT>();
+	}
+
+	if (spliter == 0.0) {
+		spliter = 3.0;
+	}
+
+	std::vector<POINT> v;
+	auto w = rc->right - rc->left;
+	auto h = rc->bottom - rc->top;
+	auto ww = static_cast<int>(w / spliter);
+	auto hh = static_cast<int>(h / spliter);
+
+	POINT pt;
+	pt.x = rc->left;
+	pt.y = rc->top + hh;
+	v.push_back(pt);
+
+	pt.x = rc->left + ww;
+	pt.y = rc->top;
+	v.push_back(pt);
+
+	pt.x = rc->right - ww;
+	v.push_back(pt);
+
+	pt.x = rc->right;
+	pt.y = rc->top + hh;
+	v.push_back(pt);
+
+	pt.y = rc->bottom - hh;
+	v.push_back(pt);
+
+	pt.x = rc->right - ww;
+	pt.y = rc->bottom;
+	v.push_back(pt);
+
+	pt.x = rc->left + ww;
+	v.push_back(pt);
+
+	pt.x = rc->left;
+	pt.y = rc->bottom - hh;
+	v.push_back(pt);
+
+	return v;
+}
 
 };
