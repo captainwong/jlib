@@ -136,7 +136,7 @@ public:
 };
 
 // 将矩形平均分割成n份
-inline std::vector<RECT> split_rect(LPRECT rc, int n, int gap = 50) {
+inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 	std::vector<RECT> v;
 	for (int i = 0; i < n; i++) {
 		v.push_back(*rc);
