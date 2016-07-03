@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <string>
+#include <vector>
 #include "utf8.h"
 
 namespace utf8 {
@@ -76,6 +77,7 @@ inline std::string get_exe_path_a()
 	return std::string(path).substr(0, pos);
 }
 
+
 inline BOOL Win32CenterWindow(HWND hwndWindow)
 {
 	HWND hwndParent;
@@ -133,6 +135,32 @@ public:
 	}
 };
 
+// 将矩形平均分割成n份
+inline std::vector<RECT> split_rect(LPRECT rc, int n, int gap = 50) {
+	std::vector<RECT> v;
+	for (int i = 0; i < n; i++) {
+		v.push_back(*rc);
+	}
 
+	double l = sqrt(n);
+	int line = int(l);
+
+	int col_step = (int)((rc->right - rc->left) / line);
+	int row_step = (int)((rc->bottom - rc->top) / line);
+
+	for (int i = 0; i < n; i++) {
+		v[i].left = rc->left + (i % line) * col_step;
+		v[i].right = v[i].left + col_step;
+		v[i].top = rc->top + (i / line) * row_step;
+		v[i].bottom = v[i].top + row_step;
+		//v[i].DeflateRect(gap, gap, gap, gap);
+		v[i].left += gap;
+		v[i].top += gap;
+		v[i].right -= gap;
+		v[i].bottom -= gap;
+	}
+
+	return v;
+};
 
 };
