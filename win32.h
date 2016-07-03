@@ -150,15 +150,15 @@ inline auto Height(LPCRECT rc) {
 inline void DeflateRect(LPRECT rc, int l, int t, int r, int b) {
 	rc->left += l;
 	rc->top += t;
-	rc->right += r;
-	rc->bottom += b;
+	rc->right -= r;
+	rc->bottom -= b;
 }
 
 inline void InflateRect(LPRECT rc, int l, int t, int r, int b) {
 	rc->left -= l;
 	rc->top -= t;
-	rc->right -= r;
-	rc->bottom -= b;
+	rc->right += r;
+	rc->bottom += b;
 }
 
 }
@@ -189,14 +189,18 @@ inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 	return v;
 };
 
-// 将矩形水平平均分割为n份矩形，间距为wgap
-inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50) {
+// 将矩形水平平均分割为n份矩形, 当hgap==-1时，分割出的矩形与源矩形保持比例
+inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50, int hgap = -1) {
 	using namespace detail;
 	std::vector<RECT> v;
-	double ratio = (rc->right - rc->left) * 1.0 / (rc->bottom - rc->top);
+	
 	int w = (Width(rc) - (n + 1) * wgap) / n;
-	int h = static_cast<int>(w / ratio);
-	int hgap = (Height(rc) - h) / 2;
+
+	if (hgap == -1) {
+		double ratio = (rc->right - rc->left) * 1.0 / (rc->bottom - rc->top);
+		int h = static_cast<int>(w / ratio);
+		hgap = (Height(rc) - h) / 2;
+	}
 
 	for (int i = 0; i < n; i++) {
 		RECT r = *rc;
