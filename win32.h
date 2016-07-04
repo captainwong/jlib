@@ -137,7 +137,7 @@ public:
 };
 
 
-namespace detail {
+namespace rc_detail {
 
 inline auto Width(LPCRECT rc) {
 	return rc->right - rc->left;
@@ -165,7 +165,7 @@ inline void InflateRect(LPRECT rc, int l, int t, int r, int b) {
 
 // 将矩形平均分割成n份,间距2*gap, n is x^2, x={1,2,3...}
 inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
-	using namespace detail;
+	using namespace rc_detail;
 
 	std::vector<RECT> v;
 	for (int i = 0; i < n; i++) {
@@ -175,15 +175,15 @@ inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 	double l = sqrt(n);
 	int line = int(l);
 
-	int col_step = (int)(detail::Width(rc) / line);
-	int row_step = (int)(detail::Height(rc) / line);
+	int col_step = (int)(Width(rc) / line);
+	int row_step = (int)(Height(rc) / line);
 
 	for (int i = 0; i < n; i++) {
 		v[i].left = rc->left + (i % line) * col_step;
 		v[i].right = v[i].left + col_step;
 		v[i].top = rc->top + (i / line) * row_step;
 		v[i].bottom = v[i].top + row_step;
-		detail::DeflateRect(&v[i], gap, gap, gap, gap);
+		DeflateRect(&v[i], gap, gap, gap, gap);
 	}
 
 	return v;
@@ -191,7 +191,7 @@ inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 
 // 将矩形水平平均分割为n份矩形, 当hgap==-1时，分割出的矩形与源矩形保持比例
 inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50, int hgap = -1) {
-	using namespace detail;
+	using namespace rc_detail;
 	std::vector<RECT> v;
 	
 	int w = (Width(rc) - (n + 1) * wgap) / n;
