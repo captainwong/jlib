@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include "utf8.h"
+#include "mtverify.h"
+#include "MyWSAError.h"
 
 namespace utf8 {
 
