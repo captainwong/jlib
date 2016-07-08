@@ -1,11 +1,11 @@
 #pragma once
 
-#ifdef WIN32
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-#include <Windows.h>
-#endif
+//#ifdef WIN32
+//#ifndef _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
+//#endif
+//#include <Windows.h>
+//#endif
 
 /*
 Warnning: 
@@ -14,14 +14,17 @@ you should call log::get_instance() once in your main thread,
 or else it might cause multiple constructions.
 */
 
+// uncomment line below to enable OutputDebugString
+// #define NO_WINDOWS
+
 #include <assert.h>
 #include <mutex>
 #include <fstream>
 #include <string>
 #include <memory>
 #include <cstring>
-#include <stdint.h>
-#include <stdarg.h>
+#include <cstdint>
+#include <cstdarg>
 #include <algorithm>
 #include <boost/noncopyable.hpp>
 #include "utf8.h"
@@ -183,7 +186,7 @@ public:
 				}
 
 				if (instance->log_to_dbg_view_) {
-#ifdef WIN32
+#if defined(WIN32) && !defined(NO_WINDOWS)
 					OutputDebugStringW(buf);
 #else
 					std::printf(msg.c_str());
@@ -288,7 +291,7 @@ protected:
 	}
 
 	void output_to_dbg_view(const std::string& msg) {
-#ifdef WIN32
+#if defined(WIN32) && !defined(NO_WINDOWS)
 		OutputDebugStringA(msg.c_str());
 #else
 		std::printf(msg.c_str());
