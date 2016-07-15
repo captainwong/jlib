@@ -81,6 +81,25 @@ inline std::string get_exe_path_a()
 }
 
 
+inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true) {
+	STARTUPINFO si = { sizeof(si) };
+	si.dwFlags |= STARTF_USESHOWWINDOW;
+	si.wShowWindow = SW_SHOW;
+	PROCESS_INFORMATION pi;
+	::SetFocus(GetDesktopWindow());
+	BOOL bRet = CreateProcess(NULL, (LPWSTR)(path.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	if (bRet) {
+		WaitForSingleObject(pi.hProcess, wait_app_exit ? INFINITE : 0);
+		DWORD dwExit;
+		::GetExitCodeProcess(pi.hProcess, &dwExit);
+		CloseHandle(pi.hThread);
+		CloseHandle(pi.hProcess);
+		return dwExit;
+	}
+	return -1;
+}
+
+
 inline BOOL Win32CenterWindow(HWND hwndWindow)
 {
 	HWND hwndParent;
