@@ -2,11 +2,14 @@
 
 #include <boost/noncopyable.hpp>
 #include <windows.h>
+#include <objbase.h>
+#include <Shobjidl.h>
 #include <string>
 #include <vector>
 #include "utf8.h"
-#include "mtverify.h"
-#include "MyWSAError.h"
+#include "win32/MyWSAError.h"
+#include "win32/path_op.h"
+#include "win32/memory_micros.h"
 
 namespace utf8 {
 
@@ -63,30 +66,11 @@ inline std::string mbcs_to_utf8(const std::wstring& mbcs) {
 
 namespace jlib {
 
-inline std::wstring get_exe_path()
-{
-	wchar_t path[1024] = { 0 };
-	GetModuleFileName(nullptr, path, 1024);
-	std::wstring::size_type pos = std::wstring(path).find_last_of(L"\\/");
-	return std::wstring(path).substr(0, pos);
-}
-
-
-inline std::string get_exe_path_a()
-{
-	char path[1024] = { 0 };
-	GetModuleFileNameA(nullptr, path, 1024);
-	std::string::size_type pos = std::string(path).find_last_of("\\/");
-	return std::string(path).substr(0, pos);
-}
-
-
-inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true) {
+inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool show = true) {
 	STARTUPINFO si = { sizeof(si) };
 	si.dwFlags |= STARTF_USESHOWWINDOW;
-	si.wShowWindow = SW_SHOW;
+	si.wShowWindow = show ? SW_SHOW : SW_HIDE;
 	PROCESS_INFORMATION pi;
-	::SetFocus(GetDesktopWindow());
 	BOOL bRet = CreateProcess(NULL, (LPWSTR)(path.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	if (bRet) {
 		WaitForSingleObject(pi.hProcess, wait_app_exit ? INFINITE : 0);
@@ -98,7 +82,6 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true) {
 	}
 	return -1;
 }
-
 
 inline BOOL Win32CenterWindow(HWND hwndWindow)
 {
@@ -135,6 +118,95 @@ inline BOOL Win32CenterWindow(HWND hwndWindow)
 	}
 
 	return FALSE;
+}
+
+inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr) {
+	bool ok = false;
+
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
+								COINIT_DISABLE_OLE1DDE);
+
+	if (SUCCEEDED(hr)) {
+
+		IFileOpenDialog *pFileOpen;
+
+		// Create the FileOpenDialog object.
+		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+							  IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+		if (SUCCEEDED(hr)) {
+			// Show the Open dialog box.
+			hr = pFileOpen->Show(hWnd);
+
+			// Get the file name from the dialog box.
+			if (SUCCEEDED(hr)) {
+				IShellItem *pItem;
+				hr = pFileOpen->GetResult(&pItem);
+				if (SUCCEEDED(hr)) {
+					PWSTR pszFilePath;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+					// Display the file name to the user.
+					if (SUCCEEDED(hr)) {
+						//MessageBox(hWnd, pszFilePath, L"File Path", MB_OK);
+						path = pszFilePath;
+						ok = true;
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release();
+				}
+			}
+			pFileOpen->Release();
+		}
+		CoUninitialize();
+	}
+
+	return ok;
+}
+
+
+inline bool get_save_as_dialog_path(std::wstring& path, HWND hWnd = nullptr) {
+	bool ok = false;
+
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
+								COINIT_DISABLE_OLE1DDE);
+
+	if (SUCCEEDED(hr)) {
+
+		IFileSaveDialog *pFileSave;
+
+		// Create the FileOpenDialog object.
+		hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL,
+							  IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
+
+		if (SUCCEEDED(hr)) {
+			// Show the Open dialog box.
+			hr = pFileSave->Show(hWnd);
+
+			// Get the file name from the dialog box.
+			if (SUCCEEDED(hr)) {
+				IShellItem *pItem;
+				hr = pFileSave->GetResult(&pItem);
+				if (SUCCEEDED(hr)) {
+					PWSTR pszFilePath;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+					// Display the file name to the user.
+					if (SUCCEEDED(hr)) {
+						//MessageBox(hWnd, pszFilePath, L"File Path", MB_OK);
+						path = pszFilePath;
+						ok = true;
+						CoTaskMemFree(pszFilePath);
+					}
+					pItem->Release();
+				}
+			}
+			pFileSave->Release();
+		}
+		CoUninitialize();
+	}
+
+	return ok;
 }
 
 class auto_timer : public boost::noncopyable

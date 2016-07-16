@@ -29,7 +29,7 @@ or else it might cause multiple constructions.
 #include <boost/noncopyable.hpp>
 #include "utf8.h"
 #include "chrono_wrapper.h"
-#include "singleton.h"
+#include "dp/singleton.h"
 
 namespace jlib
 {
