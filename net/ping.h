@@ -70,7 +70,7 @@ private:
 	{
 		if (num_replies_ == 0) {
 			total_time_ += std::chrono::milliseconds(5000);
-			std::cout << "Request timed out" << std::endl;
+			JLOGA("Request timed out");
 		}
 
 		if (!quiting_) {
@@ -115,15 +115,18 @@ private:
 			// Print out some information about the reply packet.
 			posix_time::ptime now = posix_time::microsec_clock::universal_time();
 			auto ms = (now - time_sent_).total_milliseconds();
-			std::cout << length - ipv4_hdr.header_length()
+			std::stringstream ss;
+			ss << length - ipv4_hdr.header_length()
 				<< " bytes from " << ipv4_hdr.source_address()
 				<< ": icmp_seq=" << icmp_hdr.sequence_number()
 				<< ", ttl=" << ipv4_hdr.time_to_live()
-				<< ", time=" << ms << " ms"
-				<< std::endl;
+				<< ", time=" << ms << " ms";
+			JLOGA(ss.str().c_str());
 			total_time_ += std::chrono::milliseconds(ms);
 			auto cnt = total_time_.count();
-			std::cout << "total_time_ " << cnt << std::endl;
+			ss.str(""); ss.clear();
+			ss << "total_time_ " << cnt;
+			JLOGA(ss.str().c_str());
 		}
 
 		if (max_sequence_number_ != 0 && sequence_number_ < max_sequence_number_)

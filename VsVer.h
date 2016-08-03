@@ -1,10 +1,10 @@
-// VsVer.h
+ï»¿// VsVer.h
 
 #pragma once
 
 /***************************************/
-// ÎªÁË´úÂëÔÚvc6ºÍvs2010ÏÂ¶¼ÄÜÍ¨¹ı±àÒë£¬¶¨ÒåÒÔÏÂºê
-#if _MSC_VER == 1200		// vc6µÄcl°æ±¾ºÅ
+// ä¸ºäº†ä»£ç åœ¨vc6å’Œvs2010ä¸‹éƒ½èƒ½é€šè¿‡ç¼–è¯‘ï¼Œå®šä¹‰ä»¥ä¸‹å®
+#if _MSC_VER == 1200		// vc6çš„clç‰ˆæœ¬å·
 #define _ultoa_s _ultoa
 #define _itoa_s _itoa
 #define _ltoa_s _ltoa

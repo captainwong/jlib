@@ -18,5 +18,6 @@ inline std::string get_exe_path_a()
 	return std::string(path).substr(0, pos);
 }
 
+
 }
 

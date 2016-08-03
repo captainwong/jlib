@@ -9,6 +9,9 @@
 #include "utf8.h"
 #include "win32/MyWSAError.h"
 #include "win32/path_op.h"
+#if _WIN32_WINNT > _WIN32_WINNT_WINXP
+#include "win32/file_op.h"
+#endif
 #include "win32/memory_micros.h"
 
 namespace utf8 {
@@ -80,7 +83,11 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool sh
 		CloseHandle(pi.hProcess);
 		return dwExit;
 	}
-	return -1;
+	return 0xFFFFFFFF;
+}
+
+inline DWORD daemon(const std::string& path, bool wait_app_exit = true, bool show = true) {
+	return daemon(utf8::a2w(path), wait_app_exit, show);
 }
 
 inline BOOL Win32CenterWindow(HWND hwndWindow)
@@ -120,95 +127,6 @@ inline BOOL Win32CenterWindow(HWND hwndWindow)
 	return FALSE;
 }
 
-inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr) {
-	bool ok = false;
-
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
-								COINIT_DISABLE_OLE1DDE);
-
-	if (SUCCEEDED(hr)) {
-
-		IFileOpenDialog *pFileOpen;
-
-		// Create the FileOpenDialog object.
-		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
-							  IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
-
-		if (SUCCEEDED(hr)) {
-			// Show the Open dialog box.
-			hr = pFileOpen->Show(hWnd);
-
-			// Get the file name from the dialog box.
-			if (SUCCEEDED(hr)) {
-				IShellItem *pItem;
-				hr = pFileOpen->GetResult(&pItem);
-				if (SUCCEEDED(hr)) {
-					PWSTR pszFilePath;
-					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-
-					// Display the file name to the user.
-					if (SUCCEEDED(hr)) {
-						//MessageBox(hWnd, pszFilePath, L"File Path", MB_OK);
-						path = pszFilePath;
-						ok = true;
-						CoTaskMemFree(pszFilePath);
-					}
-					pItem->Release();
-				}
-			}
-			pFileOpen->Release();
-		}
-		CoUninitialize();
-	}
-
-	return ok;
-}
-
-
-inline bool get_save_as_dialog_path(std::wstring& path, HWND hWnd = nullptr) {
-	bool ok = false;
-
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
-								COINIT_DISABLE_OLE1DDE);
-
-	if (SUCCEEDED(hr)) {
-
-		IFileSaveDialog *pFileSave;
-
-		// Create the FileOpenDialog object.
-		hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL,
-							  IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
-
-		if (SUCCEEDED(hr)) {
-			// Show the Open dialog box.
-			hr = pFileSave->Show(hWnd);
-
-			// Get the file name from the dialog box.
-			if (SUCCEEDED(hr)) {
-				IShellItem *pItem;
-				hr = pFileSave->GetResult(&pItem);
-				if (SUCCEEDED(hr)) {
-					PWSTR pszFilePath;
-					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-
-					// Display the file name to the user.
-					if (SUCCEEDED(hr)) {
-						//MessageBox(hWnd, pszFilePath, L"File Path", MB_OK);
-						path = pszFilePath;
-						ok = true;
-						CoTaskMemFree(pszFilePath);
-					}
-					pItem->Release();
-				}
-			}
-			pFileSave->Release();
-		}
-		CoUninitialize();
-	}
-
-	return ok;
-}
-
 class auto_timer : public boost::noncopyable
 {
 private:
@@ -232,22 +150,22 @@ public:
 
 namespace rc_detail {
 
-inline auto Width(LPCRECT rc) {
+inline long Width(::LPCRECT rc) {
 	return rc->right - rc->left;
 }
 
-inline auto Height(LPCRECT rc) {
+inline long Height(::LPCRECT rc) {
 	return rc->bottom - rc->top;
 }
 
-inline void DeflateRect(LPRECT rc, int l, int t, int r, int b) {
+inline void DeflateRect(::LPRECT rc, int l, int t, int r, int b) {
 	rc->left += l;
 	rc->top += t;
 	rc->right -= r;
 	rc->bottom -= b;
 }
 
-inline void InflateRect(LPRECT rc, int l, int t, int r, int b) {
+inline void InflateRect(::LPRECT rc, int l, int t, int r, int b) {
 	rc->left -= l;
 	rc->top -= t;
 	rc->right += r;
@@ -257,10 +175,10 @@ inline void InflateRect(LPRECT rc, int l, int t, int r, int b) {
 }
 
 // 将矩形平均分割成n份,间距2*gap, n is x^2, x={1,2,3...}
-inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
+inline std::vector<::RECT> split_rect(::LPCRECT rc, int n, int gap = 50) {
 	using namespace rc_detail;
 
-	std::vector<RECT> v;
+	std::vector<::RECT> v;
 	for (int i = 0; i < n; i++) {
 		v.push_back(*rc);
 	}
@@ -283,9 +201,9 @@ inline std::vector<RECT> split_rect(LPCRECT rc, int n, int gap = 50) {
 };
 
 // 将矩形水平平均分割为n份矩形, 当hgap==-1时，分割出的矩形与源矩形保持比例
-inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50, int hgap = -1) {
+inline std::vector<::RECT> split_rect_horizontal(::LPCRECT rc, int n, int wgap = 50, int hgap = -1) {
 	using namespace rc_detail;
-	std::vector<RECT> v;
+	std::vector<::RECT> v;
 	
 	int w = (Width(rc) - (n + 1) * wgap) / n;
 
@@ -296,7 +214,7 @@ inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50,
 	}
 
 	for (int i = 0; i < n; i++) {
-		RECT r = *rc;
+		::RECT r = *rc;
 		r.left += i*w + (i + 1)*wgap;
 		r.right = r.left + w;
 		r.top = rc->top + hgap;
@@ -308,22 +226,22 @@ inline std::vector<RECT> split_rect_horizontal(LPCRECT rc, int n, int wgap = 50,
 }
 
 // rc's width / spliter = (rc's width - hexagon's side length) / 2
-inline std::vector<POINT> get_hexagon_vertexes_from_rect(LPCRECT rc, float spliter = 3.0) {
+inline std::vector<::POINT> get_hexagon_vertexes_from_rect(::LPCRECT rc, float spliter = 3.0) {
 	if (!rc) {
-		return std::vector<POINT>();
+		return std::vector<::POINT>();
 	}
 
 	if (spliter == 0.0) {
 		spliter = 3.0;
 	}
 
-	std::vector<POINT> v;
+	std::vector<::POINT> v;
 	auto w = rc->right - rc->left;
 	auto h = rc->bottom - rc->top;
 	auto ww = static_cast<int>(w / spliter);
 	auto hh = static_cast<int>(h / spliter);
 
-	POINT pt;
+	::POINT pt;
 	pt.x = rc->left;
 	pt.y = rc->top + hh;
 	v.push_back(pt);

@@ -55,6 +55,7 @@ private:
 	std::string log_file_foler_ = "";
 	std::string log_file_path_ = "";
 	std::string line_prefix_ = "";
+	std::string log_file_prefix_ = "";
 	std::mutex lock_;
 	//static log* instance_;	
 
@@ -66,11 +67,13 @@ public:
 	
 	void set_output_to_console(bool b = true) { log_to_console_ = b; }
 
+	// 3 functions below must be called by sequence
 	void set_log_file_foler(const std::string& folder_path) { log_file_foler_ = folder_path.empty() ? "" : folder_path + "\\"; }
-
+	void set_log_file_prefix(const std::string& prefix) { log_file_prefix_ = prefix; }
 	void set_output_to_file(bool b = true) { log_to_file_ = b; if (b) create_file_name(); }
 
-	auto get_log_file_path() const { return log_file_path_; }
+
+	std::string get_log_file_path() const { return log_file_path_; }
 
 public:
 	
@@ -248,7 +251,7 @@ protected:
 		auto s = now_to_string();
 		std::replace(s.begin(), s.end(), ' ', '_');
 		std::replace(s.begin(), s.end(), ':', '-');
-		log_file_path_ = log_file_foler_ + s + ".log";
+		log_file_path_ = log_file_foler_ + log_file_prefix_ + "." + s + ".log";
 	}
 
 	std::string format_msg(const std::string& msg) {
