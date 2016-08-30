@@ -43,6 +43,14 @@ private:
 	{
 		std::string body("\"Hello!\" from Asio ping.");
 
+		if (max_sequence_number_ != 0 && sequence_number_ >= max_sequence_number_) {
+			quiting_ = true;
+			timer_.cancel();
+			socket_.close();
+			socket_.get_io_service().stop();
+			return;
+		}
+
 		// Create an ICMP header for an echo request.
 		icmp_header echo_request;
 		echo_request.type(icmp_header::echo_request);
@@ -62,7 +70,7 @@ private:
 
 		// Wait up to five seconds for a reply.
 		num_replies_ = 0;
-		timer_.expires_at(time_sent_ + posix_time::seconds(5));
+		timer_.expires_at(time_sent_ + posix_time::seconds(3));
 		timer_.async_wait(boost::bind(&pinger::handle_timeout, this));
 	}
 

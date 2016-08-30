@@ -1,20 +1,14 @@
 #pragma once
 
-//#ifdef WIN32
-//#ifndef _CRT_SECURE_NO_WARNINGS
-//#define _CRT_SECURE_NO_WARNINGS
-//#endif
+#ifdef WIN32
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 //#include <Windows.h>
-//#endif
+#include "win32.h"
+#endif
 
-/*
-Warnning: 
-The singleton pattern that log implemented is not thread-safe,
-you should call log::get_instance() once in your main thread,
-or else it might cause multiple constructions.
-*/
-
-// uncomment line below to enable OutputDebugString
+// uncomment line below to disable OutputDebugString
 // #define NO_WINDOWS
 
 #include <assert.h>
@@ -40,8 +34,6 @@ namespace jlib
 #define JLOGB(b, l) jlib::log::dump_hex(b, l)
 #define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
 
-//#define IMPLEMENT_CLASS_LOG_STATIC_MEMBER jlib::log* jlib::log::instance_ = nullptr;
-
 class log : public dp::singleton<log>
 {
 	enum { max_output_size = 1024 * 64, max_single_log_file_size = 1024 * 1024 * 10 };
@@ -57,7 +49,6 @@ private:
 	std::string line_prefix_ = "";
 	std::string log_file_prefix_ = "";
 	std::mutex lock_;
-	//static log* instance_;	
 
 public:
 	// initializers, they should be called right after get_instance
@@ -72,26 +63,10 @@ public:
 	void set_log_file_prefix(const std::string& prefix) { log_file_prefix_ = prefix; }
 	void set_output_to_file(bool b = true) { log_to_file_ = b; if (b) create_file_name(); }
 
-
 	std::string get_log_file_path() const { return log_file_path_; }
 
 public:
 	
-	//static log* get_instance()
-	//{
-	//	/*
-	//	Warnning:
-	//	The singleton pattern that log implemented is not thread-safe,
-	//	you should call log::get_instance() once in your main thread,
-	//	or else it might cause multiple constructions.
-	//	*/
-	//	if (log::instance_ == nullptr) {
-	//		static log log_;
-	//		log::instance_ = &log_;
-	//	}
-	//	return log::instance_;
-	//}
-
 	~log()
 	{
 		running_ = false;
@@ -181,24 +156,12 @@ public:
 				*p++ = '\n';
 				*p = '\0';
 
-				//instance->output(instance->format_msg(utf8::w2a(buf)));
-				std::lock_guard<std::mutex> lock(instance->lock_);
-				auto msg = instance->format_msg(utf8::w2a(buf));
-				if (instance->log_to_file_) {
-					instance->output_to_log_file(msg);
-				}
-
-				if (instance->log_to_dbg_view_) {
-#if defined(WIN32) && !defined(NO_WINDOWS)
-					OutputDebugStringW(buf);
+#if defined(WIN32)
+				auto msg = instance->format_msg(utf8::u16_to_mbcs(buf));
 #else
-					std::printf(msg.c_str());
-#endif	
-				}
-
-				if (instance->log_to_console_) {
-					std::wprintf(L"%s", buf);
-				}
+				auto msg = instance->format_msg(utf8::w2a(buf));
+#endif
+				instance->output(msg);
 			}
 		} catch (...) {
 			assert(0);
@@ -306,26 +269,6 @@ protected:
 };
 
 
-class log_function {
-private:
-	const char* func_name_;
-	std::chrono::steady_clock::time_point begin_;
-
-public:
-	log_function(const char* func_name) : func_name_(func_name) {
-		JLOGA("%s in\n", func_name_); begin_ = std::chrono::steady_clock::now();
-	}
-
-	~log_function() {
-		auto diff = std::chrono::steady_clock::now() - begin_;
-		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
-		JLOGA("%s out, duration: %d(ms)\n", func_name_, msec.count());
-	}
-};
-
-#define LOG_FUNCTION(func_name) jlib::log_function __log_function_object__(func_name);
-#define AUTO_LOG_FUNCTION LOG_FUNCTION(__FUNCTION__);
-
 class range_log
 {
 private:
@@ -338,10 +281,10 @@ public:
 		begin_ = std::chrono::steady_clock::now();
 	}
 
-	range_log(const std::wstring& msg) : msg_() { 
-		msg_ = utf8::w2a(msg); 
+	range_log(const std::wstring& msg) : msg_() {
+		msg_ = utf8::w2a(msg);
 		JLOGA((msg_ + " in").c_str());
-		begin_ = std::chrono::steady_clock::now(); 
+		begin_ = std::chrono::steady_clock::now();
 	}
 
 	~range_log() {
@@ -350,6 +293,10 @@ public:
 		JLOGA("%s out, duration: %d(ms)\n", msg_.c_str(), msec.count());
 	}
 };
+
+#define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__FUNCTION__);
+
+
 
 
 
