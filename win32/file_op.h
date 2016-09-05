@@ -1,4 +1,6 @@
 #pragma once
+
+namespace jlib {
 inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr) {
 	bool ok = false;
 
@@ -88,3 +90,4 @@ inline bool get_save_as_dialog_path(std::wstring& path, HWND hWnd = nullptr) {
 	return ok;
 }
 
+}
