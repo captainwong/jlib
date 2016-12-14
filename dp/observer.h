@@ -40,7 +40,7 @@ public:
 				obj->on_update(target);
 				++iter;
 			} else {
-				iter = _observers.erase(iter);
+				iter = observers_.erase(iter);
 			}
 		}
 	}
