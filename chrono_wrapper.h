@@ -8,6 +8,56 @@
 
 namespace jlib {
 
+// section: 
+// 0 for YYYY-mm-dd HH:MM:SS
+// 1 for YYYY-mm-dd 
+// 2 for HH:MM:SS
+inline std::wstring time_t_to_wstring(time_t t, int section = 0)
+{
+	wchar_t wtime[32] = { 0 };
+	struct tm tmtm;
+	localtime_s(&tmtm, &t);
+	if (t == -1) {
+		t = time(nullptr);
+		localtime_s(&tmtm, &t);
+	}
+
+	if (section == 0) {
+		wcsftime(wtime, 32, L"%Y-%m-%d %H:%M:%S", &tmtm);
+	} else if (section == 1) {
+		wcsftime(wtime, 32, L"%Y-%m-%d", &tmtm);
+	} else {
+		wcsftime(wtime, 32, L"%H:%M:%S", &tmtm);
+	}
+
+	return std::wstring(wtime);
+}
+
+// section: 
+// 0 for YYYY-mm-dd HH:MM:SS
+// 1 for YYYY-mm-dd 
+// 2 for HH:MM:SS
+inline std::string time_t_to_string(time_t t, int section = 0)
+{
+	char stime[32] = { 0 };
+	struct tm tmtm;
+	localtime_s(&tmtm, &t);
+	if (t == -1) {
+		t = time(nullptr);
+		localtime_s(&tmtm, &t);
+	}
+
+	if (section == 0) {
+		strftime(stime, 32, "%Y-%m-%d %H:%M:%S", &tmtm);
+	} else if (section == 1) {
+		strftime(stime, 32, "%Y-%m-%d", &tmtm);
+	} else {
+		strftime(stime, 32, "%H:%M:%S", &tmtm);
+	}
+
+	return std::string(stime);
+}
+
 inline std::string time_point_to_string(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
 {
 	std::stringstream ss;
@@ -61,7 +111,6 @@ inline std::wstring now_to_wstring(bool with_milliseconds = false)
 {
 	return time_point_to_wstring(std::chrono::system_clock::now(), with_milliseconds);
 }
-
 
 
 

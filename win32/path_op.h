@@ -7,7 +7,7 @@ namespace jlib {
 inline std::wstring get_exe_path()
 {
 	wchar_t path[1024] = { 0 };
-	GetModuleFileName(nullptr, path, 1024);
+	GetModuleFileNameW(nullptr, path, 1024);
 	std::wstring::size_type pos = std::wstring(path).find_last_of(L"\\/");
 	return std::wstring(path).substr(0, pos);
 }
