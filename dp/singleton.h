@@ -38,6 +38,10 @@ public:
 	static void release_singleton() {
 		instance_ = nullptr;
 	}
+
+	static bool is_instance_exists() {
+		return instance_ != nullptr;
+	}
 };
 
 

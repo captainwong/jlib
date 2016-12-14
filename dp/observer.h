@@ -23,24 +23,24 @@ public:
 	typedef std::weak_ptr<observer_type> observer_ptr;
 	typedef std::lock_guard<std::mutex> lock_guard_type;
 protected:
-	mutable std::mutex _mutex;
-	std::list<observer_ptr> _observers;
+	mutable std::mutex mutex_;
+	std::list<observer_ptr> observers_;
 public:
 	void register_observer(const observer_ptr& obj) {
-		lock_guard_type lock(_mutex);
-		_observers.push_back(obj);
+		lock_guard_type lock(mutex_);
+		observers_.push_back(obj);
 	}
 
 	void notify_observers(const target& target) {
-		lock_guard_type lock(_mutex);
-		auto iter = _observers.begin();
-		while (iter != _observers.end()) {
+		lock_guard_type lock(mutex_);
+		auto iter = observers_.begin();
+		while (iter != observers_.end()) {
 			std::shared_ptr<observer_type> obj(iter->lock());
 			if (obj) {
 				obj->on_update(target);
 				++iter;
 			} else {
-				iter = _observers.erase(iter);
+				iter = observers_.erase(iter);
 			}
 		}
 	}

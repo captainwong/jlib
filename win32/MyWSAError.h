@@ -1,7 +1,7 @@
 #pragma once
 namespace jlib
 {
-	inline wchar_t* FormatWSAError(int errornumber)
+	inline const wchar_t* FormatWSAError(int errornumber)
 	{
 		switch (errornumber) {
 			case WSANOTINITIALISED:
