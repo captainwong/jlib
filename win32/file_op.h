@@ -46,7 +46,7 @@ inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr)
 }
 
 
-inline bool get_save_as_dialog_path(std::wstring& path, HWND hWnd = nullptr) {
+inline bool get_save_as_dialog_path(std::wstring& path, const std::wstring& ext = L"", HWND hWnd = nullptr) {
 	bool ok = false;
 
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
@@ -61,6 +61,9 @@ inline bool get_save_as_dialog_path(std::wstring& path, HWND hWnd = nullptr) {
 							  IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
 
 		if (SUCCEEDED(hr)) {
+
+			pFileSave->SetDefaultExtension(ext.c_str());
+
 			// Show the Open dialog box.
 			hr = pFileSave->Show(hWnd);
 
