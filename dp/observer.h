@@ -31,13 +31,13 @@ public:
 		observers_.push_back(obj);
 	}
 
-	void notify_observers(const target& target) {
+	void notify_observers(const target& _target) {
 		lock_guard_type lock(mutex_);
 		auto iter = observers_.begin();
 		while (iter != observers_.end()) {
 			std::shared_ptr<observer_type> obj(iter->lock());
 			if (obj) {
-				obj->on_update(target);
+				obj->on_update(_target);
 				++iter;
 			} else {
 				iter = observers_.erase(iter);

@@ -60,7 +60,7 @@ public:
 
 private:
   unsigned short decode(int a, int b) const
-    { return (rep_[a] << 8) + rep_[b]; }
+    { return ((rep_[a] << 8) + rep_[b]) & 0xFFFF; }
 
   void encode(int a, int b, unsigned short n)
   {

@@ -8,6 +8,14 @@
 
 namespace jlib {
 
+#ifdef __GNUG__
+inline void localtime_s(struct tm* tmtm, const time_t* t) {
+	memcpy(tmtm, localtime(t), sizeof(tm));
+}
+#else
+
+#endif
+
 // section: 
 // 0 for YYYY-mm-dd HH:MM:SS
 // 1 for YYYY-mm-dd 

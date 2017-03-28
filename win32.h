@@ -13,7 +13,6 @@
 #include "win32/file_op.h"
 #endif
 #include "win32/memory_micros.h"
-#include "win32/clipboard.h"
 
 namespace utf8 {
 

@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 
 namespace jlib {
 inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr) {

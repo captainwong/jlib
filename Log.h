@@ -34,6 +34,15 @@ namespace jlib
 #define JLOGB(b, l) jlib::log::dump_hex(b, l)
 #define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
 
+#ifdef __GNUG__
+inline int _vsnwprintf_s(wchar_t* __restrict__ __s, size_t n, size_t, const wchar_t* __restrict__ __format, __gnuc_va_list __arg) {
+	return std::vswprintf(__s, n, __format, __arg);
+}
+inline int _vsnprintf_s(char* __restrict__ __s, size_t __max_len, size_t, const char* __restrict__ __format, __gnuc_va_list __arg) {
+	return std::vsnprintf(__s, __max_len, __format, __arg);
+}
+#endif
+
 class log : public dp::singleton<log>
 {
 	enum { max_output_size = 1024 * 64, max_single_log_file_size = 1024 * 1024 * 10 };
@@ -193,6 +202,10 @@ public:
 		}
 	}
 
+	std::string format_msg(const std::string& msg) {
+		return line_prefix_ + " " + now_to_string(true) + " ---- " + msg;
+	}
+
 
 protected:
 
@@ -215,10 +228,6 @@ protected:
 		std::replace(s.begin(), s.end(), ' ', '_');
 		std::replace(s.begin(), s.end(), ':', '-');
 		log_file_path_ = log_file_foler_ + log_file_prefix_ + "." + s + ".log";
-	}
-
-	std::string format_msg(const std::string& msg) {
-		return line_prefix_ + " " + now_to_string(true) + " ---- " + msg;
 	}
 
 	void output(const std::string& msg) {
@@ -294,7 +303,7 @@ public:
 	}
 };
 
-#define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__FUNCTION__);
+#define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__func__);
 
 
 
