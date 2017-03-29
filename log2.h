@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
-#include "D:/dev_libs/spdlog-0.13.0/include/spdlog/spdlog.h"
-#include "D:/dev_libs/spdlog-0.13.0/include/spdlog/sinks/msvc_sink.h"
+#include <spdlog/spdlog.h>
+#ifdef WIN32
+#include <spdlog/sinks/msvc_sink.h>
+#endif
 #include "utf8.h"
 
 namespace jlib{
@@ -16,7 +18,13 @@ inline void init_logger(const std::string& file_name = "")
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
-		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(utf8::a2w(file_name + ".log"), 23, 59));
+		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
+#ifdef WIN32
+			utf8::a2w(file_name + ".log")
+#else		
+			file_name + ".log"
+#endif
+			, 23, 59));
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);
@@ -57,7 +65,7 @@ public:
 	~range_log() {
 		auto diff = std::chrono::steady_clock::now() - begin_;
 		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
-		JLOG_INFO("{} out, duration: {}(ms)\n", msg_, msec.count());
+		JLOG_INFO("{} out, duration: {}(ms)", msg_, msec.count());
 	}
 };
 
