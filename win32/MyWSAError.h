@@ -1,4 +1,6 @@
 #pragma once
+
+
 namespace jlib
 {
 	inline const wchar_t* FormatWSAError(int errornumber)
@@ -79,6 +81,11 @@ namespace jlib
 				return buf;
 			}break;
 		}
+	}
+
+	inline const char* FormatWSAErrorA(int errornumber)
+	{
+		return utf8::w2a(FormatWSAError(errornumber)).c_str();
 	}
 
 };

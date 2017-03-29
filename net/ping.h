@@ -78,7 +78,7 @@ private:
 	{
 		if (num_replies_ == 0) {
 			total_time_ += std::chrono::milliseconds(5000);
-			JLOGA("Request timed out");
+			JLOG_ERRO("Request timed out");
 		}
 
 		if (!quiting_) {
@@ -129,12 +129,12 @@ private:
 				<< ": icmp_seq=" << icmp_hdr.sequence_number()
 				<< ", ttl=" << ipv4_hdr.time_to_live()
 				<< ", time=" << ms << " ms";
-			JLOGA(ss.str().c_str());
+			JLOG_INFO(ss.str());
 			total_time_ += std::chrono::milliseconds(ms);
 			auto cnt = total_time_.count();
 			ss.str(""); ss.clear();
 			ss << "total_time_ " << cnt;
-			JLOGA(ss.str().c_str());
+			JLOG_INFO(ss.str());
 		}
 
 		if (max_sequence_number_ != 0 && sequence_number_ < max_sequence_number_)
