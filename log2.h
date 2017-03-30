@@ -38,6 +38,7 @@ inline void init_logger(const std::string& file_name = "")
 #define JLOG_WARN spdlog::get(g_logger_name)->warn
 #define JLOG_ERRO spdlog::get(g_logger_name)->error
 #define JLOG_CRTC spdlog::get(g_logger_name)->critical
+#define JLOG_ALL(args...) spdlog::get(jlib::g_logger_name)->log(spdlog::level::off, args)
 
 //#define JLOG JLOG_INFO
 #define JLOGB(b, l) (b, l)
