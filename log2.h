@@ -3,6 +3,7 @@
 #include <spdlog/spdlog.h>
 #ifdef WIN32
 #include <spdlog/sinks/msvc_sink.h>
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 #include "utf8.h"
 
@@ -34,6 +35,8 @@ inline void init_logger(const std::string& file_name = "")
     
 }
 
+
+
 #define JLOG_INFO spdlog::get(g_logger_name)->info
 #define JLOG_WARN spdlog::get(g_logger_name)->warn
 #define JLOG_ERRO spdlog::get(g_logger_name)->error
@@ -44,11 +47,6 @@ inline void init_logger(const std::string& file_name = "")
 #else
 #define JLOG_ALL(args...) spdlog::get(jlib::g_logger_name)->log(spdlog::level::off, args)
 #endif /* _WIN32 */
-
-//#define JLOG JLOG_INFO
-#define JLOGB(b, l) (b, l)
-#define JLOGASC(b, l) (b, l)
-
 
 class range_log
 {
@@ -76,5 +74,72 @@ public:
 };
 
 #define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__func__);
-    
+
+
+static const int MAX_OUT_BUFF_LEN = 4096;
+
+inline void dump_hex(const void* buff, size_t buff_len)
+{
+	size_t output_len = buff_len * 6 + 64;
+	if (output_len > MAX_OUT_BUFF_LEN) {
+		JLOG_ERRO("dump_hex, output_len {} > MAX_OUT_BUFF_LEN {}", output_len, MAX_OUT_BUFF_LEN);
+		return;
+	}
+
+	char output[4096] = { 0 };
+	char c[128] = { 0 };
+	std::sprintf(c, "dump_hex: buff 0x%p, buff_len %d\n", buff, buff_len);
+
+	for (size_t i = 0; i < 16; i++) {
+		char tmp[4];
+		std::sprintf(tmp, "%02X ", i);
+		std::strcat(c, tmp);
+	}
+
+	std::strcat(output, c); std::strcat(output, "\n");
+
+	for (size_t i = 0; i < buff_len; i++) {
+		std::sprintf(c, "%02X ", reinterpret_cast<const unsigned char*>(buff)[i]);
+		std::strcat(output, c);
+		if (i > 0 && (i + 1) % 16 == 0) {
+			std::strcat(output, "\n");
+		}
+	}
+
+	JLOG_WARN(output);
+}
+
+inline void dump_asc(const void* buff, size_t buff_len)
+{
+	size_t output_len = buff_len * 6 + 64;
+	if (output_len > MAX_OUT_BUFF_LEN) {
+		JLOG_ERRO("dump_asc, output_len {} > MAX_OUT_BUFF_LEN {}", output_len, MAX_OUT_BUFF_LEN);
+		return;
+	}
+
+	char output[4096] = { 0 };
+	char c[128] = { 0 };
+	std::sprintf(c, "dump_asc: buff 0x%p, buff_len %d\n", buff, buff_len);
+
+	for (size_t i = 0; i < 16; i++) {
+		char tmp[4];
+		std::sprintf(tmp, "%02X ", i);
+		std::strcat(c, tmp);
+	}
+
+	std::strcat(output, c); std::strcat(output, "\n");
+
+	for (size_t i = 0; i < buff_len; i++) {
+		std::sprintf(c, "%c  ", reinterpret_cast<const char*>(buff)[i]);
+		std::strcat(output, c);
+		if (i > 0 && (i + 1) % 16 == 0) {
+			std::strcat(output, "\n");
+		}
+	}
+
+	JLOG_WARN(output);
+}
+
+#define JLOG_HEX(b, l) jlib::dump_hex(b, l)
+#define JLOG_ASC(b, l) jlib::dump_asc(b, l)
 }
