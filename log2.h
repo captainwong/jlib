@@ -1,9 +1,11 @@
 #pragma once
 #include <iostream>
-#include <spdlog/spdlog.h>
+#include "spdlog/spdlog.h"
 #ifdef WIN32
-#include <spdlog/sinks/msvc_sink.h>
+#include "spdlog/sinks/msvc_sink.h"
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
 #endif
 #include "utf8.h"
 
