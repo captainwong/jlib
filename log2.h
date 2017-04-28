@@ -90,11 +90,11 @@ inline void dump_hex(const void* buff, size_t buff_len)
 
 	char output[4096] = { 0 };
 	char c[128] = { 0 };
-	std::sprintf(c, "dump_hex: buff 0x%p, buff_len %d\n", buff, buff_len);
+	std::sprintf(c, "dump_hex: buff 0x%p, buff_len %zu\n", buff, buff_len);
 
 	for (size_t i = 0; i < 16; i++) {
 		char tmp[4];
-		std::sprintf(tmp, "%02X ", i);
+		std::sprintf(tmp, "%02zX ", i);
 		std::strcat(c, tmp);
 	}
 
@@ -121,11 +121,11 @@ inline void dump_asc(const void* buff, size_t buff_len)
 
 	char output[4096] = { 0 };
 	char c[128] = { 0 };
-	std::sprintf(c, "dump_asc: buff 0x%p, buff_len %d\n", buff, buff_len);
+	std::sprintf(c, "dump_asc: buff 0x%p, buff_len %zu\n", buff, buff_len);
 
 	for (size_t i = 0; i < 16; i++) {
 		char tmp[4];
-		std::sprintf(tmp, "%02X ", i);
+		std::sprintf(tmp, "%02zX ", i);
 		std::strcat(c, tmp);
 	}
 
