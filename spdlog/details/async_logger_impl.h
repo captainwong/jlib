@@ -8,8 +8,8 @@
 // Async Logger implementation
 // Use an async_sink (queue per logger) to perform the logging in a worker thread
 
-#include "details/async_log_helper.h"
-#include "async_logger.h"
+#include "async_log_helper.h"
+#include "../async_logger.h"
 
 #include <string>
 #include <functional>
