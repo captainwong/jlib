@@ -10,8 +10,8 @@
 // Can be set to auto flush on every line
 // Throw spdlog_ex exception on errors
 
-#include "details/os.h"
-#include "details/log_msg.h"
+#include "os.h"
+#include "log_msg.h"
 
 #include <chrono>
 #include <cstdio>

@@ -15,10 +15,10 @@
 #pragma once
 
 #include "common.h"
-#include "sinks/sink.h"
-#include "details/mpmc_bounded_q.h"
-#include "details/log_msg.h"
-#include "details/os.h"
+#include "../sinks/sink.h"
+#include "mpmc_bounded_q.h"
+#include "log_msg.h"
+#include "os.h"
 #include "formatter.h"
 
 #include <chrono>
