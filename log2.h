@@ -3,6 +3,7 @@
 #include "spdlog/spdlog.h"
 #ifdef WIN32
 #include "spdlog/sinks/msvc_sink.h"
+#include "win32.h"
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -23,7 +24,7 @@ inline void init_logger(const std::string& file_name = "")
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
 #ifdef WIN32
-			utf8::a2w(file_name + ".log")
+			utf8::mbcs_to_u16(file_name + ".log")
 #else		
 			file_name + ".log"
 #endif
@@ -32,7 +33,13 @@ inline void init_logger(const std::string& file_name = "")
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);
 	} catch (const spdlog::spdlog_ex& ex) {
+#ifdef WIN32
+		char msg[1024] = { 0 };
+		sprintf_s(msg, "Log initialization failed: %s\n", ex.what());
+		OutputDebugStringA(msg);
+#else
 		std::cerr << "Log initialization failed: " << ex.what() << std::endl;
+#endif
 	}
     
 }

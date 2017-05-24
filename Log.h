@@ -28,11 +28,18 @@
 namespace jlib
 {
 
+#define JLOG_ORIGIN
+
 #define JLOG jlib::log::log_utf16
 #define JLOGA jlib::log::log_utf8
 #define JLOGW jlib::log::log_utf16
 #define JLOGB(b, l) jlib::log::dump_hex(b, l)
 #define JLOGASC(b, l) jlib::log::dump_ascii(b, l)
+
+#define JLOG_ERRO JLOGA
+#define JLOG_INFO JLOGA
+#define JLOG_HEX JLOGB
+#define JLOG_ASC JLOGASC
 
 #ifdef __GNUG__
 inline int _vsnwprintf_s(wchar_t* __restrict__ __s, size_t n, size_t, const wchar_t* __restrict__ __format, __gnuc_va_list __arg) {
