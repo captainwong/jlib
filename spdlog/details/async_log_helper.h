@@ -14,12 +14,12 @@
 
 #pragma once
 
-#include "common.h"
+#include "../common.h"
 #include "../sinks/sink.h"
 #include "mpmc_bounded_q.h"
 #include "log_msg.h"
 #include "os.h"
-#include "formatter.h"
+#include "../formatter.h"
 
 #include <chrono>
 #include <exception>
