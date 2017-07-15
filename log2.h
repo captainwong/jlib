@@ -82,7 +82,13 @@ public:
 	}
 };
 
-#define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__func__);
+#ifdef _WIN32
+#define __the_pretty_name_of_this_function__ __FUNCTION__
+#else
+#define __the_pretty_name_of_this_function__ __PRETTY_FUNCTION__
+#endif
+
+#define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__the_pretty_name_of_this_function__);
 
 
 static const int MAX_OUT_BUFF_LEN = 4096;
