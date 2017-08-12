@@ -253,7 +253,7 @@ public:
 		num.ReleaseBuffer();
 		num.Format(_T("%03d"), nums);
 		tittle += num;
-		newFileName.Format(_T("%s%s"), tittle, ext);
+		newFileName.Format(_T("%s%s"), (LPCWSTR)tittle, (LPCWSTR)ext);
 		LPCTSTR szOldName = fileName.GetBuffer(fileName.GetLength());
 		fileName.ReleaseBuffer();
 		LPCTSTR szNewName = newFileName.GetBuffer(newFileName.GetLength());
@@ -281,7 +281,7 @@ public:
 				filepath = find.GetFilePath();
 				if(DeleteFile(filepath.GetBuffer(filepath.GetLength()))){
 					CString trace;trace.Format(_T("CFileOper::DeleteFilesInFolder delete file %s \n"), 
-						find.GetFilePath());
+						(LPCWSTR)find.GetFilePath());
 					TRACE(trace);
 					bfoundone = TRUE;
 					dwDeletedFileNums++;
