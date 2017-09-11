@@ -46,7 +46,11 @@ inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr)
 }
 
 
-inline bool get_save_as_dialog_path(std::wstring& path, const std::wstring& ext = L"", HWND hWnd = nullptr) {
+inline bool get_save_as_dialog_path(std::wstring& path,
+									const std::wstring& ext = L"",
+									UINT cFileTypes = 0,
+									const COMDLG_FILTERSPEC *rgFilterSpec = nullptr,
+									HWND hWnd = nullptr) {
 	bool ok = false;
 
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
@@ -62,7 +66,17 @@ inline bool get_save_as_dialog_path(std::wstring& path, const std::wstring& ext 
 
 		if (SUCCEEDED(hr)) {
 
-			pFileSave->SetDefaultExtension(ext.c_str());
+			if (!ext.empty()) {
+				pFileSave->SetDefaultExtension(ext.c_str());
+			}
+			
+			if (cFileTypes != 0 && rgFilterSpec) {
+				pFileSave->SetFileTypes(cFileTypes, rgFilterSpec);
+			}
+
+			if (!hWnd) {
+				hWnd = ::GetDesktopWindow();
+			}
 
 			// Show the Open dialog box.
 			hr = pFileSave->Show(hWnd);
