@@ -75,7 +75,8 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool sh
 	si.dwFlags |= STARTF_USESHOWWINDOW;
 	si.wShowWindow = show ? SW_SHOW : SW_HIDE;
 	PROCESS_INFORMATION pi;
-	BOOL bRet = CreateProcessW(NULL, (LPWSTR)(path.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+	DWORD dwCreationFlags = show ? 0 : CREATE_NO_WINDOW;
+	BOOL bRet = CreateProcessW(NULL, (LPWSTR)(path.c_str()), NULL, NULL, FALSE, dwCreationFlags, NULL, NULL, &si, &pi);
 	if (bRet) {
 		WaitForSingleObject(pi.hProcess, wait_app_exit ? INFINITE : 0);
 		DWORD dwExit;
