@@ -1,7 +1,11 @@
 #pragma once
 
 namespace jlib {
-inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr) {
+inline bool get_file_open_dialog_result(std::wstring& path, 
+										HWND hWnd = nullptr,
+										const std::wstring& ext = L"",
+										UINT cFileTypes = 0,
+										const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
 	bool ok = false;
 
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
@@ -16,6 +20,18 @@ inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr)
 							  IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
 
 		if (SUCCEEDED(hr)) {
+			if (!ext.empty()) {
+				pFileOpen->SetDefaultExtension(ext.c_str());
+			}
+
+			if (cFileTypes != 0 && rgFilterSpec) {
+				pFileOpen->SetFileTypes(cFileTypes, rgFilterSpec);
+			}
+
+			if (!hWnd) {
+				hWnd = ::GetDesktopWindow();
+			}
+
 			// Show the Open dialog box.
 			hr = pFileOpen->Show(hWnd);
 
@@ -45,12 +61,11 @@ inline bool get_file_open_dialog_result(std::wstring& path, HWND hWnd = nullptr)
 	return ok;
 }
 
-
 inline bool get_save_as_dialog_path(std::wstring& path,
+									HWND hWnd = nullptr,
 									const std::wstring& ext = L"",
 									UINT cFileTypes = 0,
-									const COMDLG_FILTERSPEC *rgFilterSpec = nullptr,
-									HWND hWnd = nullptr) {
+									const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
 	bool ok = false;
 
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |

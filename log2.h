@@ -101,7 +101,7 @@ inline void dump_hex(const void* buff, size_t buff_len)
 		return;
 	}
 
-	char output[4096] = { 0 };
+	char output[MAX_OUT_BUFF_LEN] = { 0 };
 	char c[128] = { 0 };
 	std::sprintf(c, "dump_hex: buff 0x%p, buff_len %zu\n", buff, buff_len);
 
@@ -124,7 +124,7 @@ inline void dump_hex(const void* buff, size_t buff_len)
 	JLOG_WARN(output);
 }
 
-inline void dump_asc(const void* buff, size_t buff_len)
+inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space = true, bool force_new_line = true)
 {
 	size_t output_len = buff_len * 6 + 64;
 	if (output_len > MAX_OUT_BUFF_LEN) {
@@ -132,22 +132,30 @@ inline void dump_asc(const void* buff, size_t buff_len)
 		return;
 	}
 
-	char output[4096] = { 0 };
+	char output[MAX_OUT_BUFF_LEN] = { 0 };
 	char c[128] = { 0 };
 	std::sprintf(c, "dump_asc: buff 0x%p, buff_len %zu\n", buff, buff_len);
-
-	for (size_t i = 0; i < 16; i++) {
-		char tmp[4];
-		std::sprintf(tmp, "%02zX ", i);
-		std::strcat(c, tmp);
-	}
-
 	std::strcat(output, c); std::strcat(output, "\n");
 
+	if (force_new_line) {
+		for (size_t i = 0; i < 16; i++) {
+			char tmp[4];
+			std::sprintf(tmp, "%02zX", i);
+			std::strcat(c, tmp);
+			if (seperate_with_space) {
+				std::strcat(c, " ");
+			}
+		}
+		std::strcat(output, c); std::strcat(output, "\n");
+	}
+
 	for (size_t i = 0; i < buff_len; i++) {
-		std::sprintf(c, "%c  ", reinterpret_cast<const char*>(buff)[i]);
+		std::sprintf(c, "%c", reinterpret_cast<const char*>(buff)[i]);
+		if (seperate_with_space) {
+			std::strcat(c, "  ");
+		}
 		std::strcat(output, c);
-		if (i > 0 && (i + 1) % 16 == 0) {
+		if (force_new_line && i > 0 && (i + 1) % 16 == 0) {
 			std::strcat(output, "\n");
 		}
 	}
