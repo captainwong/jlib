@@ -71,7 +71,8 @@ inline std::string mbcs_to_utf8(const std::wstring& mbcs) {
 namespace jlib {
 
 inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool show = true) {
-	STARTUPINFOW si = { sizeof(si) };
+	STARTUPINFOW si = { 0 };
+	si.cb = sizeof(si);
 	si.dwFlags |= STARTF_USESHOWWINDOW;
 	si.wShowWindow = show ? SW_SHOW : SW_HIDE;
 	PROCESS_INFORMATION pi;
