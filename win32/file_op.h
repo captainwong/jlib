@@ -1,8 +1,11 @@
 #pragma once
+#include <Windows.h>
+#include <string>
 
 namespace jlib {
 inline bool get_file_open_dialog_result(std::wstring& path, 
 										HWND hWnd = nullptr,
+										const std::wstring& default_folder = L"",
 										const std::wstring& ext = L"",
 										UINT cFileTypes = 0,
 										const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
@@ -20,8 +23,17 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 							  IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
 
 		if (SUCCEEDED(hr)) {
+
+			if (!default_folder.empty()) {
+				IShellItem *psiFolder;
+				LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
+				hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
+				if (SUCCEEDED(hr))
+					hr = pFileOpen->SetDefaultFolder(psiFolder);
+			}
+
 			if (!ext.empty()) {
-				pFileOpen->SetDefaultExtension(ext.c_str());
+				pFileOpen->SetDefaultExtension(ext.data());
 			}
 
 			if (cFileTypes != 0 && rgFilterSpec) {
@@ -63,6 +75,8 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 
 inline bool get_save_as_dialog_path(std::wstring& path,
 									HWND hWnd = nullptr,
+									const std::wstring& default_folder = L"",
+									const std::wstring& default_name = L"",
 									const std::wstring& ext = L"",
 									UINT cFileTypes = 0,
 									const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
@@ -81,8 +95,20 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 
 		if (SUCCEEDED(hr)) {
 
+			if (!default_folder.empty()) {
+				IShellItem *psiFolder;
+				LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
+				hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
+				if (SUCCEEDED(hr))
+					hr = pFileSave->SetDefaultFolder(psiFolder);
+			}
+
+			if (!default_name.empty()) {
+				pFileSave->SetFileName(default_name.data());
+			}
+
 			if (!ext.empty()) {
-				pFileSave->SetDefaultExtension(ext.c_str());
+				pFileSave->SetDefaultExtension(ext.data());
 			}
 			
 			if (cFileTypes != 0 && rgFilterSpec) {

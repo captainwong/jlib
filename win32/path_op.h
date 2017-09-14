@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <string>
 #include <algorithm>
+#include <Windows.h>
+#include <ShlObj.h>
+
+#pragma comment(lib, "Shell32.lib")
 
 namespace jlib {
 
@@ -36,6 +40,24 @@ inline std::string integrate_path(const std::string& path, char replace_by = '_'
         std::replace(ret.begin(), ret.end(), c, replace_by);
     }
     return ret;
+}
+
+inline std::wstring get_special_folder(int csidl) {
+	wchar_t path[MAX_PATH] = { 0 };
+	if (SHGetSpecialFolderPathW(nullptr, path, csidl, false)) {
+		return std::wstring(path);
+	}
+
+	return std::wstring();
+}
+
+inline std::string get_special_folder_a(int csidl) {
+	char path[MAX_PATH] = { 0 };
+	if (SHGetSpecialFolderPathA(nullptr, path, csidl, false)) {
+		return std::string(path);
+	}
+
+	return std::string();
 }
 
 
