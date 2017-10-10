@@ -1,4 +1,33 @@
 #pragma once
+
+#ifdef JLIB_DISABLE_LOG
+
+namespace jlib {
+
+#define init_logger
+#define JLOG_INFO
+#define JLOG_WARN
+#define JLOG_ERRO
+#define JLOG_CRTC
+#define JLOG_ALL
+
+class range_log {
+public:
+	range_log() {}
+	range_log(const char*) {}
+};
+
+#define AUTO_LOG_FUNCTION
+
+#define dump_hex
+#define dump_asc
+#define JLOG_HEX
+#define JLOG_ASC
+
+}
+
+#else // JLIB_DISABLE_LOG
+
 #include <iostream>
 #include "spdlog/spdlog.h"
 #ifdef WIN32
@@ -14,7 +43,7 @@ namespace jlib{
     
 static const char g_logger_name[] = "logger";
     
-inline void init_logger(const std::string& file_name = "")
+inline void init_logger(const std::wstring& file_name = L"")
 {
     try {
 		std::vector<spdlog::sink_ptr> sinks;
@@ -24,7 +53,7 @@ inline void init_logger(const std::string& file_name = "")
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
 #ifdef WIN32
-			utf8::mbcs_to_u16(file_name + ".log")
+			file_name + L".log"
 #else		
 			file_name + ".log"
 #endif
@@ -36,10 +65,11 @@ inline void init_logger(const std::string& file_name = "")
 #ifdef WIN32
 		char msg[1024] = { 0 };
 		sprintf_s(msg, "Log initialization failed: %s\n", ex.what());
-		OutputDebugStringA(msg);
+		MessageBoxA(nullptr, msg, "Error", MB_ICONERROR);
 #else
 		std::cerr << "Log initialization failed: " << ex.what() << std::endl;
 #endif
+		exit(0);
 	}
     
 }
@@ -165,4 +195,7 @@ inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space
 
 #define JLOG_HEX(b, l) jlib::dump_hex(b, l)
 #define JLOG_ASC(b, l) jlib::dump_asc(b, l)
+
 }
+
+#endif // end of JLIB_DISABLE_LOG
