@@ -55,8 +55,19 @@ struct version_no {
 
 };
 
-inline bool get_version_no_from_ini(version_no& ver, const std::string& ini_path) {
-	std::ifstream in(ini_path);
+struct update_info_json {
+	version_no ver;
+	std::string change;
+	std::vector<std::string> dllinks;
+};
+
+struct update_info_text {
+	version_no ver;
+	std::string dllink;
+};
+
+inline bool get_version_no_from_file(version_no& ver, const std::string& file_path) {
+	std::ifstream in(file_path);
 	if (!in)return false;
 	std::stringstream is;
 	is << in.rdbuf();

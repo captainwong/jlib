@@ -26,7 +26,7 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 
 			if (!default_folder.empty()) {
 				IShellItem *psiFolder;
-				LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
+				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
 				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
 				//if (SUCCEEDED(hr))
 				//	hr = pFileOpen->SetDefaultFolder(psiFolder);
@@ -107,7 +107,7 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 
 			if (!default_folder.empty()) {
 				IShellItem *psiFolder;
-				LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
+				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
 				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
 				//if (SUCCEEDED(hr))
 				//	hr = pFileSave->SetDefaultFolder(psiFolder);
