@@ -18,7 +18,7 @@ enum PositionalNotation {
  * @brief Format byte count to human readable string
  * @note bytes must less than 1DB(DoggaByte)
  */
-static std::string human_readable_byte_count(uintmax_t bytes, PositionalNotation po = PositionalNotation::Binary)
+static std::string human_readable_byte_count(uintmax_t bytes, size_t precision = 1, PositionalNotation po = PositionalNotation::Binary)
 {
     // http://programming.guide/java/formatting-byte-size-to-human-readable-format.html
 
