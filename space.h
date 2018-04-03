@@ -1,46 +1,35 @@
 #pragma once
 
 #include <string>
+#include <cmath>
+#include <iomanip>
+#include <sstream>
 
 namespace jlib {
 
-static std::string format_space(uintmax_t bytes)
+enum PositionalNotation {
+    //! Used for memory size or Microsoft disk space
+    Binary,
+    //! Usually used by Disk Space
+    Decimal,
+};
+
+/**
+ * @brief Format byte count to human readable string
+ * @note bytes must less than 1DB(DoggaByte)
+ */
+static std::string human_readable_byte_count(uintmax_t bytes, PositionalNotation po = PositionalNotation::Binary)
 {
-    static constexpr uintmax_t FACTOR = 1024;
-	static constexpr uintmax_t KB = FACTOR;
-	static constexpr uintmax_t MB = KB * FACTOR;
-	static constexpr uintmax_t GB = MB * FACTOR;
-	static constexpr uintmax_t TB = GB * FACTOR;
+    // http://programming.guide/java/formatting-byte-size-to-human-readable-format.html
 
-	uintmax_t kb = bytes / FACTOR;
-	uintmax_t mb = kb / FACTOR;
-	uintmax_t gb = mb / FACTOR;
-	uintmax_t tb = gb / FACTOR;
-
-	std::string s;
-	if (tb > 0) {
-		gb -= tb * FACTOR;
-		gb = gb * 1000 / FACTOR;
-		gb /= 10;
-		return std::to_string(tb) + "." + std::to_string(gb) + "T";
-	} else if (gb > 0) {
-		mb -= gb * FACTOR;
-		mb = mb * 1000 / FACTOR;
-		mb /= 10;
-		return std::to_string(gb) + "." + std::to_string(mb) + "G";
-	} else if (mb > 0) {
-		kb -= mb * FACTOR;
-		kb = kb * 1000 / FACTOR;
-		kb /= 10;
-		return std::to_string(mb) + "." + std::to_string(kb) + "M";
-	} else if (kb > 0) {
-		bytes -= kb * FACTOR;
-		bytes = bytes * 1000 / FACTOR;
-		bytes /= 10;
-		return std::to_string(kb) + "." + std::to_string(bytes) + "K";
-	} else {
-		return std::to_string(bytes) + "B";
-	}
+    auto unit = po == PositionalNotation::Binary ? 1024 : 1000;
+    if (bytes < unit) { return std::to_string(bytes) + "B"; }
+    auto exp = static_cast<int>(std::log(bytes) / std::log(unit));
+    auto pre = std::string("KMGTPEZYBND").at(exp - 1) + std::string(po == PositionalNotation::Binary ? "i" : "");
+    auto var = bytes / std::pow(unit, exp);
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(1) << var << pre << "B";
+    return ss.str();
 }
 
 }
