@@ -39,7 +39,7 @@ public:
 #endif
 #include "utf8.h"
 
-namespace jlib{
+namespace jlib {
     
 static const char g_logger_name[] = "logger";
     
@@ -61,6 +61,7 @@ inline void init_logger(const std::wstring& file_name = L"")
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);
+		combined_logger->flush_on(spdlog::level::off);
 	} catch (const spdlog::spdlog_ex& ex) {
 #ifdef WIN32
 		char msg[1024] = { 0 };
@@ -76,10 +77,10 @@ inline void init_logger(const std::wstring& file_name = L"")
 
 
 
-#define JLOG_INFO spdlog::get(g_logger_name)->info
-#define JLOG_WARN spdlog::get(g_logger_name)->warn
-#define JLOG_ERRO spdlog::get(g_logger_name)->error
-#define JLOG_CRTC spdlog::get(g_logger_name)->critical
+#define JLOG_INFO spdlog::get(jlib::g_logger_name)->info
+#define JLOG_WARN spdlog::get(jlib::g_logger_name)->warn
+#define JLOG_ERRO spdlog::get(jlib::g_logger_name)->error
+#define JLOG_CRTC spdlog::get(jlib::g_logger_name)->critical
 
 #ifdef _WIN32
 #define JLOG_ALL(args, ...) spdlog::get(jlib::g_logger_name)->log(spdlog::level::off, args, __VA_ARGS__)
