@@ -1,5 +1,5 @@
 .vscode/
-
+.vs/
 
 # Compiled Object files
 *.slo
@@ -31,7 +31,7 @@ Debug/config/
 Debug/
 Release/
 ReleaseD/
-AlarmCenter/include
+
 
 # vc6
 #*.dsp

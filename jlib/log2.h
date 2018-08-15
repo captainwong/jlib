@@ -61,7 +61,7 @@ inline void init_logger(const std::wstring& file_name = L"")
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);
-		combined_logger->flush_on(spdlog::level::off);
+		combined_logger->flush_on(spdlog::level::trace);
 	} catch (const spdlog::spdlog_ex& ex) {
 #ifdef WIN32
 		char msg[1024] = { 0 };
