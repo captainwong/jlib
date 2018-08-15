@@ -29,19 +29,21 @@ public:
 #else // JLIB_DISABLE_LOG
 
 #include <iostream>
-#include "spdlog/spdlog.h"
+#include "3rdparty/spdlog/spdlog.h"
+
 #ifdef WIN32
-#include "spdlog/sinks/msvc_sink.h"
-#include "win32.h"
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
-#endif
-#endif
+#endif // _CRT_SECURE_NO_WARNINGS
+#include "3rdparty/spdlog/sinks/msvc_sink.h"
+#include "win32.h"
+#endif // WIN32
+
 #include "utf8.h"
 
 namespace jlib {
     
-static const char g_logger_name[] = "logger";
+static const char g_logger_name[] = "jlogger";
     
 inline void init_logger(const std::wstring& file_name = L"")
 {

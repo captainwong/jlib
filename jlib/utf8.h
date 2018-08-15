@@ -29,8 +29,8 @@ DEALINGS IN THE SOFTWARE.
 #define UTF8_FOR_CPP_2675DCD0_9480_4c0c_B92A_CC14C027B731
 
 #include <string>
-#include "utf8/checked.h"
-#include "utf8/unchecked.h"
+#include "3rdparty/utf8/checked.h"
+#include "3rdparty/utf8/unchecked.h"
 
 
 namespace utf8 {

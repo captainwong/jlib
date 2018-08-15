@@ -34,4 +34,18 @@ inline typename C get_other(const C & All, const C& Sub) {
 	return res;
 }
 
+template <class V>
+std::vector<std::wstring> get_other(const V& v, const std::wstring& t) {
+	std::vector<std::wstring> ret = {};
+	for (auto i : v) { if (i != t) { ret.push_back(t); } }
+	return ret;
+}
+
+template <class V>
+std::vector<std::string> get_other(const V& v, const std::string& t) {
+	std::vector<std::string> ret = {};
+	for (auto i : v) { if (i != t) { ret.push_back(t); } }
+	return ret;
+}
+
 }
