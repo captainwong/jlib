@@ -437,7 +437,7 @@ inline std::wstring RegGetString(HKEY hKey, const std::wstring& subKey, const st
 	}
 
 	//
-	// On return, RegGetValue() writes in dataSize the actual size of the string, in bytes.
+	// On return, RegGetValueW() writes in dataSize the actual size of the string, in bytes.
 	// We must resize the wstring object to the proper string size.
 	// Note that dataSize is expressed in bytes, and includes the terminating NUL; so we have to 
 	// subtract the NUL from the total string length, as wstring objects are already NUL-terminated.
@@ -631,11 +631,11 @@ inline std::vector<std::pair<std::wstring, DWORD>> RegEnumValues(HKEY hKey)
 			nullptr     // no data size
 		);
 		if (retCode != ERROR_SUCCESS) {
-			throw RegistryError{ "Cannot enumerate values: RegEnumValue failed.", retCode };
+			throw RegistryError{ "Cannot enumerate values: RegEnumValueW failed.", retCode };
 		}
 
 		//
-		// On success, the RegEnumValue API writes the length of the
+		// On success, the RegEnumValueW API writes the length of the
 		// value name in the valueNameLen output parameter 
 		// (not including the terminating NUL).
 		// So we can build a wstring based on that length.
@@ -714,11 +714,11 @@ inline std::vector<std::wstring> RegEnumSubKeys(HKEY hKey)
 			nullptr  // no last write time
 		);
 		if (retCode != ERROR_SUCCESS) {
-			throw RegistryError{ "Cannot enumerate subkeys: RegEnumKeyEx failed.", retCode };
+			throw RegistryError{ "Cannot enumerate subkeys: RegEnumKeyExW failed.", retCode };
 		}
 
 		//
-		// On success, the ::RegEnumKeyEx API writes the length of the
+		// On success, the ::RegEnumKeyExW API writes the length of the
 		// subkey name in the subKeyNameLen output parameter 
 		// (not including the terminating NUL).
 		// So I can build a wstring based on that length.
