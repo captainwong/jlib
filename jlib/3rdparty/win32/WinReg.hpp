@@ -549,7 +549,7 @@ inline void RegKey::Open(
 	LONG retCode = ::RegOpenKeyExW(
 		hKeyParent,
 		subKey.c_str(),
-		REG_NONE,           // default options
+		KEY_READ | KEY_WOW64_64KEY,           // default options
 		desiredAccess,
 		&hKey
 	);
