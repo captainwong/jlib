@@ -80,5 +80,8 @@
     <ClInclude Include="..\..\jlib\win32\UnicodeTool.h">
       <Filter>Header Files\JLIB\win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\jlib\win32\DeviceUniqueIdentifierHeaderOnly.h">
+      <Filter>Header Files\JLIB\win32</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

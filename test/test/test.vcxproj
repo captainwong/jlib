@@ -165,6 +165,7 @@
     <ClInclude Include="..\..\jlib\version_no.h" />
     <ClInclude Include="..\..\jlib\win32.h" />
     <ClInclude Include="..\..\jlib\win32\clipboard.h" />
+    <ClInclude Include="..\..\jlib\win32\DeviceUniqueIdentifierHeaderOnly.h" />
     <ClInclude Include="..\..\jlib\win32\file_op.h" />
     <ClInclude Include="..\..\jlib\win32\memory_micros.h" />
     <ClInclude Include="..\..\jlib\win32\MtVerify.h" />
