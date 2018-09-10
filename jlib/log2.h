@@ -28,6 +28,8 @@ public:
 
 #else // JLIB_DISABLE_LOG
 
+#define JLIB_LOG2_ENABLED
+
 #include <iostream>
 #include "3rdparty/spdlog/spdlog.h"
 
@@ -43,7 +45,7 @@ public:
 
 namespace jlib {
     
-static const char g_logger_name[] = "jlogger";
+static constexpr char g_logger_name[] = "jlogger";
     
 inline void init_logger(const std::wstring& file_name = L"")
 {
