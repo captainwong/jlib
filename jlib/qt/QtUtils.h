@@ -10,7 +10,7 @@
 #include <QTimer>
 #include <QDir>
 #include <QProcess>
-#include "QtGlobal.h"
+#include "QtDebug.h"
 #include "QtPathHelper.h"
 
 
