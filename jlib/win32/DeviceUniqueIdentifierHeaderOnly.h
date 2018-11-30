@@ -120,7 +120,7 @@ enum {
 * @param[in,out] results 查询结果集合
 * @return 成功或失败
 */
-bool query(size_t queryTypes, std::vector<std::wstring>& results);
+static bool query(size_t queryTypes, std::vector<std::wstring>& results);
 
 /**
 * @brief 查询信息
@@ -128,7 +128,7 @@ bool query(size_t queryTypes, std::vector<std::wstring>& results);
 * @param[in,out] results 查询结果集合
 * @return 成功或失败
 */
-bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results);
+static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results);
 
 /**
 * @brief 连接查询结果为一个字符串
@@ -136,7 +136,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 * @param[in,out] conjunction 连词
 * @return 将结果以连词连接起来组成的字符串
 */
-std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction);
+static std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction);
 
 }
 }
@@ -341,7 +341,7 @@ static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uS
 
 
 
-std::wstring getMachineGUID()
+static std::wstring getMachineGUID()
 {
 	std::wstring res;
 	/*using namespace winreg;
@@ -396,7 +396,7 @@ std::wstring getMachineGUID()
 } // end of namespace detail
 
 
-bool query(size_t queryTypes, std::vector<std::wstring>& results)
+static bool query(size_t queryTypes, std::vector<std::wstring>& results)
 {
 	std::vector<QueryType> vec;
 
@@ -434,7 +434,7 @@ bool query(size_t queryTypes, std::vector<std::wstring>& results)
 }
 
 // 基于Windows Management Instrumentation（Windows管理规范）
-bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results)
+static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results)
 {
 	bool ok = false;
 
@@ -578,7 +578,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 	return ok;
 }
 
-std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring & conjunction)
+static std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring & conjunction)
 {
 	std::wstring result;
 	auto itBegin = results.cbegin();
