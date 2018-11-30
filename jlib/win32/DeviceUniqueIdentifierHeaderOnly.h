@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <Windows.h>
 #include <winioctl.h>
 
@@ -120,7 +121,7 @@ enum {
 * @param[in,out] results 查询结果集合
 * @return 成功或失败
 */
-static bool query(size_t queryTypes, std::vector<std::wstring>& results);
+static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>& results);
 
 /**
 * @brief 查询信息
@@ -128,7 +129,7 @@ static bool query(size_t queryTypes, std::vector<std::wstring>& results);
 * @param[in,out] results 查询结果集合
 * @return 成功或失败
 */
-static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results);
+static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results);
 
 /**
 * @brief 连接查询结果为一个字符串
@@ -383,7 +384,9 @@ static std::wstring getMachineGUID()
 			RegCloseKey(hKey);
 			throw "Could not read registry value";
 		}
-
+		if (value.back() == L'\0') {
+			value.erase(value.size() - 1, 1);
+		}
 		res = value;
 		RegCloseKey(hKey);
 
@@ -396,7 +399,7 @@ static std::wstring getMachineGUID()
 } // end of namespace detail
 
 
-static bool query(size_t queryTypes, std::vector<std::wstring>& results)
+static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>& results)
 {
 	std::vector<QueryType> vec;
 
@@ -427,14 +430,14 @@ static bool query(size_t queryTypes, std::vector<std::wstring>& results)
 
 	auto ok = query(vec, results);
 	if (queryTypes & WINDOWS_MACHINE_GUID) {
-		results.push_back(detail::getMachineGUID());
+		results[WINDOWS_MACHINE_GUID] = (detail::getMachineGUID());
 	}
 
 	return ok;
 }
 
 // 基于Windows Management Instrumentation（Windows管理规范）
-static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results)
+static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results)
 {
 	bool ok = false;
 
@@ -514,6 +517,11 @@ static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wst
 	}
 
 	for (auto queryType : queryTypes) {
+		if (queryType == WINDOWS_MACHINE_GUID) {
+			results[WINDOWS_MACHINE_GUID] = (detail::getMachineGUID());
+			continue;
+		}
+
 		auto query = detail::getWQLQuery(queryType);
 
 		// 通过请求代理来向WMI发送请求
@@ -526,9 +534,9 @@ static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wst
 			&pEnumerator
 		);
 		if (FAILED(hres)) {
-			pSvc->Release();
-			pLoc->Release();
-			CoUninitialize();
+			//pSvc->Release();
+			//pLoc->Release();
+			//CoUninitialize();
 			continue;
 		}
 
@@ -558,7 +566,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wst
 				VariantClear(&vtProperty);
 				// 对属性值做进一步的处理
 				if (detail::WMI_DoWithProperty(queryType, deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN)) {
-					results.push_back(deviceProperty.szProperty);
+					results[queryType] = (deviceProperty.szProperty);
 					ok = true;
 					pclsObj->Release();
 					break;
