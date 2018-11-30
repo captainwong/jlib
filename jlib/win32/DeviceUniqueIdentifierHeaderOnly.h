@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <Windows.h>
+#include <winioctl.h>
 
 namespace jlib {
 namespace DeviceUniqueIdentifier {
