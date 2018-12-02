@@ -442,7 +442,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 	bool ok = false;
 
 	// ³õÊ¼»¯COM
-	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	HRESULT hres = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if (FAILED(hres)) {
 		return false;
 	}
