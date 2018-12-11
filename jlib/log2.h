@@ -53,7 +53,7 @@ std::wstring
 #else
 std::string
 #endif
-& file_name = L"")
+& file_name)
 {
     try {
 		std::vector<spdlog::sink_ptr> sinks;
