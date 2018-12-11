@@ -55,13 +55,8 @@ inline void init_logger(const std::wstring& file_name = L"")
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
-		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
-#ifdef WIN32
-			file_name + L".log"
-#else		
-			file_name + ".log"
-#endif
-			, 23, 59));
+		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(file_name + L".log", 23, 59));
+
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);

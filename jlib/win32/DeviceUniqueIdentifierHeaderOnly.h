@@ -441,10 +441,31 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 {
 	bool ok = false;
 
-	// 初始化COM
-	HRESULT hres = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+	// 初始化COM COINIT_APARTMENTTHREADED
+	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
-		return false;
+#ifndef __AFXWIN_H__
+		_com_error ce(hres);
+		qDebug() << "CoInitializeEx with COINIT_MULTITHREADED failed:\n" << ce.Error() << QString::fromWCharArray(ce.ErrorMessage()); // 
+#endif
+
+		if (hres == 0x80010106) {
+#ifndef __AFXWIN_H__
+			qDebug() << "already initilized, pass"; // 
+#endif
+		} else {
+#ifndef __AFXWIN_H__
+			qDebug() << "trying CoInitializeEx with COINIT_APARTMENTTHREADED"; // 
+#endif
+			hres = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+
+			if (FAILED(hres)) {
+#ifndef __AFXWIN_H__
+				qDebug() << "CoInitializeEx with COINIT_APARTMENTTHREADED failed, exit";
+#endif
+				return false;
+			}
+		}
 	}
 
 	// 设置COM的安全认证级别
@@ -460,6 +481,9 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		NULL
 	);
 	if (FAILED(hres)) {
+#ifndef __AFXWIN_H__
+		qDebug() << "CoInitializeSecurity:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#endif
 		CoUninitialize();
 		return false;
 	}
@@ -474,6 +498,9 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		reinterpret_cast<LPVOID*>(&pLoc)
 	);
 	if (FAILED(hres)) {
+#ifndef __AFXWIN_H__
+		qDebug() << "CoCreateInstance:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#endif
 		CoUninitialize();
 		return false;
 	}
@@ -491,8 +518,9 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		&pSvc
 	);
 	if (FAILED(hres)) {
-		_com_error e(hres);
-		e.ErrorMessage();
+#ifndef __AFXWIN_H__
+		qDebug() << "ConnectServer:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#endif
 		pLoc->Release();
 		CoUninitialize();
 		return false;
@@ -510,6 +538,9 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		EOAC_NONE
 	);
 	if (FAILED(hres)) {
+#ifndef __AFXWIN_H__
+		qDebug() << "CoSetProxyBlanket:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#endif
 		pSvc->Release();
 		pLoc->Release();
 		CoUninitialize();
@@ -537,6 +568,10 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 			//pSvc->Release();
 			//pLoc->Release();
 			//CoUninitialize();
+#ifndef __AFXWIN_H__
+			qDebug() << "ExecQuery:\n" << QString::fromWCharArray(query.szSelect) << '\n' << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#endif
+			results[queryType] = _com_error(hres).ErrorMessage();
 			continue;
 		}
 
