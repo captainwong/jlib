@@ -107,20 +107,20 @@ private:
 
 public:
 	range_log(const std::string& msg) : msg_(msg) {
-		JLOG_INFO(msg_ + " in");
+		JLOG_DBUG(msg_ + " in");
 		begin_ = std::chrono::steady_clock::now();
 	}
 
 	range_log(const std::wstring& msg) : msg_() {
 		msg_ = utf8::w2a(msg);
-		JLOG_INFO(msg_ + " in");
+		JLOG_DBUG(msg_ + " in");
 		begin_ = std::chrono::steady_clock::now();
 	}
 
 	~range_log() {
 		auto diff = std::chrono::steady_clock::now() - begin_;
 		auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
-		JLOG_INFO("{} out, duration: {}(ms)", msg_, msec.count());
+		JLOG_DBUG("{} out, duration: {}(ms)", msg_, msec.count());
 	}
 };
 
