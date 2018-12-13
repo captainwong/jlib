@@ -87,7 +87,7 @@ std::string
 }
 
 
-
+#define JLOG_DBUG spdlog::get(jlib::g_logger_name)->debug
 #define JLOG_INFO spdlog::get(jlib::g_logger_name)->info
 #define JLOG_WARN spdlog::get(jlib::g_logger_name)->warn
 #define JLOG_ERRO spdlog::get(jlib::g_logger_name)->error
