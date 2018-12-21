@@ -135,7 +135,7 @@ public:
 
 static const int MAX_OUT_BUFF_LEN = 4096;
 
-inline void dump_hex(const void* buff, size_t buff_len)
+inline void dump_hex(const void* buff, size_t buff_len, spdlog::level::level_enum level_enum = spdlog::level::warn)
 {
 	size_t output_len = buff_len * 6 + 64;
 	if (output_len > MAX_OUT_BUFF_LEN) {
@@ -163,10 +163,10 @@ inline void dump_hex(const void* buff, size_t buff_len)
 		}
 	}
 
-	JLOG_WARN(output);
+	spdlog::get(jlib::g_logger_name)->log(level_enum, output);
 }
 
-inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space = true, bool force_new_line = true)
+inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space = true, bool force_new_line = true, spdlog::level::level_enum level_enum = spdlog::level::warn)
 {
 	size_t output_len = buff_len * 6 + 64;
 	if (output_len > MAX_OUT_BUFF_LEN) {
@@ -202,7 +202,7 @@ inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space
 		}
 	}
 
-	JLOG_WARN(output);
+	spdlog::get(jlib::g_logger_name)->log(level_enum, output);
 }
 
 #define JLOG_HEX(b, l) jlib::dump_hex(b, l)
