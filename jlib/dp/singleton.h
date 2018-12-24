@@ -3,8 +3,8 @@
 #include <mutex>
 #include <boost/noncopyable.hpp>
 
+namespace jlib {
 namespace dp {
-
 
 template <class T>
 class singleton : public boost::noncopyable
@@ -52,4 +52,5 @@ template <class T>
 std::shared_ptr<T> singleton<T>::instance_ = nullptr;
 
 
-}
+} // end of namespace dp
+} // end of namespace jlib

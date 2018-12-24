@@ -5,6 +5,7 @@
 #include <mutex>
 #include <boost/noncopyable.hpp>
 
+namespace jlib {
 namespace dp {
 
 template <typename target>
@@ -46,6 +47,5 @@ public:
 	}
 };
 
-};
-
-
+} // end of namespace dp
+} // end of namespace jlib
