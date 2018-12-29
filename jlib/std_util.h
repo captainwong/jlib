@@ -7,7 +7,7 @@ namespace jlib {
 
 template <class C, class T>
 inline bool is_contain(const C& c, const T& t) {
-	for (const auto& i : C) {
+	for (const auto& i : c) {
 		if (i == t) { return true; }
 	}
 	return false;
