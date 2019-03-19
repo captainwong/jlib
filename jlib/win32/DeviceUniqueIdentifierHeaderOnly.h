@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <Windows.h>
 #include <winioctl.h>
+#include <comdef.h>
 
 namespace jlib {
 namespace DeviceUniqueIdentifier {
