@@ -18,6 +18,19 @@
 
 int main()
 {
+	jlib::init_logger(L"test");
+
+	char data[0x80 - 0x20] = {};
+	for (int i = 0x20; i < 0x80; i++) {
+		data[i-0x20] = i;
+	}
+
+	JLOG_ASC(data, sizeof(data));
+	JLOG_HEX(data, sizeof(data));
+
+	data[0] = 31;
+	JLOG_ASC(data, sizeof(data));
+
 
     return 0;
 }
