@@ -17,7 +17,7 @@ class pinger
 {
 public:
 	pinger(boost::asio::io_service& io_service, const char* destination, unsigned short max_sequence_number = 0)
-		: resolver_(io_service), socket_(io_service, icmp::v4()),
+		: io_service_(io_service), resolver_(io_service), socket_(io_service, icmp::v4()),
 		timer_(io_service), sequence_number_(0), num_replies_(0), max_sequence_number_(max_sequence_number)
 	{
 		icmp::resolver::query query(icmp::v4(), destination, "");
@@ -47,7 +47,7 @@ private:
 			quiting_ = true;
 			timer_.cancel();
 			socket_.close();
-			socket_.get_io_service().stop();
+			io_service_.stop();
 			return;
 		}
 
@@ -143,7 +143,7 @@ private:
 			quiting_ = true;
 			timer_.cancel();
 			socket_.close();
-			socket_.get_io_service().stop();
+			io_service_.stop();
 		}
 	}
 
@@ -156,6 +156,7 @@ private:
 #endif
 	}
 
+	boost::asio::io_service& io_service_;
 	icmp::resolver resolver_;
 	icmp::endpoint destination_;
 	icmp::socket socket_;
