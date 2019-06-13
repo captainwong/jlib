@@ -1,6 +1,6 @@
 #pragma once
 #include <QDir>
-#include <QApplication>
+#include <QCoreApplication>
 #include <QString>
 #include <QDateTime>
 
@@ -19,7 +19,7 @@ struct PathHelper
 	static inline QString program() {
 		struct Helper {
 			Helper() {
-				QDir dir(qApp->applicationDirPath());
+				QDir dir(QCoreApplication::applicationDirPath());
 				dir.cdUp();
 				path = dir.absolutePath();
 			}

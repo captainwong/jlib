@@ -483,7 +483,11 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 	);
 	if (FAILED(hres)) {
 #ifndef __AFXWIN_H__
-		qDebug() << "CoInitializeSecurity:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+		qDebug() << "CoInitializeSecurity:" << hres << QString::fromWCharArray(_com_error(hres).ErrorMessage());
+#else
+		CString msg;
+		msg.Format(L"0x%X : %s", hres, _com_error(hres).ErrorMessage());
+		MessageBoxW(NULL, msg, L"error", MB_ICONERROR);
 #endif
 		CoUninitialize();
 		return false;

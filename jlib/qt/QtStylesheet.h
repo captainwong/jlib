@@ -331,6 +331,28 @@ QListWidget::item::selected
 }
 )";
 
+
+static const auto check_box = R"(
+QCheckBox
+{
+	font-size: 16px;
+	color: white;
+}
+QCheckBox::indicator
+{
+	width: 48px;
+	height: 48px;
+}
+QCheckBox::indicator:checked
+{
+	image: url(:/Skin/checkbox/checkbox_checked.png);
+}
+QCheckBox::indicator:unchecked
+{
+	image: url(:/Skin/checkbox/checkbox_unchecked.png);
+}
+)";
+
 } // end of namespace def_style_sheets
 
 

@@ -30,7 +30,6 @@ static inline void non_blocking_wait_in_ui_thread(int ms) {
 	q.exec();
 }
 
-
 /**
 * @brief 在文件夹中显示
 * @param pathIn 若为文件路径则在文件夹中显示，若为文件夹路径则打开改文件夹
