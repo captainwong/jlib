@@ -489,10 +489,18 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		msg.Format(L"0x%X : %s", hres, _com_error(hres).ErrorMessage());
 		MessageBoxW(NULL, msg, L"error", MB_ICONERROR);
 #endif
-		CoUninitialize();
-		return false;
-	}
 
+		if (hres == E_OUTOFMEMORY) {
+#ifndef __AFXWIN_H__
+			qDebug() << "E_OUTOFMEMORY";
+#else
+			MessageBoxW(NULL, L"E_OUTOFMEMORY", L"error", MB_ICONERROR);
+#endif
+		} else {
+			CoUninitialize();
+			return false;
+		}
+	}
 	// 获得WMI连接COM接口
 	IWbemLocator *pLoc = NULL;
 	hres = CoCreateInstance(
