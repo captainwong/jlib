@@ -91,6 +91,7 @@ protected:
 		is_mouse_pressed_ = true;
 		mouse_pressed_pos_ = mapToParent(e->pos());
 	}
+
 	virtual void mouseMoveEvent(QMouseEvent* e) override {
 		if (!is_mouse_pressed_)return;
 		if (is_maximized_) {
@@ -100,6 +101,7 @@ protected:
 		}
 		parentWidget()->move(e->globalPos() - mouse_pressed_pos_);
 	}
+
 	virtual void mouseReleaseEvent(QMouseEvent* e) override {
 		is_mouse_pressed_ = false;
 
