@@ -17,6 +17,41 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_json", "test_json\test
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_timestamp", "test_timestamp\test_timestamp.vcxproj", "{372670F2-83A5-4058-B93C-BB0DCC1521ED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jlib", "jlib", "{42703978-A988-403D-9723-E35527FA8A07}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\chrono_wrapper.h = ..\jlib\chrono_wrapper.h
+		..\jlib\dp.h = ..\jlib\dp.h
+		..\jlib\log.h = ..\jlib\log.h
+		..\jlib\log2.h = ..\jlib\log2.h
+		..\jlib\mem_tool.h = ..\jlib\mem_tool.h
+		..\jlib\micro_getter_setter.h = ..\jlib\micro_getter_setter.h
+		..\jlib\net.h = ..\jlib\net.h
+		..\jlib\space.h = ..\jlib\space.h
+		..\jlib\std_util.h = ..\jlib\std_util.h
+		..\jlib\utf8.h = ..\jlib\utf8.h
+		..\jlib\version_no.h = ..\jlib\version_no.h
+		..\jlib\vs_ver.h = ..\jlib\vs_ver.h
+		..\jlib\win32.h = ..\jlib\win32.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", "{5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-40DB-44FD-8FC2-A66AB921688D}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\base\cast.h = ..\jlib\base\cast.h
+		..\jlib\base\config.h = ..\jlib\base\config.h
+		..\jlib\base\copyable.h = ..\jlib\base\copyable.h
+		..\jlib\base\currentthread.h = ..\jlib\base\currentthread.h
+		..\jlib\base\logging.h = ..\jlib\base\logging.h
+		..\jlib\base\logstream.h = ..\jlib\base\logstream.h
+		..\jlib\base\noncopyable.h = ..\jlib\base\noncopyable.h
+		..\jlib\base\singleton.h = ..\jlib\base\singleton.h
+		..\jlib\base\stringpiece.h = ..\jlib\base\stringpiece.h
+		..\jlib\base\timestamp.h = ..\jlib\base\timestamp.h
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_singleton", "test_singleton\test_singleton.vcxproj", "{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -79,9 +114,21 @@ Global
 		{372670F2-83A5-4058-B93C-BB0DCC1521ED}.Release|x64.Build.0 = Release|x64
 		{372670F2-83A5-4058-B93C-BB0DCC1521ED}.Release|x86.ActiveCfg = Release|Win32
 		{372670F2-83A5-4058-B93C-BB0DCC1521ED}.Release|x86.Build.0 = Release|Win32
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Debug|x64.ActiveCfg = Debug|x64
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Debug|x64.Build.0 = Debug|x64
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Debug|x86.ActiveCfg = Debug|Win32
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Debug|x86.Build.0 = Debug|Win32
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Release|x64.ActiveCfg = Release|x64
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Release|x64.Build.0 = Release|x64
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Release|x86.ActiveCfg = Release|Win32
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5} = {42703978-A988-403D-9723-E35527FA8A07}
+		{608A105E-40DB-44FD-8FC2-A66AB921688D} = {42703978-A988-403D-9723-E35527FA8A07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

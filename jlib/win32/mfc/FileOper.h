@@ -1,4 +1,4 @@
-// FileOper.h: interface for the CFileOper class.
+ï»¿// FileOper.h: interface for the CFileOper class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -18,10 +18,10 @@ static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lParam,LPARAM 
 {
 	switch(uMsg)
 	{
-	case BFFM_INITIALIZED:    //³õÊ¼»¯ÏûÏ¢
+	case BFFM_INITIALIZED:    //åˆå§‹åŒ–æ¶ˆæ¯
 		::SendMessage(hwnd,BFFM_SETSELECTION,TRUE,lpData);
 		break;
-	case BFFM_SELCHANGED:    //Ñ¡ÔñÂ·¾¶±ä»¯£¬
+	case BFFM_SELCHANGED:    //é€‰æ‹©è·¯å¾„å˜åŒ–ï¼Œ
 		{
 			TCHAR curr[MAX_PATH];   
 			SHGetPathFromIDList((LPCITEMIDLIST)lParam,curr);   
@@ -37,7 +37,7 @@ static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lParam,LPARAM 
 class CFileOper  
 {
 public:
-	// µ¯³öÎÄ¼ş¼ĞÑ¡Ôñ¶Ô»°¿ò£¬²¢·µ»ØÑ¡¶¨µÄÎÄ¼ş¼ĞÂ·¾¶
+	// å¼¹å‡ºæ–‡ä»¶å¤¹é€‰æ‹©å¯¹è¯æ¡†ï¼Œå¹¶è¿”å›é€‰å®šçš„æ–‡ä»¶å¤¹è·¯å¾„
 	static BOOL BrowseGetPath(CString &path, HWND hWnd){
 		TCHAR szPath[MAX_PATH] = {0};
 		BROWSEINFO bi;
@@ -58,7 +58,7 @@ public:
 		return TRUE;
 	}
 
-	// É¾³ı¸ÃÂ·¾¶ÏÂËùÓĞÎÄ¼şÓëÎÄ¼ş¼Ğ
+	// åˆ é™¤è¯¥è·¯å¾„ä¸‹æ‰€æœ‰æ–‡ä»¶ä¸æ–‡ä»¶å¤¹
 	static BOOL DeleteFolderAndAllSubFolder_Files(LPCTSTR folderPath){
 		system("echo delete old folder and sub files...\n");
 		//CString cmd = _T("");
@@ -77,7 +77,7 @@ public:
 		return ret;
 	}
 
-	// »ñÈ¡ÎÄ¼ş´óĞ¡
+	// è·å–æ–‡ä»¶å¤§å°
 	static long GetFileSize(const CString& path){
 		FILE *p = NULL;
 #if defined(_UNICODE) || defined(UNICODE)
@@ -100,7 +100,7 @@ public:
 		return len;
 	}
 
-	// »ñÈ¡Â·¾¶ÖĞ×îÓÒµÄÎÄ¼ş¼ĞÃû³Æ£¬ÈçD:\A\B,·µ»ØB
+	// è·å–è·¯å¾„ä¸­æœ€å³çš„æ–‡ä»¶å¤¹åç§°ï¼Œå¦‚D:\A\B,è¿”å›B
 	static CString GetCurFolderFromFullPath(const CString& strpath)
 	{
 		int pos = -1;
@@ -110,7 +110,7 @@ public:
 		return _T("");
 	}
 
-	// »ñÈ¡ÎÄ¼şÂ·¾¶ÖĞµÄÎÄ¼ş¼ĞÂ·¾¶£¬ÈçD:/A/B.TXT, ·µ»ØD:/A
+	// è·å–æ–‡ä»¶è·¯å¾„ä¸­çš„æ–‡ä»¶å¤¹è·¯å¾„ï¼Œå¦‚D:/A/B.TXT, è¿”å›D:/A
 	static CString GetFolderPathFromFilePath(const CString& strpath)
 	{
 		int pos = -1;
@@ -120,7 +120,7 @@ public:
 		return _T("");
 	}
 
-	// ¸´ÖÆÎÄ¼ş¼Ğµ½Ä¿µÄ£¬²¢µ¯³öÎÄ¼ş¼Ğ¸´ÖÆ¶Ô»°¿ò
+	// å¤åˆ¶æ–‡ä»¶å¤¹åˆ°ç›®çš„ï¼Œå¹¶å¼¹å‡ºæ–‡ä»¶å¤¹å¤åˆ¶å¯¹è¯æ¡†
 	static BOOL CopyFolder(const CString& dstFolder, const CString& srcFolder, HWND hWnd)
 	{
 		TCHAR szDst[MAX_PATH], szSrc[MAX_PATH];
@@ -143,17 +143,17 @@ public:
 		return ret == 0 && lpFile.fAnyOperationsAborted == FALSE;
 	}
 	
-	// ÅĞ¶ÏÖ¸¶¨Â·¾¶ÊÇ·ñ´æÔÚ£¨ÎÄ¼ş¼Ğ£©
+	// åˆ¤æ–­æŒ‡å®šè·¯å¾„æ˜¯å¦å­˜åœ¨ï¼ˆæ–‡ä»¶å¤¹ï¼‰
 	static BOOL IsFolderExists(LPCTSTR lpszFolderPath){
 		return FindFirstFileExists(lpszFolderPath, FILE_ATTRIBUTE_DIRECTORY);
 	}
 
-	// ÅĞ¶ÏÖ¸¶¨Â·¾¶ÊÇ·ñ´æÔÚ£¨ÎÄ¼ş»òÎÄ¼ş¼Ğ£©
+	// åˆ¤æ–­æŒ‡å®šè·¯å¾„æ˜¯å¦å­˜åœ¨ï¼ˆæ–‡ä»¶æˆ–æ–‡ä»¶å¤¹ï¼‰
 	static BOOL PathExists(LPCTSTR lpszPath){
 		return FindFirstFileExists(lpszPath, FALSE);
 	}
 
-	// ¸ü¸ÄÎÄ¼şÃûºó×ºÃû
+	// æ›´æ”¹æ–‡ä»¶ååç¼€å
 	static CString ChangeFileExt(const CString& srcFilePath, const CString& dstExt){
 		CString dstFilePath = srcFilePath;
 		int pos = srcFilePath.ReverseFind(_T('.'));
@@ -164,7 +164,7 @@ public:
 		return dstFilePath;
 	}
 
-	// ´ÓÎÄ¼şÂ·¾¶ÖĞ»ñÈ¡ÎÄ¼ş±êÌâ£¬ÈçD:\AAA.TXT»òÕßAAA.TXT£¬·µ»ØAAA
+	// ä»æ–‡ä»¶è·¯å¾„ä¸­è·å–æ–‡ä»¶æ ‡é¢˜ï¼Œå¦‚D:\AAA.TXTæˆ–è€…AAA.TXTï¼Œè¿”å›AAA
 	static CString GetFileTitle(const CString& fileName){
 		CString title = _T("");
 		int pos = -1;
@@ -178,7 +178,7 @@ public:
 		return title;
 	}
 
-	// ´ÓÎÄ¼şÂ·¾¶ÖĞ»ñÈ¡ÎÄ¼şºó×ºÃû£¬ÈçD:\AAA.TXT£¬·µ»ØTXT
+	// ä»æ–‡ä»¶è·¯å¾„ä¸­è·å–æ–‡ä»¶åç¼€åï¼Œå¦‚D:\AAA.TXTï¼Œè¿”å›TXT
 	static CString GetFileExt(const CString& filePath){
 		CString ext = _T("");
 		int pos = filePath.ReverseFind(_T('.'));
@@ -189,7 +189,7 @@ public:
 		return ext;
 	}
 
-	// ´ÓÎÄ¼şÂ·¾¶ÖĞ»ñÈ¡ÎÄ¼şÃû£¬ÈçD:\AAA.TXT£¬·µ»ØAAA.TXT
+	// ä»æ–‡ä»¶è·¯å¾„ä¸­è·å–æ–‡ä»¶åï¼Œå¦‚D:\AAA.TXTï¼Œè¿”å›AAA.TXT
 	static CString GetFileNameFromPathName(const CString& filePathName){
 		CString fileName = _T("");
 		int pos = filePathName.ReverseFind(_T('\\'));
@@ -199,7 +199,7 @@ public:
 		return fileName;
 	}
 
-	// Ñ°ÕÒÄ¿Â¼(¸ÃÂ·¾¶²»ÄÜÒÔ \ ½áÎ²)ÏÂËùÓĞÖ¸¶¨ºó×ºÃû(²»Ö§³Ö*.*)µÄÎÄ¼ş£¬²¢½«½á¹û±£´æÔÚCStringListÖĞ£¬
+	// å¯»æ‰¾ç›®å½•(è¯¥è·¯å¾„ä¸èƒ½ä»¥ \ ç»“å°¾)ä¸‹æ‰€æœ‰æŒ‡å®šåç¼€å(ä¸æ”¯æŒ*.*)çš„æ–‡ä»¶ï¼Œå¹¶å°†ç»“æœä¿å­˜åœ¨CStringListä¸­ï¼Œ
 	static int FindFilesInFolder(LPCTSTR lpszFolder, LPCTSTR lpszFilter, CStringList &dstList){
 		if(lstrlen(lpszFolder) == 0)
 			return 0;
@@ -222,7 +222,7 @@ public:
 		return nNums;
 	}
 
-	// ½«Ä¿Â¼ÏÂ·ûºÏ *n.* µÄÎÄ¼ş(n´ú±íÊı×Ö)ÖØÃüÃûÎª *00n.*µÄĞÎÊ½£¬½«n¸ñÊ½»¯Îª3Î»Êı
+	// å°†ç›®å½•ä¸‹ç¬¦åˆ *n.* çš„æ–‡ä»¶(nä»£è¡¨æ•°å­—)é‡å‘½åä¸º *00n.*çš„å½¢å¼ï¼Œå°†næ ¼å¼åŒ–ä¸º3ä½æ•°
 	static BOOL RenameFile03d(LPCTSTR lpszFilePath){
 		CString fileName = lpszFilePath;
 		CString tittle, num, ext, newFileName;
@@ -263,7 +263,7 @@ public:
 		return TRUE;
 	}
 
-	// É¾³ıËùÓĞ¸ÃÄ¿Â¼Â·¾¶ÏÂÖ¸¶¨ºó×ºÃûµÄÎÄ¼ş
+	// åˆ é™¤æ‰€æœ‰è¯¥ç›®å½•è·¯å¾„ä¸‹æŒ‡å®šåç¼€åçš„æ–‡ä»¶
 	static DWORD DeleteFilesInFolder(LPCTSTR lpszFolder, LPCTSTR lpszFilter){
 		DWORD dwDeletedFileNums = 0;
 		CFileFind find;

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "config.h"
 #include "copyable.h"
 #include <boost/operators.hpp>
 #include <stdint.h> // int64_t
@@ -10,20 +11,19 @@
 
 //#define _WIN32_WINNT _WIN32_WINNT_WIN7
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+#ifdef JLIB_WINDOWS
+#	include <windows.h>
 	static inline struct tm* gmtime_r(const time_t* timep, struct tm* result)
 	{
 		gmtime_s(result, timep);
 		return result;
 	}
 
-#	include <windows.h>
-
     // https://blogs.msdn.microsoft.com/vcblog/2016/03/30/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
 #   define ENABLE_EBO __declspec(empty_bases)
 
-#else
-	#include <sys/time.h> // gettimeofday
+#elif defined(JLIB_LINUX)
+#   include <sys/time.h> // gettimeofday
 #   define ENABLE_EBO
 #endif
 
@@ -84,7 +84,7 @@ public:
 
 
 	static Timestamp now() {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+#ifdef JLIB_WINDOWS
 		/* FILETIME of Jan 1 1970 00:00:00. */
 		static constexpr unsigned __int64 EPOCH = 116444736000000000UL;
 
@@ -103,7 +103,7 @@ public:
 		ularge.HighPart = ft.dwHighDateTime;
 
 		return Timestamp((ularge.QuadPart - EPOCH) / 10L);
-#else
+#elif defined(JLIB_LINUX)
 		struct timeval tv;
 		gettimeofday(&tv, nullptr);
 		int64_t seconds = tv.tv_sec;

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <string>
 #include <vector>
@@ -12,90 +12,90 @@ namespace DeviceUniqueIdentifier {
 
 
 /*
-²Î¿¼1:
-¡¶Éè±¸Î¨Ò»±êÊ¶·½·¨£¨Unique Identifier£©£ºÈçºÎÔÚWindowsÏµÍ³ÉÏ»ñÈ¡Éè±¸µÄÎ¨Ò»±êÊ¶¡·
+å‚è€ƒ1:
+ã€Šè®¾å¤‡å”¯ä¸€æ ‡è¯†æ–¹æ³•ï¼ˆUnique Identifierï¼‰ï¼šå¦‚ä½•åœ¨Windowsç³»ç»Ÿä¸Šè·å–è®¾å¤‡çš„å”¯ä¸€æ ‡è¯†ã€‹
 http://www.vonwei.com/post/UniqueDeviceIDforWindows.html
 
-²Î¿¼2£º
-¡¶Í¨¹ıWMI»ñÈ¡Íø¿¨MACµØÖ·¡¢Ó²ÅÌĞòÁĞºÅ¡¢Ö÷°åĞòÁĞºÅ¡¢CPU ID¡¢BIOSĞòÁĞºÅ¡·
+å‚è€ƒ2ï¼š
+ã€Šé€šè¿‡WMIè·å–ç½‘å¡MACåœ°å€ã€ç¡¬ç›˜åºåˆ—å·ã€ä¸»æ¿åºåˆ—å·ã€CPU IDã€BIOSåºåˆ—å·ã€‹
 https://blog.csdn.net/b_h_l/article/details/7764767
 */
 
 enum QueryType : size_t {
 	/*
-	µ±Ç°Íø¿¨MAC
-	MACµØÖ·¿ÉÄÜÊÇ×î³£ÓÃµÄ±êÊ¶·½·¨£¬µ«ÊÇÏÖÔÚÕâÖÖ·½·¨»ù±¾²»¿É¿¿£º
-	Ò»¸öµçÄÔ¿ÉÄÜ´æÔÚ¶à¸öÍø¿¨£¬¶à¸öMACµØÖ·£¬
-	ÈçµäĞÍµÄ±Ê¼Ç±¾¿ÉÄÜ´æÔÚÓĞÏß¡¢ÎŞÏß¡¢À¶ÑÀµÈ¶à¸öMACµØÖ·£¬
-	Ëæ×Å²»Í¬Á¬½Ó·½Ê½µÄ¸Ä±ä£¬Ã¿´ÎMACµØÖ·Ò²»á¸Ä±ä¡£
-	¶øÇÒ£¬µ±°²×°ÓĞĞéÄâ»úÊ±£¬MACµØÖ·»á¸ü¶à¡£
-	MACµØÖ·ÁíÍâÒ»¸ö¸ü¼ÓÖÂÃüµÄÈõµãÊÇ£¬MACµØÖ·ºÜÈİÒ×ÊÖ¶¯¸ü¸Ä¡£
-	Òò´Ë£¬MACµØÖ·»ù±¾²»ÍÆ¼öÓÃ×÷Éè±¸Î¨Ò»ID¡£
+	å½“å‰ç½‘å¡MAC
+	MACåœ°å€å¯èƒ½æ˜¯æœ€å¸¸ç”¨çš„æ ‡è¯†æ–¹æ³•ï¼Œä½†æ˜¯ç°åœ¨è¿™ç§æ–¹æ³•åŸºæœ¬ä¸å¯é ï¼š
+	ä¸€ä¸ªç”µè„‘å¯èƒ½å­˜åœ¨å¤šä¸ªç½‘å¡ï¼Œå¤šä¸ªMACåœ°å€ï¼Œ
+	å¦‚å…¸å‹çš„ç¬”è®°æœ¬å¯èƒ½å­˜åœ¨æœ‰çº¿ã€æ— çº¿ã€è“ç‰™ç­‰å¤šä¸ªMACåœ°å€ï¼Œ
+	éšç€ä¸åŒè¿æ¥æ–¹å¼çš„æ”¹å˜ï¼Œæ¯æ¬¡MACåœ°å€ä¹Ÿä¼šæ”¹å˜ã€‚
+	è€Œä¸”ï¼Œå½“å®‰è£…æœ‰è™šæ‹Ÿæœºæ—¶ï¼ŒMACåœ°å€ä¼šæ›´å¤šã€‚
+	MACåœ°å€å¦å¤–ä¸€ä¸ªæ›´åŠ è‡´å‘½çš„å¼±ç‚¹æ˜¯ï¼ŒMACåœ°å€å¾ˆå®¹æ˜“æ‰‹åŠ¨æ›´æ”¹ã€‚
+	å› æ­¤ï¼ŒMACåœ°å€åŸºæœ¬ä¸æ¨èç”¨ä½œè®¾å¤‡å”¯ä¸€IDã€‚
 	*/
 	MAC_ADDR = 1,
 
 	/*
-	µ±Ç°Íø¿¨Ô­ÉúMAC
-	¿ÉÒÔÇáÒ×ĞŞ¸ÄÍø¿¨MAC£¬µ«ÎŞ·¨ĞŞ¸ÄÔ­ÉúMAC
+	å½“å‰ç½‘å¡åŸç”ŸMAC
+	å¯ä»¥è½»æ˜“ä¿®æ”¹ç½‘å¡MACï¼Œä½†æ— æ³•ä¿®æ”¹åŸç”ŸMAC
 	*/
 	MAC_ADDR_REAL = 1 << 1,
 
 	/*
-	Ó²ÅÌĞòÁĞºÅ
-	ÔÚWindowsÏµÍ³ÖĞÍ¨¹ıÃüÁîĞĞÔËĞĞ¡°wmic diskdrive get serialnumber¡±¿ÉÒÔ²é¿´¡£
-	Ó²ÅÌĞòÁĞºÅ×÷ÎªÉè±¸Î¨Ò»ID´æÔÚµÄÎÊÌâÊÇ£¬ºÜ¶à»úÆ÷¿ÉÄÜ´æÔÚ¶à¿éÓ²ÅÌ£¬
-	ÌØ±ğÊÇ·şÎñÆ÷£¬¶øÇÒ»úÆ÷¸ü»»Ó²ÅÌÊÇºÜ¿ÉÄÜ·¢ÉúµÄÊÂÇé£¬
-	¸ü»»Ó²ÅÌºóÉè±¸IDÒ²±ØĞëËæÖ®¸Ä±ä£¬ ²»È»Ò²»áÓ°ÏìÊÚÈ¨µÈÓ¦ÓÃ¡£
-	Òò´Ë£¬ºÜ¶àÊÚÈ¨Èí¼şÃ»ÓĞ¿¼ÂÇÊ¹ÓÃÓ²ÅÌĞòÁĞºÅ¡£
-	¶øÇÒ£¬²»Ò»¶¨ËùÓĞµÄµçÄÔ¶¼ÄÜ»ñÈ¡µ½Ó²ÅÌĞòÁĞºÅ¡£
+	ç¡¬ç›˜åºåˆ—å·
+	åœ¨Windowsç³»ç»Ÿä¸­é€šè¿‡å‘½ä»¤è¡Œè¿è¡Œâ€œwmic diskdrive get serialnumberâ€å¯ä»¥æŸ¥çœ‹ã€‚
+	ç¡¬ç›˜åºåˆ—å·ä½œä¸ºè®¾å¤‡å”¯ä¸€IDå­˜åœ¨çš„é—®é¢˜æ˜¯ï¼Œå¾ˆå¤šæœºå™¨å¯èƒ½å­˜åœ¨å¤šå—ç¡¬ç›˜ï¼Œ
+	ç‰¹åˆ«æ˜¯æœåŠ¡å™¨ï¼Œè€Œä¸”æœºå™¨æ›´æ¢ç¡¬ç›˜æ˜¯å¾ˆå¯èƒ½å‘ç”Ÿçš„äº‹æƒ…ï¼Œ
+	æ›´æ¢ç¡¬ç›˜åè®¾å¤‡IDä¹Ÿå¿…é¡»éšä¹‹æ”¹å˜ï¼Œ ä¸ç„¶ä¹Ÿä¼šå½±å“æˆæƒç­‰åº”ç”¨ã€‚
+	å› æ­¤ï¼Œå¾ˆå¤šæˆæƒè½¯ä»¶æ²¡æœ‰è€ƒè™‘ä½¿ç”¨ç¡¬ç›˜åºåˆ—å·ã€‚
+	è€Œä¸”ï¼Œä¸ä¸€å®šæ‰€æœ‰çš„ç”µè„‘éƒ½èƒ½è·å–åˆ°ç¡¬ç›˜åºåˆ—å·ã€‚
 	*/
 	HARDDISK_SERIAL = 1 << 2,
 
-	//! Ö÷°åĞòÁĞºÅ
+	//! ä¸»æ¿åºåˆ—å·
 	/*
-	ÔÚWindowsÏµÍ³ÖĞÍ¨¹ıÃüÁîĞĞÔËĞĞ¡°wmic csproduct get UUID¡±¿ÉÒÔ²é¿´¡£
-	Ö÷°åUUIDÊÇºÜ¶àÊÚÈ¨·½·¨ºÍÎ¢Èí¹Ù·½¶¼±È½ÏÍÆ³çµÄ·½·¨£¬
-	¼´±ãÖØ×°ÏµÍ³UUIDÓ¦¸ÃÒ²²»»á±ä
-	£¨±ÊÕßÃ»ÓĞÊµ²âÖØ×°£¬²»¹ıÔÚÒ»Ì¨»úÆ÷ÉÏ°²×°Ë«ÏµÍ³£¬»ñÈ¡µÄÖ÷°åUUIDÊÇÒ»ÑùµÄ£¬
-	Ë«ÏµÍ³Ò»¸öwindowsÒ»¸öLinux£¬LinuxÏÂÓÃ¡°dmidecode -s system-uuid¡±ÃüÁî¿ÉÒÔ»ñÈ¡UUID£©¡£
-	µ«ÊÇÕâ¸ö·½·¨Ò²ÓĞÈ±Ïİ£¬ÒòÎª²»ÊÇËùÓĞµÄ³§ÉÌ¶¼Ìá¹©Ò»¸öUUID£¬
-	µ±ÕâÖÖÇé¿ö·¢ÉúÊ±£¬wmic»á·µ»Ø¡°FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF¡±£¬
-	¼´Ò»¸öÎŞĞ§µÄUUID¡£
+	åœ¨Windowsç³»ç»Ÿä¸­é€šè¿‡å‘½ä»¤è¡Œè¿è¡Œâ€œwmic csproduct get UUIDâ€å¯ä»¥æŸ¥çœ‹ã€‚
+	ä¸»æ¿UUIDæ˜¯å¾ˆå¤šæˆæƒæ–¹æ³•å’Œå¾®è½¯å®˜æ–¹éƒ½æ¯”è¾ƒæ¨å´‡çš„æ–¹æ³•ï¼Œ
+	å³ä¾¿é‡è£…ç³»ç»ŸUUIDåº”è¯¥ä¹Ÿä¸ä¼šå˜
+	ï¼ˆç¬”è€…æ²¡æœ‰å®æµ‹é‡è£…ï¼Œä¸è¿‡åœ¨ä¸€å°æœºå™¨ä¸Šå®‰è£…åŒç³»ç»Ÿï¼Œè·å–çš„ä¸»æ¿UUIDæ˜¯ä¸€æ ·çš„ï¼Œ
+	åŒç³»ç»Ÿä¸€ä¸ªwindowsä¸€ä¸ªLinuxï¼ŒLinuxä¸‹ç”¨â€œdmidecode -s system-uuidâ€å‘½ä»¤å¯ä»¥è·å–UUIDï¼‰ã€‚
+	ä½†æ˜¯è¿™ä¸ªæ–¹æ³•ä¹Ÿæœ‰ç¼ºé™·ï¼Œå› ä¸ºä¸æ˜¯æ‰€æœ‰çš„å‚å•†éƒ½æä¾›ä¸€ä¸ªUUIDï¼Œ
+	å½“è¿™ç§æƒ…å†µå‘ç”Ÿæ—¶ï¼Œwmicä¼šè¿”å›â€œFFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFFâ€ï¼Œ
+	å³ä¸€ä¸ªæ— æ•ˆçš„UUIDã€‚
 	*/
 	MOTHERBOARD_UUID = 1 << 3,
 
-	//! Ö÷°åĞÍºÅ
+	//! ä¸»æ¿å‹å·
 	MOTHERBOARD_MODEL = 1 << 4,
 
 	/*
 	CPU ID
-	ÔÚWindowsÏµÍ³ÖĞÍ¨¹ıÃüÁîĞĞÔËĞĞ¡°wmic cpu get processorid¡±¾Í¿ÉÒÔ²é¿´CPU ID¡£
-	Ä¿Ç°CPU IDÒ²ÎŞ·¨Î¨Ò»±êÊ¶Éè±¸£¬IntelÏÖÔÚ¿ÉÄÜÍ¬Ò»Åú´ÎµÄCPU ID¶¼Ò»Ñù£¬²»ÔÙÌá¹©Î¨Ò»µÄID¡£
-	¶øÇÒ¾­¹ıÊµ¼Ê²âÊÔ£¬ĞÂ¹ºÂòµÄÍ¬Ò»Åú´ÎPCµÄCPU IDºÜ¿ÉÄÜÒ»Ñù¡£
-	ÕâÑù×÷ÎªÉè±¸µÄÎ¨Ò»±êÊ¶¾Í»á´æÔÚÎÊÌâ¡£
+	åœ¨Windowsç³»ç»Ÿä¸­é€šè¿‡å‘½ä»¤è¡Œè¿è¡Œâ€œwmic cpu get processoridâ€å°±å¯ä»¥æŸ¥çœ‹CPU IDã€‚
+	ç›®å‰CPU IDä¹Ÿæ— æ³•å”¯ä¸€æ ‡è¯†è®¾å¤‡ï¼ŒIntelç°åœ¨å¯èƒ½åŒä¸€æ‰¹æ¬¡çš„CPU IDéƒ½ä¸€æ ·ï¼Œä¸å†æä¾›å”¯ä¸€çš„IDã€‚
+	è€Œä¸”ç»è¿‡å®é™…æµ‹è¯•ï¼Œæ–°è´­ä¹°çš„åŒä¸€æ‰¹æ¬¡PCçš„CPU IDå¾ˆå¯èƒ½ä¸€æ ·ã€‚
+	è¿™æ ·ä½œä¸ºè®¾å¤‡çš„å”¯ä¸€æ ‡è¯†å°±ä¼šå­˜åœ¨é—®é¢˜ã€‚
 	*/
 	CPU_ID = 1 << 5,
 
-	//! BIOSĞòÁĞºÅ
+	//! BIOSåºåˆ—å·
 	BIOS_SERIAL = 1 << 6,
 
 	/*
-	Windows ²úÆ·ID
-	ÔÚ¡°¿ØÖÆÃæ°å\ÏµÍ³ºÍ°²È«\ÏµÍ³¡±µÄ×îÏÂÃæ¾Í¿ÉÒÔ¿´µ½¼¤»îµÄWindows²úÆ·IDĞÅÏ¢£¬
-	ÁíÍâÍ¨¹ı×¢²á±í¡°HKEY_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion¡±Ò²¿ÉÒÔ¿´µ½¿´µ½¡°ProductId¡±×Ö¶Î¡£
-	²»¹ıÕâ¸ö²úÆ·ID²¢²»Î¨Ò»£¬²»Í¬ÏµÍ³»òÕß»úÆ÷ÖØ¸´µÄ¸ÅÂÊÒ²±È½Ï´ó¡£
-	ĞéÄâ»úÖĞ¿ËÂ¡µÄÏµÍ³£¬Ê¹ÓÃÍ¬Ò»¸ö¾µÏñ°²×°¼¤»îµÄÏµÍ³£¬Æä²úÆ·ID¾Í¿ÉÄÜÒ»Ä£Ò»Ñù¡£
-	¾­¹ıÊµ²â£¬±ÊÕßÔÚÁ½Ì¨Thinkpad±Ê¼Ç±¾ÉÏ·¢ÏÖÆäProductIdÍêÈ«Ò»Ñù¡£
+	Windows äº§å“ID
+	åœ¨â€œæ§åˆ¶é¢æ¿\ç³»ç»Ÿå’Œå®‰å…¨\ç³»ç»Ÿâ€çš„æœ€ä¸‹é¢å°±å¯ä»¥çœ‹åˆ°æ¿€æ´»çš„Windowsäº§å“IDä¿¡æ¯ï¼Œ
+	å¦å¤–é€šè¿‡æ³¨å†Œè¡¨â€œHKEY_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersionâ€ä¹Ÿå¯ä»¥çœ‹åˆ°çœ‹åˆ°â€œProductIdâ€å­—æ®µã€‚
+	ä¸è¿‡è¿™ä¸ªäº§å“IDå¹¶ä¸å”¯ä¸€ï¼Œä¸åŒç³»ç»Ÿæˆ–è€…æœºå™¨é‡å¤çš„æ¦‚ç‡ä¹Ÿæ¯”è¾ƒå¤§ã€‚
+	è™šæ‹Ÿæœºä¸­å…‹éš†çš„ç³»ç»Ÿï¼Œä½¿ç”¨åŒä¸€ä¸ªé•œåƒå®‰è£…æ¿€æ´»çš„ç³»ç»Ÿï¼Œå…¶äº§å“IDå°±å¯èƒ½ä¸€æ¨¡ä¸€æ ·ã€‚
+	ç»è¿‡å®æµ‹ï¼Œç¬”è€…åœ¨ä¸¤å°Thinkpadç¬”è®°æœ¬ä¸Šå‘ç°å…¶ProductIdå®Œå…¨ä¸€æ ·ã€‚
 	*/
 	WINDOWS_PRODUCT_ID = 1 << 7,
 
 	/*
 	Windows MachineGUID
-	Windows°²×°Ê±»áÎ¨Ò»Éú³ÉÒ»¸öGUID£¬
-	¿ÉÒÔÔÚ×¢²á±í¡°HKEY_MACHINE\SOFTWARE\Microsoft\Cryptography¡±ÖĞ²é¿´Æä¡°MachineGuid¡±×Ö¶Î¡£
-	Õâ¸öID×÷ÎªWindowsÏµÍ³Éè±¸µÄÎ¨Ò»±êÊ¶²»´í£¬²»¹ıÖµµÃ×¢ÒâµÄÒ»µãÊÇ£¬ÓëÓ²¼şID²»Ò»Ñù£¬
-	Õâ¸öIDÔÚÖØ×°WindowsÏµÍ³ºóÓ¦¸Ã²»Ò»ÑùÁË¡£
-	ÕâÑùÊÚÈ¨Èí¼şÔÚÖØ×°ÏµÍ³ºó£¬¿ÉÄÜ¾ÍĞèÒªÓÃ»§ÖØĞÂ¹ºÂòÊÚÈ¨¡£
+	Windowså®‰è£…æ—¶ä¼šå”¯ä¸€ç”Ÿæˆä¸€ä¸ªGUIDï¼Œ
+	å¯ä»¥åœ¨æ³¨å†Œè¡¨â€œHKEY_MACHINE\SOFTWARE\Microsoft\Cryptographyâ€ä¸­æŸ¥çœ‹å…¶â€œMachineGuidâ€å­—æ®µã€‚
+	è¿™ä¸ªIDä½œä¸ºWindowsç³»ç»Ÿè®¾å¤‡çš„å”¯ä¸€æ ‡è¯†ä¸é”™ï¼Œä¸è¿‡å€¼å¾—æ³¨æ„çš„ä¸€ç‚¹æ˜¯ï¼Œä¸ç¡¬ä»¶IDä¸ä¸€æ ·ï¼Œ
+	è¿™ä¸ªIDåœ¨é‡è£…Windowsç³»ç»Ÿååº”è¯¥ä¸ä¸€æ ·äº†ã€‚
+	è¿™æ ·æˆæƒè½¯ä»¶åœ¨é‡è£…ç³»ç»Ÿåï¼Œå¯èƒ½å°±éœ€è¦ç”¨æˆ·é‡æ–°è´­ä¹°æˆæƒã€‚
 	*/
 	WINDOWS_MACHINE_GUID = 1 << 8,
 };
@@ -117,26 +117,26 @@ enum {
 };
 
 /**
-* @brief ²éÑ¯ĞÅÏ¢
-* @param[in] queryTypes QueryType¼¯ºÏ
-* @param[in,out] results ²éÑ¯½á¹û¼¯ºÏ
-* @return ³É¹¦»òÊ§°Ü
+* @brief æŸ¥è¯¢ä¿¡æ¯
+* @param[in] queryTypes QueryTypeé›†åˆ
+* @param[in,out] results æŸ¥è¯¢ç»“æœé›†åˆ
+* @return æˆåŠŸæˆ–å¤±è´¥
 */
 static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>& results);
 
 /**
-* @brief ²éÑ¯ĞÅÏ¢
-* @param[in] queryTypes QueryType¼¯ºÏ
-* @param[in,out] results ²éÑ¯½á¹û¼¯ºÏ
-* @return ³É¹¦»òÊ§°Ü
+* @brief æŸ¥è¯¢ä¿¡æ¯
+* @param[in] queryTypes QueryTypeé›†åˆ
+* @param[in,out] results æŸ¥è¯¢ç»“æœé›†åˆ
+* @return æˆåŠŸæˆ–å¤±è´¥
 */
 static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results);
 
 /**
-* @brief Á¬½Ó²éÑ¯½á¹ûÎªÒ»¸ö×Ö·û´®
-* @param[in] results ²éÑ¯½á¹û¼¯ºÏ
-* @param[in,out] conjunction Á¬´Ê
-* @return ½«½á¹ûÒÔÁ¬´ÊÁ¬½ÓÆğÀ´×é³ÉµÄ×Ö·û´®
+* @brief è¿æ¥æŸ¥è¯¢ç»“æœä¸ºä¸€ä¸ªå­—ç¬¦ä¸²
+* @param[in] results æŸ¥è¯¢ç»“æœé›†åˆ
+* @param[in,out] conjunction è¿è¯
+* @return å°†ç»“æœä»¥è¿è¯è¿æ¥èµ·æ¥ç»„æˆçš„å­—ç¬¦ä¸²
 */
 static std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction);
 
@@ -164,7 +164,7 @@ namespace DeviceUniqueIdentifier {
 namespace detail {
 
 struct DeviceProperty {
-	enum { PROPERTY_MAX_LEN = 128 }; // ÊôĞÔ×Ö¶Î×î´ó³¤¶È
+	enum { PROPERTY_MAX_LEN = 128 }; // å±æ€§å­—æ®µæœ€å¤§é•¿åº¦
 	wchar_t szProperty[PROPERTY_MAX_LEN];
 };
 
@@ -177,35 +177,35 @@ struct WQL_QUERY
 inline WQL_QUERY getWQLQuery(QueryType queryType) {
 	switch (queryType) {
 	case DeviceUniqueIdentifier::MAC_ADDR:
-		return // Íø¿¨µ±Ç°MACµØÖ·
+		return // ç½‘å¡å½“å‰MACåœ°å€
 		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
 			L"MACAddress" };
 	case DeviceUniqueIdentifier::MAC_ADDR_REAL:
-		return // Íø¿¨Ô­ÉúMACµØÖ·
+		return // ç½‘å¡åŸç”ŸMACåœ°å€
 		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
 			L"PNPDeviceID" };
 	case DeviceUniqueIdentifier::HARDDISK_SERIAL:
-		return // Ó²ÅÌĞòÁĞºÅ
+		return // ç¡¬ç›˜åºåˆ—å·
 		{ L"SELECT * FROM Win32_DiskDrive WHERE (SerialNumber IS NOT NULL) AND (MediaType LIKE 'Fixed hard disk%')",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::MOTHERBOARD_UUID:
-		return // Ö÷°åĞòÁĞºÅ
+		return // ä¸»æ¿åºåˆ—å·
 		{ L"SELECT * FROM Win32_BaseBoard WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::MOTHERBOARD_MODEL:
-		return // Ö÷°åĞÍºÅ
+		return // ä¸»æ¿å‹å·
 		{ L"SELECT * FROM Win32_BaseBoard WHERE (Product IS NOT NULL)",
 			L"Product" };
 	case DeviceUniqueIdentifier::CPU_ID:
-		return // ´¦ÀíÆ÷ID
+		return // å¤„ç†å™¨ID
 		{ L"SELECT * FROM Win32_Processor WHERE (ProcessorId IS NOT NULL)",
 			L"ProcessorId" };
 	case DeviceUniqueIdentifier::BIOS_SERIAL:
-		return // BIOSĞòÁĞºÅ
+		return // BIOSåºåˆ—å·
 		{ L"SELECT * FROM Win32_BIOS WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::WINDOWS_PRODUCT_ID:
-		return // Windows ²úÆ·ID
+		return // Windows äº§å“ID
 		{ L"SELECT * FROM Win32_OperatingSystem WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	default:
@@ -221,11 +221,11 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 
 	iLen = wcslen(SerialNumber);
 	if (iLen == 40)	// InterfaceType = "IDE"
-	{	// ĞèÒª½«16½øÖÆ±àÂë´®×ª»»Îª×Ö·û´®
+	{	// éœ€è¦å°†16è¿›åˆ¶ç¼–ç ä¸²è½¬æ¢ä¸ºå­—ç¬¦ä¸²
 		wchar_t ch, szBuf[32];
 		BYTE b;
 
-		for (i = 0; i < 20; i++) {	// ½«16½øÖÆ×Ö·û×ª»»Îª¸ß4Î»
+		for (i = 0; i < 20; i++) {	// å°†16è¿›åˆ¶å­—ç¬¦è½¬æ¢ä¸ºé«˜4ä½
 			ch = SerialNumber[i * 2];
 			if ((ch >= '0') && (ch <= '9')) {
 				b = ch - '0';
@@ -233,13 +233,13 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 				b = ch - 'A' + 10;
 			} else if ((ch >= 'a') && (ch <= 'f')) {
 				b = ch - 'a' + 10;
-			} else {	// ·Ç·¨×Ö·û
+			} else {	// éæ³•å­—ç¬¦
 				break;
 			}
 
 			b <<= 4;
 
-			// ½«16½øÖÆ×Ö·û×ª»»ÎªµÍ4Î»
+			// å°†16è¿›åˆ¶å­—ç¬¦è½¬æ¢ä¸ºä½4ä½
 			ch = SerialNumber[i * 2 + 1];
 			if ((ch >= '0') && (ch <= '9')) {
 				b += ch - '0';
@@ -247,48 +247,48 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 				b += ch - 'A' + 10;
 			} else if ((ch >= 'a') && (ch <= 'f')) {
 				b += ch - 'a' + 10;
-			} else {	// ·Ç·¨×Ö·û
+			} else {	// éæ³•å­—ç¬¦
 				break;
 			}
 
 			szBuf[i] = b;
 		}
 
-		if (i == 20) {	// ×ª»»³É¹¦
+		if (i == 20) {	// è½¬æ¢æˆåŠŸ
 			szBuf[i] = L'\0';
 			StringCchCopyW(SerialNumber, uSize, szBuf);
 			iLen = wcslen(SerialNumber);
 		}
 	}
 
-	// Ã¿2¸ö×Ö·û»¥»»Î»ÖÃ
+	// æ¯2ä¸ªå­—ç¬¦äº’æ¢ä½ç½®
 	for (i = 0; i < iLen; i += 2) {
 		std::swap(SerialNumber[i], SerialNumber[i + 1]);
 	}
 
-	// È¥µô¿Õ¸ñ
+	// å»æ‰ç©ºæ ¼
 	std::remove(SerialNumber, SerialNumber + wcslen(SerialNumber) + 1, L' ');
 	return TRUE;
 }
 
 
-// Í¨¹ı¡°PNPDeviceID¡±»ñÈ¡Íø¿¨Ô­ÉúMACµØÖ·
+// é€šè¿‡â€œPNPDeviceIDâ€è·å–ç½‘å¡åŸç”ŸMACåœ°å€
 static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddress, UINT uSize)
 {
 	wchar_t	DevicePath[MAX_PATH];
 	HANDLE	hDeviceFile;
 	BOOL	isOK = FALSE;
 
-	// Éú³ÉÉè±¸Â·¾¶Ãû
+	// ç”Ÿæˆè®¾å¤‡è·¯å¾„å
 	StringCchCopyW(DevicePath, MAX_PATH, L"\\\\.\\");
 	StringCchCatW(DevicePath, MAX_PATH, PNPDeviceID);
 	// {ad498944-762f-11d0-8dcb-00c04fc3358c} is 'Device Interface Name' for 'Network Card'
 	StringCchCatW(DevicePath, MAX_PATH, L"#{ad498944-762f-11d0-8dcb-00c04fc3358c}");
 
-	// ½«¡°PNPDeviceID¡±ÖĞµÄ¡°/¡±Ìæ»»³É¡°#¡±£¬ÒÔ»ñµÃÕæÕıµÄÉè±¸Â·¾¶Ãû
+	// å°†â€œPNPDeviceIDâ€ä¸­çš„â€œ/â€æ›¿æ¢æˆâ€œ#â€ï¼Œä»¥è·å¾—çœŸæ­£çš„è®¾å¤‡è·¯å¾„å
 	std::replace(DevicePath + 4, DevicePath + 4 + wcslen(PNPDeviceID), (int)L'\\', (int)L'#');
 
-	// »ñÈ¡Éè±¸¾ä±ú
+	// è·å–è®¾å¤‡å¥æŸ„
 	hDeviceFile = CreateFileW(DevicePath,
 							  0,
 							  FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -302,15 +302,15 @@ static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddres
 		BYTE	ucData[8];
 		DWORD	dwByteRet;
 
-		// »ñÈ¡Íø¿¨Ô­ÉúMACµØÖ·
+		// è·å–ç½‘å¡åŸç”ŸMACåœ°å€
 		dwID = OID_802_3_PERMANENT_ADDRESS;
 		isOK = DeviceIoControl(hDeviceFile, IOCTL_NDIS_QUERY_GLOBAL_STATS, &dwID, sizeof(dwID), ucData, sizeof(ucData), &dwByteRet, NULL);
-		if (isOK) {	// ½«×Ö½ÚÊı×é×ª»»³É16½øÖÆ×Ö·û´®
+		if (isOK) {	// å°†å­—èŠ‚æ•°ç»„è½¬æ¢æˆ16è¿›åˆ¶å­—ç¬¦ä¸²
 			for (DWORD i = 0; i < dwByteRet; i++) {
 				StringCchPrintfW(MacAddress + (i << 1), uSize - (i << 1), L"%02X", ucData[i]);
 			}
 
-			MacAddress[dwByteRet << 1] = L'\0';	// Ğ´Èë×Ö·û´®½áÊø±ê¼Ç
+			MacAddress[dwByteRet << 1] = L'\0';	// å†™å…¥å­—ç¬¦ä¸²ç»“æŸæ ‡è®°
 		}
 
 		CloseHandle(hDeviceFile);
@@ -324,18 +324,18 @@ static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uS
 {
 	BOOL isOK = TRUE;
 	switch (queryType) {
-	case MAC_ADDR_REAL:		// Íø¿¨Ô­ÉúMACµØÖ·		
+	case MAC_ADDR_REAL:		// ç½‘å¡åŸç”ŸMACåœ°å€		
 		isOK = WMI_DoWithPNPDeviceID(szProperty, szProperty, uSize);
 		break;
-	case HARDDISK_SERIAL:	// Ó²ÅÌĞòÁĞºÅ
+	case HARDDISK_SERIAL:	// ç¡¬ç›˜åºåˆ—å·
 		isOK = WMI_DoWithHarddiskSerialNumber(szProperty, uSize);
 		break;
-	case MAC_ADDR:			// Íø¿¨µ±Ç°MACµØÖ·
-							// È¥µôÃ°ºÅ
+	case MAC_ADDR:			// ç½‘å¡å½“å‰MACåœ°å€
+							// å»æ‰å†’å·
 		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L':');
 		break;
 	default:
-		// È¥µô¿Õ¸ñ
+		// å»æ‰ç©ºæ ¼
 		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L' ');
 	}
 	return isOK;
@@ -437,12 +437,12 @@ static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>
 	return ok;
 }
 
-// »ùÓÚWindows Management Instrumentation£¨Windows¹ÜÀí¹æ·¶£©
+// åŸºäºWindows Management Instrumentationï¼ˆWindowsç®¡ç†è§„èŒƒï¼‰
 static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results)
 {
 	bool ok = false;
 
-	// ³õÊ¼»¯COM COINIT_APARTMENTTHREADED
+	// åˆå§‹åŒ–COM COINIT_APARTMENTTHREADED
 	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
 #ifndef __AFXWIN_H__
@@ -469,7 +469,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		}
 	}
 
-	// ÉèÖÃCOMµÄ°²È«ÈÏÖ¤¼¶±ğ
+	// è®¾ç½®COMçš„å®‰å…¨è®¤è¯çº§åˆ«
 	hres = CoInitializeSecurity(
 		NULL,
 		-1,
@@ -501,7 +501,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 			return false;
 		}
 	}
-	// »ñµÃWMIÁ¬½ÓCOM½Ó¿Ú
+	// è·å¾—WMIè¿æ¥COMæ¥å£
 	IWbemLocator *pLoc = NULL;
 	hres = CoCreateInstance(
 		CLSID_WbemLocator,
@@ -518,7 +518,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		return false;
 	}
 
-	// Í¨¹ıÁ¬½Ó½Ó¿ÚÁ¬½ÓWMIµÄÄÚºË¶ÔÏóÃû"ROOT//CIMV2"
+	// é€šè¿‡è¿æ¥æ¥å£è¿æ¥WMIçš„å†…æ ¸å¯¹è±¡å"ROOT//CIMV2"
 	IWbemServices *pSvc = NULL;
 	hres = pLoc->ConnectServer(
 		_bstr_t(L"ROOT\\CIMV2"),
@@ -539,7 +539,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		return false;
 	}
 
-	// ÉèÖÃÇëÇó´úÀíµÄ°²È«¼¶±ğ
+	// è®¾ç½®è¯·æ±‚ä»£ç†çš„å®‰å…¨çº§åˆ«
 	hres = CoSetProxyBlanket(
 		pSvc,
 		RPC_C_AUTHN_WINNT,
@@ -568,7 +568,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 
 		auto query = detail::getWQLQuery(queryType);
 
-		// Í¨¹ıÇëÇó´úÀíÀ´ÏòWMI·¢ËÍÇëÇó
+		// é€šè¿‡è¯·æ±‚ä»£ç†æ¥å‘WMIå‘é€è¯·æ±‚
 		IEnumWbemClassObject *pEnumerator = NULL;
 		hres = pSvc->ExecQuery(
 			bstr_t("WQL"),
@@ -588,7 +588,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 			continue;
 		}
 
-		// Ñ­»·Ã¶¾ÙËùÓĞµÄ½á¹û¶ÔÏó  
+		// å¾ªç¯æšä¸¾æ‰€æœ‰çš„ç»“æœå¯¹è±¡  
 		while (pEnumerator) {
 			IWbemClassObject *pclsObj = NULL;
 			ULONG uReturn = 0;
@@ -604,7 +604,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 				break;
 			}
 
-			// »ñÈ¡ÊôĞÔÖµ
+			// è·å–å±æ€§å€¼
 			{
 				VARIANT vtProperty;
 				VariantInit(&vtProperty);
@@ -612,7 +612,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 				detail::DeviceProperty deviceProperty{};
 				StringCchCopyW(deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN, vtProperty.bstrVal);
 				VariantClear(&vtProperty);
-				// ¶ÔÊôĞÔÖµ×ö½øÒ»²½µÄ´¦Àí
+				// å¯¹å±æ€§å€¼åšè¿›ä¸€æ­¥çš„å¤„ç†
 				if (detail::WMI_DoWithProperty(queryType, deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN)) {
 					results[queryType] = (deviceProperty.szProperty);
 					ok = true;
@@ -623,7 +623,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 
 			pclsObj->Release();
 		} // End While
-		  // ÊÍ·Å×ÊÔ´
+		  // é‡Šæ”¾èµ„æº
 		pEnumerator->Release();
 
 	}
