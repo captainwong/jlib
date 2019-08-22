@@ -7,3 +7,7 @@
 #else
 #error "jlib only support linux and windows"
 #endif
+
+#ifdef JLIB_WINDOWS
+#define _CRT_SECURE_NO_WARNINGS 
+#endif
