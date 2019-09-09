@@ -13,75 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\JLIB">
-      <UniqueIdentifier>{b07730c2-1faa-4cf8-bdd5-69236acd73c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\JLIB\win32">
-      <UniqueIdentifier>{eb85af39-9206-4efd-9502-a8769c529014}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\jlib\chrono_wrapper.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\dp.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\log.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\log2.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\mem_tool.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\micro_getter_setter.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\net.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\space.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\utf8.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\version_no.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32.h">
-      <Filter>Header Files\JLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\clipboard.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\file_op.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\memory_micros.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\MtVerify.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\MyWSAError.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\path_op.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\UnicodeTool.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\win32\DeviceUniqueIdentifierHeaderOnly.h">
-      <Filter>Header Files\JLIB\win32</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

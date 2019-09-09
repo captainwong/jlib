@@ -43,7 +43,7 @@ public:
         : microSecondsSinceEpoch_(microSecondsSinceEpoch)
     {}
 
-	static const int MICRO_SECONDS_PER_SECOND = 1000 * 1000;
+	static constexpr int MICRO_SECONDS_PER_SECOND = 1000 * 1000;
 
     void swap(Timestamp& rhs) {
         std::swap(microSecondsSinceEpoch_, rhs.microSecondsSinceEpoch_);

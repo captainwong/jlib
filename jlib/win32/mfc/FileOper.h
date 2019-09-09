@@ -259,7 +259,7 @@ public:
 		LPCTSTR szNewName = newFileName.GetBuffer(newFileName.GetLength());
 		newFileName.ReleaseBuffer();
 		MoveFile(szOldName, szNewName);
-		TRACE(_T("movefile %s to %s \n"), fileName, newFileName);
+		TRACE(_T("movefile %s to %s \n"), (LPCWSTR)fileName, (LPCWSTR)newFileName);
 		return TRUE;
 	}
 
@@ -271,7 +271,7 @@ public:
 		CString filter = _T("");
 		filter.Format(_T("%s\\%s"), lpszFolder, lpszFilter);
 		BOOL bFound = find.FindFile(filter); 
-		TRACE(_T("CFileOper::DeleteFilesInFolder find path %s\n"), filter);
+		TRACE(_T("CFileOper::DeleteFilesInFolder find path %s\n"), (LPCWSTR)filter);
 		CString filepath = _T("");
 		while(bFound){
 			bFound = find.FindNextFile(); 

@@ -24,12 +24,14 @@ static std::string human_readable_byte_count(uintmax_t bytes, size_t precision =
 
     auto unit = po == PositionalNotation::Binary ? 1024 : 1000;
     if (bytes < unit) { return std::to_string(bytes) + "B"; }
-    auto exp = static_cast<int>(std::log(bytes) / std::log(unit));
+    auto exp = static_cast<size_t>(std::log(bytes) / std::log(unit));
     auto pre = std::string("KMGTPEZYBND").at(exp - 1) + std::string(po == PositionalNotation::Binary ? "i" : "");
     auto var = bytes / std::pow(unit, exp);
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(1) << var << pre << "B";
-    return ss.str();
+    //std::stringstream ss;
+    //ss << std::fixed << std::setprecision(1) << var << pre << "B";
+	char buf[64] = { 0 };
+	snprintf(buf, sizeof(buf), "%.1lf%sB", var, pre.data());
+    return buf;
 }
 
 }

@@ -1,4 +1,4 @@
-#include "DeviceUniqueIdentifier.h"
+ï»¿#include "DeviceUniqueIdentifier.h"
 #include <Windows.h>
 #include <algorithm>
 #include <math.h>
@@ -20,7 +20,7 @@ namespace DeviceUniqueIdentifier {
 namespace detail {
 
 struct DeviceProperty {
-	enum { PROPERTY_MAX_LEN = 128 }; // ÊôĞÔ×Ö¶Î×î´ó³¤¶È
+	enum { PROPERTY_MAX_LEN = 128 }; // å±æ€§å­—æ®µæœ€å¤§é•¿åº¦
 	wchar_t szProperty[PROPERTY_MAX_LEN];
 };
 
@@ -33,35 +33,35 @@ struct WQL_QUERY
 inline WQL_QUERY getWQLQuery(QueryType queryType) {
 	switch (queryType) {
 	case DeviceUniqueIdentifier::MAC_ADDR:
-		return // Íø¿¨µ±Ç°MACµØÖ·
+		return // ç½‘å¡å½“å‰MACåœ°å€
 		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
 			L"MACAddress" };
 	case DeviceUniqueIdentifier::MAC_ADDR_REAL:
-		return // Íø¿¨Ô­ÉúMACµØÖ·
+		return // ç½‘å¡åŸç”ŸMACåœ°å€
 		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
 			L"PNPDeviceID" };
 	case DeviceUniqueIdentifier::HARDDISK_SERIAL:
-		return // Ó²ÅÌĞòÁĞºÅ
+		return // ç¡¬ç›˜åºåˆ—å·
 		{ L"SELECT * FROM Win32_DiskDrive WHERE (SerialNumber IS NOT NULL) AND (MediaType LIKE 'Fixed hard disk%')",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::MOTHERBOARD_UUID:
-		return // Ö÷°åĞòÁĞºÅ
+		return // ä¸»æ¿åºåˆ—å·
 		{ L"SELECT * FROM Win32_BaseBoard WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::MOTHERBOARD_MODEL:
-		return // Ö÷°åĞÍºÅ
+		return // ä¸»æ¿å‹å·
 		{ L"SELECT * FROM Win32_BaseBoard WHERE (Product IS NOT NULL)",
 			L"Product" };
 	case DeviceUniqueIdentifier::CPU_ID:
-		return // ´¦ÀíÆ÷ID
+		return // å¤„ç†å™¨ID
 		{ L"SELECT * FROM Win32_Processor WHERE (ProcessorId IS NOT NULL)",
 			L"ProcessorId" };
 	case DeviceUniqueIdentifier::BIOS_SERIAL:
-		return // BIOSĞòÁĞºÅ
+		return // BIOSåºåˆ—å·
 		{ L"SELECT * FROM Win32_BIOS WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	case DeviceUniqueIdentifier::WINDOWS_PRODUCT_ID:
-		return // Windows ²úÆ·ID
+		return // Windows äº§å“ID
 		{ L"SELECT * FROM Win32_OperatingSystem WHERE (SerialNumber IS NOT NULL)",
 			L"SerialNumber" };
 	default:
@@ -77,11 +77,11 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 
 	iLen = wcslen(SerialNumber);
 	if (iLen == 40)	// InterfaceType = "IDE"
-	{	// ĞèÒª½«16½øÖÆ±àÂë´®×ª»»Îª×Ö·û´®
+	{	// éœ€è¦å°†16è¿›åˆ¶ç¼–ç ä¸²è½¬æ¢ä¸ºå­—ç¬¦ä¸²
 		wchar_t ch, szBuf[32];
 		BYTE b;
 
-		for (i = 0; i < 20; i++) {	// ½«16½øÖÆ×Ö·û×ª»»Îª¸ß4Î»
+		for (i = 0; i < 20; i++) {	// å°†16è¿›åˆ¶å­—ç¬¦è½¬æ¢ä¸ºé«˜4ä½
 			ch = SerialNumber[i * 2];
 			if ((ch >= '0') && (ch <= '9')) {
 				b = ch - '0';
@@ -89,13 +89,13 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 				b = ch - 'A' + 10;
 			} else if ((ch >= 'a') && (ch <= 'f')) {
 				b = ch - 'a' + 10;
-			} else {	// ·Ç·¨×Ö·û
+			} else {	// éæ³•å­—ç¬¦
 				break;
 			}
 
 			b <<= 4;
 
-			// ½«16½øÖÆ×Ö·û×ª»»ÎªµÍ4Î»
+			// å°†16è¿›åˆ¶å­—ç¬¦è½¬æ¢ä¸ºä½4ä½
 			ch = SerialNumber[i * 2 + 1];
 			if ((ch >= '0') && (ch <= '9')) {
 				b += ch - '0';
@@ -103,48 +103,48 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 				b += ch - 'A' + 10;
 			} else if ((ch >= 'a') && (ch <= 'f')) {
 				b += ch - 'a' + 10;
-			} else {	// ·Ç·¨×Ö·û
+			} else {	// éæ³•å­—ç¬¦
 				break;
 			}
 
 			szBuf[i] = b;
 		}
 
-		if (i == 20) {	// ×ª»»³É¹¦
+		if (i == 20) {	// è½¬æ¢æˆåŠŸ
 			szBuf[i] = L'\0';
 			StringCchCopyW(SerialNumber, uSize, szBuf);
 			iLen = wcslen(SerialNumber);
 		}
 	}
 
-	// Ã¿2¸ö×Ö·û»¥»»Î»ÖÃ
+	// æ¯2ä¸ªå­—ç¬¦äº’æ¢ä½ç½®
 	for (i = 0; i < iLen; i += 2) {
 		std::swap(SerialNumber[i], SerialNumber[i + 1]);
 	}
 
-	// È¥µô¿Õ¸ñ
+	// å»æ‰ç©ºæ ¼
 	std::remove(SerialNumber, SerialNumber + wcslen(SerialNumber) + 1, L' ');
 	return TRUE;
 }
 
 
-// Í¨¹ı¡°PNPDeviceID¡±»ñÈ¡Íø¿¨Ô­ÉúMACµØÖ·
+// é€šè¿‡â€œPNPDeviceIDâ€è·å–ç½‘å¡åŸç”ŸMACåœ°å€
 static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddress, UINT uSize)
 {
 	wchar_t	DevicePath[MAX_PATH];
 	HANDLE	hDeviceFile;
 	BOOL	isOK = FALSE;
 
-	// Éú³ÉÉè±¸Â·¾¶Ãû
+	// ç”Ÿæˆè®¾å¤‡è·¯å¾„å
 	StringCchCopyW(DevicePath, MAX_PATH, L"\\\\.\\");
 	StringCchCatW(DevicePath, MAX_PATH, PNPDeviceID);
 	// {ad498944-762f-11d0-8dcb-00c04fc3358c} is 'Device Interface Name' for 'Network Card'
 	StringCchCatW(DevicePath, MAX_PATH, L"#{ad498944-762f-11d0-8dcb-00c04fc3358c}");
 
-	// ½«¡°PNPDeviceID¡±ÖĞµÄ¡°/¡±Ìæ»»³É¡°#¡±£¬ÒÔ»ñµÃÕæÕıµÄÉè±¸Â·¾¶Ãû
+	// å°†â€œPNPDeviceIDâ€ä¸­çš„â€œ/â€æ›¿æ¢æˆâ€œ#â€ï¼Œä»¥è·å¾—çœŸæ­£çš„è®¾å¤‡è·¯å¾„å
 	std::replace(DevicePath + 4, DevicePath + 4 + wcslen(PNPDeviceID), (int)L'\\', (int)L'#');
 
-	// »ñÈ¡Éè±¸¾ä±ú
+	// è·å–è®¾å¤‡å¥æŸ„
 	hDeviceFile = CreateFileW(DevicePath,
 							  0,
 							  FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -158,15 +158,15 @@ static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddres
 		BYTE	ucData[8];
 		DWORD	dwByteRet;
 
-		// »ñÈ¡Íø¿¨Ô­ÉúMACµØÖ·
+		// è·å–ç½‘å¡åŸç”ŸMACåœ°å€
 		dwID = OID_802_3_PERMANENT_ADDRESS;
 		isOK = DeviceIoControl(hDeviceFile, IOCTL_NDIS_QUERY_GLOBAL_STATS, &dwID, sizeof(dwID), ucData, sizeof(ucData), &dwByteRet, NULL);
-		if (isOK) {	// ½«×Ö½ÚÊı×é×ª»»³É16½øÖÆ×Ö·û´®
+		if (isOK) {	// å°†å­—èŠ‚æ•°ç»„è½¬æ¢æˆ16è¿›åˆ¶å­—ç¬¦ä¸²
 			for (DWORD i = 0; i < dwByteRet; i++) {
 				StringCchPrintfW(MacAddress + (i << 1), uSize - (i << 1), L"%02X", ucData[i]);
 			}
 
-			MacAddress[dwByteRet << 1] = L'\0';	// Ğ´Èë×Ö·û´®½áÊø±ê¼Ç
+			MacAddress[dwByteRet << 1] = L'\0';	// å†™å…¥å­—ç¬¦ä¸²ç»“æŸæ ‡è®°
 		}
 
 		CloseHandle(hDeviceFile);
@@ -180,18 +180,18 @@ static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uS
 {
 	BOOL isOK = TRUE;
 	switch (queryType) {
-	case MAC_ADDR_REAL:		// Íø¿¨Ô­ÉúMACµØÖ·		
+	case MAC_ADDR_REAL:		// ç½‘å¡åŸç”ŸMACåœ°å€		
 		isOK = WMI_DoWithPNPDeviceID(szProperty, szProperty, uSize);
 		break;
-	case HARDDISK_SERIAL:	// Ó²ÅÌĞòÁĞºÅ
+	case HARDDISK_SERIAL:	// ç¡¬ç›˜åºåˆ—å·
 		isOK = WMI_DoWithHarddiskSerialNumber(szProperty, uSize);
 		break;
-	case MAC_ADDR:			// Íø¿¨µ±Ç°MACµØÖ·
-		// È¥µôÃ°ºÅ
+	case MAC_ADDR:			// ç½‘å¡å½“å‰MACåœ°å€
+		// å»æ‰å†’å·
 		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L':');
 		break;
 	default:
-		// È¥µô¿Õ¸ñ
+		// å»æ‰ç©ºæ ¼
 		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L' ');
 	}
 	return isOK;
@@ -291,18 +291,18 @@ bool query(size_t queryTypes, std::vector<std::wstring>& results)
 	return ok;
 }
 
-// »ùÓÚWindows Management Instrumentation£¨Windows¹ÜÀí¹æ·¶£©
+// åŸºäºWindows Management Instrumentationï¼ˆWindowsç®¡ç†è§„èŒƒï¼‰
 bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& results)
 {
 	bool ok = false;
 
-	// ³õÊ¼»¯COM
+	// åˆå§‹åŒ–COM
 	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
 		return false;
 	}
 
-	// ÉèÖÃCOMµÄ°²È«ÈÏÖ¤¼¶±ğ
+	// è®¾ç½®COMçš„å®‰å…¨è®¤è¯çº§åˆ«
 	hres = CoInitializeSecurity(
 		NULL,
 		-1,
@@ -319,7 +319,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 		return false;
 	}
 
-	// »ñµÃWMIÁ¬½ÓCOM½Ó¿Ú
+	// è·å¾—WMIè¿æ¥COMæ¥å£
 	IWbemLocator *pLoc = NULL;
 	hres = CoCreateInstance(
 		CLSID_WbemLocator,
@@ -333,7 +333,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 		return false;
 	}
 
-	// Í¨¹ıÁ¬½Ó½Ó¿ÚÁ¬½ÓWMIµÄÄÚºË¶ÔÏóÃû"ROOT//CIMV2"
+	// é€šè¿‡è¿æ¥æ¥å£è¿æ¥WMIçš„å†…æ ¸å¯¹è±¡å"ROOT//CIMV2"
 	IWbemServices *pSvc = NULL;
 	hres = pLoc->ConnectServer(
 		_bstr_t(L"ROOT\\CIMV2"),
@@ -353,7 +353,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 		return false;
 	}
 
-	// ÉèÖÃÇëÇó´úÀíµÄ°²È«¼¶±ğ
+	// è®¾ç½®è¯·æ±‚ä»£ç†çš„å®‰å…¨çº§åˆ«
 	hres = CoSetProxyBlanket(
 		pSvc,
 		RPC_C_AUTHN_WINNT,
@@ -374,7 +374,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 	for (auto queryType : queryTypes) {
 		auto query = detail::getWQLQuery(queryType);
 
-		// Í¨¹ıÇëÇó´úÀíÀ´ÏòWMI·¢ËÍÇëÇó
+		// é€šè¿‡è¯·æ±‚ä»£ç†æ¥å‘WMIå‘é€è¯·æ±‚
 		IEnumWbemClassObject *pEnumerator = NULL;
 		hres = pSvc->ExecQuery(
 			bstr_t("WQL"),
@@ -390,7 +390,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 			continue;
 		}
 
-		// Ñ­»·Ã¶¾ÙËùÓĞµÄ½á¹û¶ÔÏó  
+		// å¾ªç¯æšä¸¾æ‰€æœ‰çš„ç»“æœå¯¹è±¡  
 		while (pEnumerator) {
 			IWbemClassObject *pclsObj = NULL;
 			ULONG uReturn = 0;
@@ -406,7 +406,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 				break;
 			}
 
-			// »ñÈ¡ÊôĞÔÖµ
+			// è·å–å±æ€§å€¼
 			{
 				VARIANT vtProperty;
 				VariantInit(&vtProperty);
@@ -414,7 +414,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 				detail::DeviceProperty deviceProperty{};
 				StringCchCopyW(deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN, vtProperty.bstrVal);
 				VariantClear(&vtProperty);
-				// ¶ÔÊôĞÔÖµ×ö½øÒ»²½µÄ´¦Àí
+				// å¯¹å±æ€§å€¼åšè¿›ä¸€æ­¥çš„å¤„ç†
 				if (detail::WMI_DoWithProperty(queryType, deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN)) {
 					results.push_back(deviceProperty.szProperty);
 					ok = true;
@@ -425,7 +425,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 
 			pclsObj->Release();
 		} // End While
-		  // ÊÍ·Å×ÊÔ´
+		  // é‡Šæ”¾èµ„æº
 		pEnumerator->Release();
 
 	}

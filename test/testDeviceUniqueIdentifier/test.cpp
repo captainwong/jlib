@@ -1,7 +1,7 @@
 #include <jlib/win32/DeviceUniqueIdentifier.h>
 #include <stdio.h>
 #include <algorithm>
-#include <locale.h>
+#include <locale>
 
 int main()
 {

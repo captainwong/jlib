@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -154,27 +154,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\jlib\chrono_wrapper.h" />
-    <ClInclude Include="..\..\jlib\dp.h" />
-    <ClInclude Include="..\..\jlib\log.h" />
-    <ClInclude Include="..\..\jlib\log2.h" />
-    <ClInclude Include="..\..\jlib\mem_tool.h" />
-    <ClInclude Include="..\..\jlib\micro_getter_setter.h" />
-    <ClInclude Include="..\..\jlib\net.h" />
-    <ClInclude Include="..\..\jlib\space.h" />
-    <ClInclude Include="..\..\jlib\utf8.h" />
-    <ClInclude Include="..\..\jlib\version_no.h" />
-    <ClInclude Include="..\..\jlib\win32.h" />
-    <ClInclude Include="..\..\jlib\win32\clipboard.h" />
-    <ClInclude Include="..\..\jlib\win32\DeviceUniqueIdentifierHeaderOnly.h" />
-    <ClInclude Include="..\..\jlib\win32\file_op.h" />
-    <ClInclude Include="..\..\jlib\win32\memory_micros.h" />
-    <ClInclude Include="..\..\jlib\win32\MtVerify.h" />
-    <ClInclude Include="..\..\jlib\win32\MyWSAError.h" />
-    <ClInclude Include="..\..\jlib\win32\path_op.h" />
-    <ClInclude Include="..\..\jlib\win32\UnicodeTool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
