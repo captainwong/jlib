@@ -90,7 +90,7 @@ struct Curl
 	static void dump_slist(curl_slist* list) {
 		JLOG_INFO("dumping curl_slist:");
 		while (list) {
-			JLOG_INFO("    {:X}", list->data);
+			JLOG_INFO("    {:x}", list->data);
 			list = list->next;
 		}
 	}
