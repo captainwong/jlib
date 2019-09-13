@@ -90,7 +90,7 @@ struct Curl
 	static void dump_slist(curl_slist* list) {
 		JLOG_INFO("dumping curl_slist:");
 		while (list) {
-			LOG_INFO("    {:X}", list->data);
+			JLOG_INFO("    {:X}", list->data);
 			list = list->next;
 		}
 	}
@@ -119,7 +119,6 @@ struct Curl
 		if (header_size < 0) {
 #ifdef JLIB_LOG2_ENABLED
 			JLOG_ERRO("get responce headers error");
-			ec = HBVideoPlatform::CurlErrorCode::GET_RESPONCE_HEADERS_ERROR;
 #endif // JLIB_LOG2_ENABLED
 			return false;
 		}
@@ -141,6 +140,9 @@ struct Curl
 		if (ret != CURLE_OK) {
 			lastErorrCode_ = ret;
 			lastErrorMsg_ = curl_easy_strerror(ret);
+#ifdef JLIB_LOG2_ENABLED
+			JLOG_ERRO("curl_easy_perform error {}:{}", lastHttpCode_, lastErrorMsg_);
+#endif // JLIB_LOG2_ENABLED
 			return false;
 		}
 		return parse_centent();
