@@ -88,7 +88,7 @@ struct Curl
 
 #ifdef JLIB_LOG2_ENABLED
 	static void dump_slist(curl_slist* list) {
-		LOG_INFO("dumping curl_slist:");
+		JLOG_INFO("dumping curl_slist:");
 		while (list) {
 			LOG_INFO("    {:X}", list->data);
 			list = list->next;
@@ -130,8 +130,8 @@ struct Curl
 		auto content_length = buffer_.size() - sheaders.size();
 		lastHttpContent_ = (buffer_.substr(sheaders.size()));
 #ifdef JLIB_LOG2_ENABLED
-		LOG_INFO("responce status: {}", lastHttpCode_);
-		LOG_INFO("responce body:\n{}", lastHttpContent_);
+		JLOG_INFO("responce status: {}", lastHttpCode_);
+		JLOG_INFO("responce body:\n{}", lastHttpContent_);
 #endif // JLIB_LOG2_ENABLED
 		return true;
 	}
