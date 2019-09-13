@@ -1,9 +1,6 @@
 #include "../../jlib/util/curl_wrapper.h"
 #include <stdio.h>
 
-#ifdef _WIN32
-#pragma comment(lib, "../../jlib/3rdparty/curl/libcurldll.a")
-#endif
 
 using namespace jlib;
 
@@ -11,7 +8,9 @@ int main()
 {
 	Curl curl;
 	curl.init();
-	curl.get("qq.com");
+	curl.get("https://baidu.com");
 	printf("HTTP %ld\n", curl.lastHttpCode());
+	printf("error %d\n", curl.lastError());
+	printf("error msg %s\n", curl.lastErrorMsg().data());
 	printf("%s\n", curl.lastHttpContent().data());
 }

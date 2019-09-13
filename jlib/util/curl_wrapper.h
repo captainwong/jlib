@@ -1,15 +1,32 @@
 ﻿#pragma once
 
-#include "../3rdparty/curl/curl.h"
+/**
+* simple curl wrapper
+* under windows, you should config project's include/lib path to your curl-path.
+* define CURL_STATICLIB in your prject
+* the input libs are: libcurl.lib;ws2_32.lib;wldap32.lib;crypt32.lib;
+*/
+
+
+#include <curl/curl.h>
 #include <string>
 #include "mem_tool.h"
 
 namespace jlib
 {
 
-class Curl
+struct CurlHelper {
+	CurlHelper() {
+		curl_global_init(CURL_GLOBAL_ALL);
+	}
+
+	~CurlHelper() {
+		curl_global_cleanup();
+	}
+};
+
+struct Curl
 {
-public:
 	Curl() { static CurlHelper helper = {}; }
 
 	~Curl() {
@@ -79,16 +96,8 @@ public:
 	}
 #endif // JLIB_LOG2_ENABLED
 
-private:
-	struct CurlHelper {
-		CurlHelper() {
-			curl_global_init(CURL_GLOBAL_ALL);
-		}
 
-		~CurlHelper() {
-			curl_global_cleanup();
-		}
-	};
+///////////////////////////// details ///////////////////////////////
 
 	CURL* curl_ = nullptr;
 	std::string buffer_ = {};
