@@ -1,10 +1,13 @@
-#pragma once
+﻿#pragma once
 #include <algorithm>
 #include <iterator>
 
 namespace jlib {
 
-
+/**
+ * @brief check if container c contains t
+ * @note C must be a container of type T
+ */
 template <class C, class T>
 inline bool is_contain(const C& c, const T& t) {
 	for (const auto& i : c) {
@@ -13,7 +16,10 @@ inline bool is_contain(const C& c, const T& t) {
 	return false;
 }
 
-
+/**
+ * @brief Sub 是 All 的子集，返回 All 内 Sub 的补集
+ * @note All 和 Sub 必须为同样类型的容器
+ */
 template <class C>
 inline typename C get_other(const C & All, const C& Sub) {
 	typename C res, tmp;
@@ -34,6 +40,10 @@ inline typename C get_other(const C & All, const C& Sub) {
 	return res;
 }
 
+/**
+ * @brief Sub 是 All 的子集，返回 All 内 Sub 的补集
+ * @note All 和 Sub 必须为同样类型的容器
+ */
 template <class V>
 std::vector<std::wstring> get_other(const V& v, const std::wstring& t) {
 	std::vector<std::wstring> ret = {};

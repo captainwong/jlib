@@ -81,5 +81,4 @@ inline bool get_version_no_from_file(version_no& ver, const std::string& file_pa
 	return false;
 }
 
-
 }

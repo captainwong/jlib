@@ -126,6 +126,4 @@ inline std::wstring now_to_wstring(bool with_milliseconds = false)
 	return time_point_to_wstring(std::chrono::system_clock::now(), with_milliseconds);
 }
 
-
-
 };

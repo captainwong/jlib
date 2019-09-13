@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <boost/noncopyable.hpp>
 #include <windows.h>
@@ -177,7 +177,7 @@ inline void InflateRect(::LPRECT rc, int l, int t, int r, int b) {
 
 }
 
-// ½«¾ØĞÎÆ½¾ù·Ö¸î³Én·İ,¼ä¾à2*gap, n is x^2, x={1,2,3...}
+// å°†çŸ©å½¢å¹³å‡åˆ†å‰²æˆnä»½,é—´è·2*gap, n is x^2, x={1,2,3...}
 inline std::vector<::RECT> split_rect(::LPCRECT rc, int n, int gap = 50) {
 	using namespace rc_detail;
 
@@ -203,7 +203,7 @@ inline std::vector<::RECT> split_rect(::LPCRECT rc, int n, int gap = 50) {
 	return v;
 };
 
-// ½«¾ØĞÎË®Æ½Æ½¾ù·Ö¸îÎªn·İ¾ØĞÎ, µ±hgap==-1Ê±£¬·Ö¸î³öµÄ¾ØĞÎÓëÔ´¾ØĞÎ±£³Ö±ÈÀı
+// å°†çŸ©å½¢æ°´å¹³å¹³å‡åˆ†å‰²ä¸ºnä»½çŸ©å½¢, å½“hgap==-1æ—¶ï¼Œåˆ†å‰²å‡ºçš„çŸ©å½¢ä¸æºçŸ©å½¢ä¿æŒæ¯”ä¾‹
 inline std::vector<::RECT> split_rect_horizontal(::LPCRECT rc, int n, int wgap = 50, int hgap = -1) {
 	using namespace rc_detail;
 	std::vector<::RECT> v;

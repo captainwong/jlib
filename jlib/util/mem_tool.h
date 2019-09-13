@@ -5,10 +5,6 @@
 
 namespace jlib {
 
-//template <typename T>
-//struct deleter : public std::default_delete<T>
-//{};
-
 template <typename T>
 class auto_free
 {

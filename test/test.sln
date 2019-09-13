@@ -19,18 +19,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_timestamp", "test_time
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jlib", "jlib", "{42703978-A988-403D-9723-E35527FA8A07}"
 	ProjectSection(SolutionItems) = preProject
-		..\jlib\chrono_wrapper.h = ..\jlib\chrono_wrapper.h
 		..\jlib\dp.h = ..\jlib\dp.h
 		..\jlib\log.h = ..\jlib\log.h
 		..\jlib\log2.h = ..\jlib\log2.h
-		..\jlib\mem_tool.h = ..\jlib\mem_tool.h
-		..\jlib\micro_getter_setter.h = ..\jlib\micro_getter_setter.h
 		..\jlib\net.h = ..\jlib\net.h
-		..\jlib\space.h = ..\jlib\space.h
-		..\jlib\std_util.h = ..\jlib\std_util.h
 		..\jlib\utf8.h = ..\jlib\utf8.h
-		..\jlib\version_no.h = ..\jlib\version_no.h
-		..\jlib\vs_ver.h = ..\jlib\vs_ver.h
 		..\jlib\win32.h = ..\jlib\win32.h
 	EndProjectSection
 EndProject
@@ -72,6 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win32", "win32", "{B5D9E71E
 		..\jlib\win32\odbccp32.lib = ..\jlib\win32\odbccp32.lib
 		..\jlib\win32\path_op.h = ..\jlib\win32\path_op.h
 		..\jlib\win32\registry.h = ..\jlib\win32\registry.h
+		..\jlib\win32\resolve.h = ..\jlib\win32\resolve.h
 		..\jlib\win32\UnicodeTool.h = ..\jlib\win32\UnicodeTool.h
 	EndProjectSection
 EndProject
@@ -85,6 +79,112 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win32_tests", "win32_tests", "{0E6598D3-602D-4552-97F7-DC5AB458D553}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_registry", "test_registry\test_registry.vcxproj", "{519E5179-6E95-44EF-A63B-65C9C9C47A3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net", "net", "{FEAECF59-4F31-4E6E-A28A-8DD0D8DEEB58}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\net\icmp_header.hpp = ..\jlib\net\icmp_header.hpp
+		..\jlib\net\ipv4_header.hpp = ..\jlib\net\ipv4_header.hpp
+		..\jlib\net\ping.h = ..\jlib\net\ping.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{E13021FA-C9A3-4627-B7EF-16E97B7E2E14}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\util\chrono_wrapper.h = ..\jlib\util\chrono_wrapper.h
+		..\jlib\util\curl_wrapper.h = ..\jlib\util\curl_wrapper.h
+		..\jlib\util\mem_tool.h = ..\jlib\util\mem_tool.h
+		..\jlib\util\micro_getter_setter.h = ..\jlib\util\micro_getter_setter.h
+		..\jlib\util\rand.h = ..\jlib\util\rand.h
+		..\jlib\util\space.h = ..\jlib\util\space.h
+		..\jlib\util\std_util.h = ..\jlib\util\std_util.h
+		..\jlib\util\version_no.h = ..\jlib\util\version_no.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dp", "dp", "{8D9BBE8F-28BE-481B-A27F-A87526A78C67}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\dp\observer.h = ..\jlib\dp\observer.h
+		..\jlib\dp\singleton.h = ..\jlib\dp\singleton.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "spdlog", "spdlog", "{16CFC30A-57FA-4CCA-94FE-B2217B626454}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\spdlog\async_logger.h = ..\jlib\3rdparty\spdlog\async_logger.h
+		..\jlib\3rdparty\spdlog\common.h = ..\jlib\3rdparty\spdlog\common.h
+		..\jlib\3rdparty\spdlog\formatter.h = ..\jlib\3rdparty\spdlog\formatter.h
+		..\jlib\3rdparty\spdlog\logger.h = ..\jlib\3rdparty\spdlog\logger.h
+		..\jlib\3rdparty\spdlog\spdlog.h = ..\jlib\3rdparty\spdlog\spdlog.h
+		..\jlib\3rdparty\spdlog\tweakme.h = ..\jlib\3rdparty\spdlog\tweakme.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "details", "details", "{0E7B820E-22E6-4F30-B0E1-F1CEE55C114F}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\spdlog\details\async_log_helper.h = ..\jlib\3rdparty\spdlog\details\async_log_helper.h
+		..\jlib\3rdparty\spdlog\details\async_logger_impl.h = ..\jlib\3rdparty\spdlog\details\async_logger_impl.h
+		..\jlib\3rdparty\spdlog\details\file_helper.h = ..\jlib\3rdparty\spdlog\details\file_helper.h
+		..\jlib\3rdparty\spdlog\details\log_msg.h = ..\jlib\3rdparty\spdlog\details\log_msg.h
+		..\jlib\3rdparty\spdlog\details\logger_impl.h = ..\jlib\3rdparty\spdlog\details\logger_impl.h
+		..\jlib\3rdparty\spdlog\details\mpmc_bounded_q.h = ..\jlib\3rdparty\spdlog\details\mpmc_bounded_q.h
+		..\jlib\3rdparty\spdlog\details\null_mutex.h = ..\jlib\3rdparty\spdlog\details\null_mutex.h
+		..\jlib\3rdparty\spdlog\details\os.h = ..\jlib\3rdparty\spdlog\details\os.h
+		..\jlib\3rdparty\spdlog\details\pattern_formatter_impl.h = ..\jlib\3rdparty\spdlog\details\pattern_formatter_impl.h
+		..\jlib\3rdparty\spdlog\details\registry.h = ..\jlib\3rdparty\spdlog\details\registry.h
+		..\jlib\3rdparty\spdlog\details\spdlog_impl.h = ..\jlib\3rdparty\spdlog\details\spdlog_impl.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fmt", "fmt", "{513FCA46-EB27-422D-8B65-BAB4AA594D43}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\spdlog\fmt\fmt.h = ..\jlib\3rdparty\spdlog\fmt\fmt.h
+		..\jlib\3rdparty\spdlog\fmt\ostr.h = ..\jlib\3rdparty\spdlog\fmt\ostr.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sinks", "sinks", "{EB799714-86C1-4DB1-A199-D4E596B9E801}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\spdlog\sinks\android_sink.h = ..\jlib\3rdparty\spdlog\sinks\android_sink.h
+		..\jlib\3rdparty\spdlog\sinks\ansicolor_sink.h = ..\jlib\3rdparty\spdlog\sinks\ansicolor_sink.h
+		..\jlib\3rdparty\spdlog\sinks\base_sink.h = ..\jlib\3rdparty\spdlog\sinks\base_sink.h
+		..\jlib\3rdparty\spdlog\sinks\dist_sink.h = ..\jlib\3rdparty\spdlog\sinks\dist_sink.h
+		..\jlib\3rdparty\spdlog\sinks\file_sinks.h = ..\jlib\3rdparty\spdlog\sinks\file_sinks.h
+		..\jlib\3rdparty\spdlog\sinks\msvc_sink.h = ..\jlib\3rdparty\spdlog\sinks\msvc_sink.h
+		..\jlib\3rdparty\spdlog\sinks\null_sink.h = ..\jlib\3rdparty\spdlog\sinks\null_sink.h
+		..\jlib\3rdparty\spdlog\sinks\ostream_sink.h = ..\jlib\3rdparty\spdlog\sinks\ostream_sink.h
+		..\jlib\3rdparty\spdlog\sinks\sink.h = ..\jlib\3rdparty\spdlog\sinks\sink.h
+		..\jlib\3rdparty\spdlog\sinks\stdout_sinks.h = ..\jlib\3rdparty\spdlog\sinks\stdout_sinks.h
+		..\jlib\3rdparty\spdlog\sinks\syslog_sink.h = ..\jlib\3rdparty\spdlog\sinks\syslog_sink.h
+		..\jlib\3rdparty\spdlog\sinks\wincolor_sink.h = ..\jlib\3rdparty\spdlog\sinks\wincolor_sink.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bundled", "bundled", "{823DD7B5-4815-4132-8D28-A5AFBC70DF45}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\spdlog\fmt\bundled\format.cc = ..\jlib\3rdparty\spdlog\fmt\bundled\format.cc
+		..\jlib\3rdparty\spdlog\fmt\bundled\format.h = ..\jlib\3rdparty\spdlog\fmt\bundled\format.h
+		..\jlib\3rdparty\spdlog\fmt\bundled\ostream.cc = ..\jlib\3rdparty\spdlog\fmt\bundled\ostream.cc
+		..\jlib\3rdparty\spdlog\fmt\bundled\ostream.h = ..\jlib\3rdparty\spdlog\fmt\bundled\ostream.h
+		..\jlib\3rdparty\spdlog\fmt\bundled\posix.cc = ..\jlib\3rdparty\spdlog\fmt\bundled\posix.cc
+		..\jlib\3rdparty\spdlog\fmt\bundled\posix.h = ..\jlib\3rdparty\spdlog\fmt\bundled\posix.h
+		..\jlib\3rdparty\spdlog\fmt\bundled\time.h = ..\jlib\3rdparty\spdlog\fmt\bundled\time.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utf8", "utf8", "{41E61D5E-42D7-4EEA-A6B5-3D13DB455848}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\utf8\checked.h = ..\jlib\3rdparty\utf8\checked.h
+		..\jlib\3rdparty\utf8\core.h = ..\jlib\3rdparty\utf8\core.h
+		..\jlib\3rdparty\utf8\unchecked.h = ..\jlib\3rdparty\utf8\unchecked.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "curl", "curl", "{F441BB78-6FE1-4FCB-80C3-9FC5F8131996}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\3rdparty\curl\curl.h = ..\jlib\3rdparty\curl\curl.h
+		..\jlib\3rdparty\curl\curlver.h = ..\jlib\3rdparty\curl\curlver.h
+		..\jlib\3rdparty\curl\easy.h = ..\jlib\3rdparty\curl\easy.h
+		..\jlib\3rdparty\curl\libcurl.dll = ..\jlib\3rdparty\curl\libcurl.dll
+		..\jlib\3rdparty\curl\libcurldll.a = ..\jlib\3rdparty\curl\libcurldll.a
+		..\jlib\3rdparty\curl\mprintf.h = ..\jlib\3rdparty\curl\mprintf.h
+		..\jlib\3rdparty\curl\multi.h = ..\jlib\3rdparty\curl\multi.h
+		..\jlib\3rdparty\curl\stdcheaders.h = ..\jlib\3rdparty\curl\stdcheaders.h
+		..\jlib\3rdparty\curl\system.h = ..\jlib\3rdparty\curl\system.h
+		..\jlib\3rdparty\curl\typecheck-gcc.h = ..\jlib\3rdparty\curl\typecheck-gcc.h
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_curl_wrapper", "test_curl_wrapper\test_curl_wrapper.vcxproj", "{175611D7-9C38-4269-B0B4-66DE9555A8EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -180,6 +280,14 @@ Global
 		{519E5179-6E95-44EF-A63B-65C9C9C47A3B}.Release|x64.Build.0 = Release|x64
 		{519E5179-6E95-44EF-A63B-65C9C9C47A3B}.Release|x86.ActiveCfg = Release|Win32
 		{519E5179-6E95-44EF-A63B-65C9C9C47A3B}.Release|x86.Build.0 = Release|Win32
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Debug|x64.ActiveCfg = Debug|x64
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Debug|x64.Build.0 = Debug|x64
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Debug|x86.ActiveCfg = Debug|Win32
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Debug|x86.Build.0 = Debug|Win32
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x64.ActiveCfg = Release|x64
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x64.Build.0 = Release|x64
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x86.ActiveCfg = Release|Win32
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -201,6 +309,17 @@ Global
 		{9A3F45EB-C57C-4789-8177-0DEFCC5AFD0E} = {B5D9E71E-2BFE-4D04-A66A-4CB0A103CD77}
 		{0E6598D3-602D-4552-97F7-DC5AB458D553} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
 		{519E5179-6E95-44EF-A63B-65C9C9C47A3B} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
+		{FEAECF59-4F31-4E6E-A28A-8DD0D8DEEB58} = {42703978-A988-403D-9723-E35527FA8A07}
+		{E13021FA-C9A3-4627-B7EF-16E97B7E2E14} = {42703978-A988-403D-9723-E35527FA8A07}
+		{8D9BBE8F-28BE-481B-A27F-A87526A78C67} = {42703978-A988-403D-9723-E35527FA8A07}
+		{16CFC30A-57FA-4CCA-94FE-B2217B626454} = {5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}
+		{0E7B820E-22E6-4F30-B0E1-F1CEE55C114F} = {16CFC30A-57FA-4CCA-94FE-B2217B626454}
+		{513FCA46-EB27-422D-8B65-BAB4AA594D43} = {16CFC30A-57FA-4CCA-94FE-B2217B626454}
+		{EB799714-86C1-4DB1-A199-D4E596B9E801} = {16CFC30A-57FA-4CCA-94FE-B2217B626454}
+		{823DD7B5-4815-4132-8D28-A5AFBC70DF45} = {513FCA46-EB27-422D-8B65-BAB4AA594D43}
+		{41E61D5E-42D7-4EEA-A6B5-3D13DB455848} = {5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}
+		{F441BB78-6FE1-4FCB-80C3-9FC5F8131996} = {5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}
+		{175611D7-9C38-4269-B0B4-66DE9555A8EB} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
