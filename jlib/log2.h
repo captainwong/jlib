@@ -35,8 +35,10 @@ public:
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
+#include <Windows.h>
 #endif // _WIN32
 
+#include <stdio.h>
 #include "3rdparty/spdlog/spdlog.h"
 
 #ifdef _WIN32
@@ -83,7 +85,7 @@ file_name)
 		sprintf_s(msg, "Log initialization failed: %s\n", ex.what());
 		MessageBoxA(nullptr, msg, "Error", MB_ICONERROR);
 #else
-		std::cerr << "Log initialization failed: " << ex.what() << std::endl;
+		fprintf(stderr, "Log initialization failed: %s\n", ex.what());
 #endif
 		exit(0);
 	}
