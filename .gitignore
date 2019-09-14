@@ -1,6 +1,8 @@
 .vscode/
 .vs/
 
+*.log*
+
 # Compiled Object files
 *.slo
 *.lo

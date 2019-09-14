@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include <boost/noncopyable.hpp>
 #include <windows.h>
 #include <objbase.h>
 #include <Shobjidl.h>
 #include <string>
 #include <vector>
+#include "base/noncopyable.h"
 #include "utf8.h"
 #include "win32/MyWSAError.h"
 #include "win32/path_op.h"
@@ -130,7 +130,7 @@ inline BOOL Win32CenterWindow(HWND hwndWindow)
 	return FALSE;
 }
 
-class auto_timer : public boost::noncopyable
+class auto_timer : public noncopyable
 {
 private:
 	int m_timer_id;

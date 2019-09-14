@@ -75,7 +75,7 @@ struct Curl
 		curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, json.data());
 
 		curl_slist* headers = nullptr;
-		headers = curl_slist_append(headers, "application/json");
+		headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers);
 		auto_free<curl_slist> auto_free_headers(headers, [](curl_slist* p) { curl_slist_free_all(p); });
 
@@ -90,7 +90,7 @@ struct Curl
 	static void dump_slist(curl_slist* list) {
 		JLOG_INFO("dumping curl_slist:");
 		while (list) {
-			JLOG_INFO("    {:x}", list->data);
+			JLOG_INFO("    {}", list->data);
 			list = list->next;
 		}
 	}

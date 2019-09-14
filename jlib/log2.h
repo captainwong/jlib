@@ -30,16 +30,19 @@ public:
 
 #define JLIB_LOG2_ENABLED
 
-#include <iostream>
-#include "3rdparty/spdlog/spdlog.h"
-
-#ifdef WIN32
+#ifdef _WIN32
+#define SPDLOG_WCHAR_FILENAMES
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
+#endif // _WIN32
+
+#include "3rdparty/spdlog/spdlog.h"
+
+#ifdef _WIN32
 #include "3rdparty/spdlog/sinks/msvc_sink.h"
-#include "win32.h"
-#endif // WIN32
+#include "utf8.h"
+#endif // _WIN32
 
 #include "utf8.h"
 
@@ -47,34 +50,35 @@ namespace jlib {
     
 static constexpr char g_logger_name[] = "jlogger";
     
-inline void init_logger(const 
-#ifdef WIN32
+inline void init_logger( 
+#ifdef _WIN32
 std::wstring
 #else
 std::string
 #endif
-& file_name)
+file_name)
 {
+#ifdef _WIN32
+	file_name += L".log";
+#else
+	file_name += ".log";
+#endif
+
     try {
 		std::vector<spdlog::sink_ptr> sinks;
-#ifdef WIN32
+#ifdef _WIN32
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
-#ifdef WIN32
-            file_name + L".log"
-#else
-            file_name + ".log"
-#endif
-            , 23, 59));
+			file_name , 23, 59));
 
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
 		spdlog::register_logger(combined_logger);
 		combined_logger->flush_on(spdlog::level::trace);
 	} catch (const spdlog::spdlog_ex& ex) {
-#ifdef WIN32
+#ifdef _WIN32
 		char msg[1024] = { 0 };
 		sprintf_s(msg, "Log initialization failed: %s\n", ex.what());
 		MessageBoxA(nullptr, msg, "Error", MB_ICONERROR);
