@@ -3,7 +3,7 @@
 
 #include "pch.h"
 #include <iostream>
-#include "../../jlib/json/json.h"
+#include "../../jlib/3rdparty/json/json.h"
 
 int main()
 {

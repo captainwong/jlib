@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jlib", "jlib", "{42703978-A
 		..\jlib\win32.h = ..\jlib\win32.h
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", "{5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdparty", "3rdparty", "{5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-40DB-44FD-8FC2-A66AB921688D}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,6 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-4
 		..\jlib\base\noncopyable.h = ..\jlib\base\noncopyable.h
 		..\jlib\base\singleton.h = ..\jlib\base\singleton.h
 		..\jlib\base\stringpiece.h = ..\jlib\base\stringpiece.h
+		..\jlib\base\time.h = ..\jlib\base\time.h
 		..\jlib\base\timestamp.h = ..\jlib\base\timestamp.h
 		..\jlib\base\timezone.h = ..\jlib\base\timezone.h
 	EndProjectSection
@@ -186,6 +187,40 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "curl", "curl", "{F441BB78-6
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_curl_wrapper", "test_curl_wrapper\test_curl_wrapper.vcxproj", "{175611D7-9C38-4269-B0B4-66DE9555A8EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base_tests", "base_tests", "{D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "qt", "qt", "{F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\qt\ErrorCode.h = ..\jlib\qt\ErrorCode.h
+		..\jlib\qt\QtDebug.h = ..\jlib\qt\QtDebug.h
+		..\jlib\qt\QtDebugOutput.h = ..\jlib\qt\QtDebugOutput.h
+		..\jlib\qt\QtPathHelper.h = ..\jlib\qt\QtPathHelper.h
+		..\jlib\qt\QtStylesheet.h = ..\jlib\qt\QtStylesheet.h
+		..\jlib\qt\QtUtils.h = ..\jlib\qt\QtUtils.h
+		..\jlib\qt\signal_slot.h = ..\jlib\qt\signal_slot.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ctrl", "Ctrl", "{0E82BB61-0D27-42B4-8F11-98DB2A21C168}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\qt\Ctrl\ThreadCtrl.h = ..\jlib\qt\Ctrl\ThreadCtrl.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{42039C84-62EE-4F71-A4B9-E9DB2880357C}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\qt\Model\ThreadModel.h = ..\jlib\qt\Model\ThreadModel.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View", "View", "{16CAD8DD-EF99-4A38-B5AA-BF86FC7A07AB}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\qt\View\BgColorBtn.h = ..\jlib\qt\View\BgColorBtn.h
+		..\jlib\qt\View\HttpDlg.h = ..\jlib\qt\View\HttpDlg.h
+		..\jlib\qt\View\HttpDlgErrorCode.h = ..\jlib\qt\View\HttpDlgErrorCode.h
+		..\jlib\qt\View\IconBtn.h = ..\jlib\qt\View\IconBtn.h
+		..\jlib\qt\View\LoadingView.h = ..\jlib\qt\View\LoadingView.h
+		..\jlib\qt\View\PageTitle.h = ..\jlib\qt\View\PageTitle.h
+		..\jlib\qt\View\RndButton.h = ..\jlib\qt\View\RndButton.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -299,12 +334,12 @@ Global
 		{A4B1CDB2-7325-4E22-AD0A-1D2907924CDB} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 		{B12702AD-ABFB-343A-A199-8E24837244A3} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
 		{8A39D7AF-50AF-43BD-8CC6-DA20B6349F03} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
-		{372670F2-83A5-4058-B93C-BB0DCC1521ED} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
+		{372670F2-83A5-4058-B93C-BB0DCC1521ED} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5} = {42703978-A988-403D-9723-E35527FA8A07}
 		{608A105E-40DB-44FD-8FC2-A66AB921688D} = {42703978-A988-403D-9723-E35527FA8A07}
-		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
-		{3E322E9F-E560-4300-AFF8-1DCE44E7DDA2} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
-		{8A9333D5-2981-4E92-87BF-AFFC5F99B1A4} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
+		{B4B8F20B-1B3E-42CD-8B37-A734EF3CA279} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
+		{3E322E9F-E560-4300-AFF8-1DCE44E7DDA2} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
+		{8A9333D5-2981-4E92-87BF-AFFC5F99B1A4} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{B5D9E71E-2BFE-4D04-A66A-4CB0A103CD77} = {42703978-A988-403D-9723-E35527FA8A07}
 		{9A3F45EB-C57C-4789-8177-0DEFCC5AFD0E} = {B5D9E71E-2BFE-4D04-A66A-4CB0A103CD77}
 		{0E6598D3-602D-4552-97F7-DC5AB458D553} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
@@ -320,6 +355,11 @@ Global
 		{41E61D5E-42D7-4EEA-A6B5-3D13DB455848} = {5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}
 		{F441BB78-6FE1-4FCB-80C3-9FC5F8131996} = {5A2CA1BE-5A4B-41B0-B74A-F86AB433F4A5}
 		{175611D7-9C38-4269-B0B4-66DE9555A8EB} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
+		{D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
+		{F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3} = {42703978-A988-403D-9723-E35527FA8A07}
+		{0E82BB61-0D27-42B4-8F11-98DB2A21C168} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
+		{42039C84-62EE-4F71-A4B9-E9DB2880357C} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
+		{16CAD8DD-EF99-4A38-B5AA-BF86FC7A07AB} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

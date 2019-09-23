@@ -70,12 +70,18 @@ struct LocalTime
 
 static constexpr int SECONDS_PER_DAY = 24 * 60 * 60;
     
-
+//! TimeZone for 1970~2030
 class Timezone : public copyable
 {
 public:
-    explicit Timezone(const char* zonename);
-    Timezone(int bias, const char* tzname);
+	explicit Timezone(const char* zonename) {
+
+	}
+
+	Timezone(int bias, const char* tzname) {
+
+	}
+
     Timezone() = default; // invalid timezone
 
     bool valid() const{

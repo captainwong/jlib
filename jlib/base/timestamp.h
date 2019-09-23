@@ -7,25 +7,10 @@
 #include <string> // std::string
 #include <inttypes.h> // PRId64
 #include <stdio.h> // snprintf
-#include <time.h> // gmtime_r
+#include "time.h"
 
 //#define _WIN32_WINNT _WIN32_WINNT_WIN7
 
-#ifdef JLIB_WINDOWS
-#	include <windows.h>
-	static inline struct tm* gmtime_r(const time_t* timep, struct tm* result)
-	{
-		gmtime_s(result, timep);
-		return result;
-	}
-
-    // https://blogs.msdn.microsoft.com/vcblog/2016/03/30/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
-#   define ENABLE_EBO __declspec(empty_bases)
-
-#elif defined(JLIB_LINUX)
-#   include <sys/time.h> // gettimeofday
-#   define ENABLE_EBO
-#endif
 
 namespace jlib
 {
@@ -43,7 +28,6 @@ public:
         : microSecondsSinceEpoch_(microSecondsSinceEpoch)
     {}
 
-	static constexpr int MICRO_SECONDS_PER_SECOND = 1000 * 1000;
 
     void swap(Timestamp& rhs) {
         std::swap(microSecondsSinceEpoch_, rhs.microSecondsSinceEpoch_);
@@ -84,31 +68,7 @@ public:
 
 
 	static Timestamp now() {
-#ifdef JLIB_WINDOWS
-		/* FILETIME of Jan 1 1970 00:00:00. */
-		static constexpr unsigned __int64 EPOCH = 116444736000000000UL;
-
-		FILETIME ft;
-
-#if		_WIN32_WINNT > _WIN32_WINNT_WIN7
-		GetSystemTimePreciseAsFileTime(&ft); // win8 or later
-#else
-		SYSTEMTIME st;
-		GetSystemTime(&st);
-		SystemTimeToFileTime(&st, &ft);
-#endif 
-
-		ULARGE_INTEGER ularge;
-		ularge.LowPart = ft.dwLowDateTime;
-		ularge.HighPart = ft.dwHighDateTime;
-
-		return Timestamp((ularge.QuadPart - EPOCH) / 10L);
-#elif defined(JLIB_LINUX)
-		struct timeval tv;
-		gettimeofday(&tv, nullptr);
-		int64_t seconds = tv.tv_sec;
-		return Timestamp(seconds * MICRO_SECONDS_PER_SECOND + tv.tv_usec);
-#endif
+		return Timestamp(gettimeofdayUsec());
 	}
 
 	static Timestamp invalid() { return Timestamp(); }
@@ -120,7 +80,6 @@ public:
 	static Timestamp fromTime_t(time_t t, int microSeconds) {
 		return Timestamp(static_cast<int64_t>(t) * MICRO_SECONDS_PER_SECOND + microSeconds);
 	}
-
 
 private:
     int64_t microSecondsSinceEpoch_ = 0;
@@ -143,11 +102,11 @@ inline bool operator==(Timestamp lhs, Timestamp rhs) {
 */
 inline double timeDifference(Timestamp high, Timestamp low) {
 	int64_t diff = high.microSecondsSinceEpoch() - low.microSecondsSinceEpoch();
-	return static_cast<double>(diff) / Timestamp::MICRO_SECONDS_PER_SECOND;
+	return static_cast<double>(diff) / MICRO_SECONDS_PER_SECOND;
 }
 
 inline Timestamp addSeconds(Timestamp t, double seconds) {
-	int64_t delta = static_cast<int64_t>(seconds * Timestamp::MICRO_SECONDS_PER_SECOND);
+	int64_t delta = static_cast<int64_t>(seconds * MICRO_SECONDS_PER_SECOND);
 	return Timestamp(t.microSecondsSinceEpoch() + delta);
 }
 

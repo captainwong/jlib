@@ -10,4 +10,8 @@
 
 #ifdef JLIB_WINDOWS
 #define _CRT_SECURE_NO_WARNINGS 
+// https://blogs.msdn.microsoft.com/vcblog/2016/03/30/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
+#define ENABLE_EBO __declspec(empty_bases)
+#else
+#define ENABLE_EBO
 #endif
