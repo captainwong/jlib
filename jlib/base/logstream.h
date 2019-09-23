@@ -346,14 +346,15 @@ static std::string formatSI(int64_t s)
 */
 static std::string formatIEC(int64_t s)
 {
+	static constexpr double Ki = 1024.0;
+	static constexpr double Mi = Ki * 1024.0;
+	static constexpr double Gi = Mi * 1024.0;
+	static constexpr double Ti = Gi * 1024.0;
+	static constexpr double Pi = Ti * 1024.0;
+	static constexpr double Ei = Pi * 1024.0;
+
     double n = static_cast<double>(s);
     char buf[64];
-    const double Ki = 1024.0;
-    const double Mi = Ki * 1024.0;
-    const double Gi = Mi * 1024.0;
-    const double Ti = Gi * 1024.0;
-    const double Pi = Ti * 1024.0;
-    const double Ei = Pi * 1024.0;
 
     if (n < Ki)
         snprintf(buf, sizeof buf, "%" PRId64, s);

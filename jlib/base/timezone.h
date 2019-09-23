@@ -71,46 +71,46 @@ struct LocalTime
 static constexpr int SECONDS_PER_DAY = 24 * 60 * 60;
     
 //! TimeZone for 1970~2030
-class Timezone : public copyable
+class TimeZone : public copyable
 {
 public:
-	explicit Timezone(const char* zonename) {
+	explicit TimeZone(const char* zonename) {
 
 	}
 
-	Timezone(int bias, const char* tzname) {
+	TimeZone(int bias, const char* tzname) {
 
 	}
 
-    Timezone() = default; // invalid timezone
+    TimeZone() = default; // invalid timezone
 
     bool valid() const{
         return static_cast<bool>(data_);
     }
 
-	struct tm toLocalTime(time_t secondsSinceEpoch) const {
+	//struct tm toLocalTime(time_t secondsSinceEpoch) const {
 
-	}
+	//}
 
-	time_t fromLocalTime(const struct tm& tm_time) const {
+	//time_t fromLocalTime(const struct tm& tm_time) const {
 
-	}
+	//}
 
-	static struct tm toUtcTime(time_t secondsSinceEpoch, bool yday = false);
-	static time_t fromUtcTime(const struct tm& tm_time);
-	
-	/**
-	* @param year [1900, 2500]
-	* @param month [1, 12]
-	* @param day [1, 31]
-	* @param hour [0, 23]
-	* @param minute [0, 59]
-	* @param seconds [0, 59]
-	*/
-	static time_t fromUtcTime(int year, int month, int day,
-							  int hour, int minute, int seconds) {
+	//static struct tm toUtcTime(time_t secondsSinceEpoch, bool yday = false);
+	//static time_t fromUtcTime(const struct tm& tm_time);
+	//
+	///**
+	//* @param year [1900, 2500]
+	//* @param month [1, 12]
+	//* @param day [1, 31]
+	//* @param hour [0, 23]
+	//* @param minute [0, 59]
+	//* @param seconds [0, 59]
+	//*/
+	//static time_t fromUtcTime(int year, int month, int day,
+	//						  int hour, int minute, int seconds) {
 
-	}
+	//}
 
 	struct Data {
 		std::vector<detail::Transition> transitions;
