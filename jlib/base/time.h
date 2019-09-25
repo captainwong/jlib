@@ -57,4 +57,55 @@ static inline int64_t gettimeofdayUsec()
 	return 0;
 }
 
+
+/********** Windows Only *******/
+
+#ifdef JLIB_WINDOWS
+
+static inline tm systemTimeToTm(const SYSTEMTIME& st)
+{
+	tm tm;
+	tm.tm_year	= st.wYear - 1900;
+	tm.tm_mon	= st.wMonth - 1;
+	tm.tm_mday	= st.wDay;
+	tm.tm_hour	= st.wHour;
+	tm.tm_min	= st.wMinute;
+	tm.tm_sec	= st.wSecond;
+	tm.tm_isdst = -1;
+	return tm;
+}
+
+static inline SYSTEMTIME tmToSystemTime(const tm& tm)
+{
+	SYSTEMTIME st = { 0 };
+	st.wYear	= tm.tm_year + 1900;
+	st.wMonth	= tm.tm_mon + 1;
+	st.wDay		= tm.tm_mday;
+	st.wHour	= tm.tm_hour;
+	st.wMinute	= tm.tm_min;
+	st.wSecond	= tm.tm_sec;
+	st.wDayOfWeek = tm.tm_wday;
+	return st;
+}
+
+static inline time_t systemTimeToTime_t(const SYSTEMTIME& st)
+{
+	tm tm = systemTimeToTm(st);
+	return mktime(&tm);
+}
+
+static inline SYSTEMTIME time_tToSystemTime(time_t t)
+{
+	tm tm; gmtime_s(&tm, &t);
+	return tmToSystemTime(tm);
+}
+
+static inline SYSTEMTIME time_tToSystemTimeLocal(time_t t)
+{
+	tm tm; localtime_s(&tm, &t);
+	return tmToSystemTime(tm);
+}
+
+#endif // JLIB_WINDOWS
+
 }
