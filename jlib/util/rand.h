@@ -2,6 +2,8 @@
 
 #include <random>
 #include <string>
+#include <type_traits>
+#include <iterator>
 #include <assert.h>
 
 namespace jlib
