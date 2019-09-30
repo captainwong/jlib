@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="testDeviceUniqueIdentifierHeaderOnly.cpp">
+    <ClCompile Include="test_clipboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

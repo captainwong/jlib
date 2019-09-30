@@ -57,17 +57,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win32", "win32", "{B5D9E71E
 		..\jlib\win32\DeviceUniqueIdentifier.cpp = ..\jlib\win32\DeviceUniqueIdentifier.cpp
 		..\jlib\win32\DeviceUniqueIdentifier.h = ..\jlib\win32\DeviceUniqueIdentifier.h
 		..\jlib\win32\deviceuniqueidentifierheaderonly.h = ..\jlib\win32\deviceuniqueidentifierheaderonly.h
-		..\jlib\win32\file_op = ..\jlib\win32\file_op
 		..\jlib\win32\file_op.h = ..\jlib\win32\file_op.h
 		..\jlib\win32\memory_micros.h = ..\jlib\win32\memory_micros.h
-		..\jlib\win32\MtVerify.h = ..\jlib\win32\MtVerify.h
-		..\jlib\win32\MtVerify.h.bak = ..\jlib\win32\MtVerify.h.bak
 		..\jlib\win32\MyWSAError.h = ..\jlib\win32\MyWSAError.h
 		..\jlib\win32\odbccp32.lib = ..\jlib\win32\odbccp32.lib
 		..\jlib\win32\path_op.h = ..\jlib\win32\path_op.h
 		..\jlib\win32\registry.h = ..\jlib\win32\registry.h
 		..\jlib\win32\resolve.h = ..\jlib\win32\resolve.h
 		..\jlib\win32\UnicodeTool.h = ..\jlib\win32\UnicodeTool.h
+		..\jlib\win32\wmi.h = ..\jlib\win32\wmi.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mfc", "mfc", "{9A3F45EB-C57C-4789-8177-0DEFCC5AFD0E}"
@@ -221,6 +219,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View", "View", "{16CAD8DD-E
 		..\jlib\qt\View\RndButton.h = ..\jlib\qt\View\RndButton.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_clipboard", "test_clipboard\test_clipboard.vcxproj", "{904EC99B-A012-4134-AE6F-E21635FB602F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_wmi", "test_wmi\test_wmi.vcxproj", "{79A2C0A6-B8BB-406F-A732-C6300A611EC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -323,6 +325,22 @@ Global
 		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x64.Build.0 = Release|x64
 		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x86.ActiveCfg = Release|Win32
 		{175611D7-9C38-4269-B0B4-66DE9555A8EB}.Release|x86.Build.0 = Release|Win32
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Debug|x64.ActiveCfg = Debug|x64
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Debug|x64.Build.0 = Debug|x64
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Debug|x86.ActiveCfg = Debug|Win32
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Debug|x86.Build.0 = Debug|Win32
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Release|x64.ActiveCfg = Release|x64
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Release|x64.Build.0 = Release|x64
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Release|x86.ActiveCfg = Release|Win32
+		{904EC99B-A012-4134-AE6F-E21635FB602F}.Release|x86.Build.0 = Release|Win32
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Debug|x64.ActiveCfg = Debug|x64
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Debug|x64.Build.0 = Debug|x64
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Debug|x86.ActiveCfg = Debug|Win32
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Debug|x86.Build.0 = Debug|Win32
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Release|x64.ActiveCfg = Release|x64
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Release|x64.Build.0 = Release|x64
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Release|x86.ActiveCfg = Release|Win32
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -360,6 +378,8 @@ Global
 		{0E82BB61-0D27-42B4-8F11-98DB2A21C168} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
 		{42039C84-62EE-4F71-A4B9-E9DB2880357C} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
 		{16CAD8DD-EF99-4A38-B5AA-BF86FC7A07AB} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
+		{904EC99B-A012-4134-AE6F-E21635FB602F} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
+		{79A2C0A6-B8BB-406F-A732-C6300A611EC8} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

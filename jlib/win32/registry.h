@@ -71,10 +71,8 @@
 
 namespace jlib
 {
-
 namespace win32
 {
-
 namespace reg
 {
 
@@ -927,7 +925,5 @@ inline std::wstring RegKey::regTypeToString(const DWORD regType)
 }
 
 } // namespace reg
-
 } // namespace win32
-
 } // namespace jlib

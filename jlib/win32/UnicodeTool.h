@@ -2,6 +2,11 @@
 
 #include <windows.h>
 
+namespace jlib
+{
+namespace win32
+{
+
 inline bool Utf16ToUtf8(const wchar_t* utf16String, char* utf8Buffer, size_t szBuff)
 {
 	size_t request_size = WideCharToMultiByte(CP_UTF8, 0, utf16String, -1, NULL, 0, 0, 0);
@@ -25,24 +30,24 @@ inline bool Utf8ToUtf16(const char* utf8String, wchar_t* utf16Buffer, size_t szB
 
 /**************UNICODE-ANSI mutually transform**************************/
 // need be manuly delete
-__forceinline LPSTR Utf16ToAnsi(const wchar_t * const wSrc)
+__forceinline LPSTR Utf16ToAnsi(const wchar_t* const wSrc)
 {
 	char* pElementText;
 	int iTextLen;
 	iTextLen = WideCharToMultiByte(CP_ACP, 0, wSrc, -1, NULL, 0, NULL, NULL);
 	pElementText = new char[iTextLen + 1];
-	memset((void*)pElementText, 0, sizeof(char)* (iTextLen + 1));
+	memset((void*)pElementText, 0, sizeof(char) * (iTextLen + 1));
 	::WideCharToMultiByte(CP_ACP, 0, wSrc, -1, pElementText, iTextLen, NULL, NULL);
 
 	return pElementText;
 }
 
-__forceinline BOOL Utf16ToAnsiUseCharArray(const wchar_t * const wSrc,
-										   char *ansiArr, DWORD ansiArrLen)
+__forceinline BOOL Utf16ToAnsiUseCharArray(const wchar_t* const wSrc,
+										   char* ansiArr, DWORD ansiArrLen)
 {
 	int iTextLen = WideCharToMultiByte(CP_ACP, 0, wSrc, -1, NULL, 0, NULL, NULL);
 	if (static_cast<DWORD>(iTextLen) < ansiArrLen) {
-		memset((void*)ansiArr, 0, sizeof(char)* (iTextLen + 1));
+		memset((void*)ansiArr, 0, sizeof(char) * (iTextLen + 1));
 		::WideCharToMultiByte(CP_ACP, 0, wSrc, -1, ansiArr, iTextLen, NULL, NULL);
 		return TRUE;
 	}
@@ -51,9 +56,9 @@ __forceinline BOOL Utf16ToAnsiUseCharArray(const wchar_t * const wSrc,
 
 __forceinline wchar_t* AnsiToUtf16(PCSTR ansiSrc)
 {
-	wchar_t *pWide;
+	wchar_t* pWide;
 	int iUnicodeLen = ::MultiByteToWideChar(CP_ACP,
-											 0, ansiSrc, -1, NULL, 0);
+											0, ansiSrc, -1, NULL, 0);
 	pWide = new wchar_t[iUnicodeLen + 1];
 	memset(pWide, 0, (iUnicodeLen + 1) * sizeof(wchar_t));
 	::MultiByteToWideChar(CP_ACP, 0, ansiSrc, -1, (LPWSTR)pWide, iUnicodeLen);
@@ -63,7 +68,7 @@ __forceinline wchar_t* AnsiToUtf16(PCSTR ansiSrc)
 __forceinline BOOL AnsiToUtf16Array(PCSTR ansiSrc, wchar_t* warr, int warr_len)
 {
 	int iUnicodeLen = ::MultiByteToWideChar(CP_ACP,
-											 0, ansiSrc, -1, NULL, 0);
+											0, ansiSrc, -1, NULL, 0);
 	if (warr_len >= iUnicodeLen) {
 		memset(warr, 0, (iUnicodeLen + 1) * sizeof(wchar_t));
 		::MultiByteToWideChar(CP_ACP, 0, ansiSrc, -1, (LPWSTR)warr, iUnicodeLen);
@@ -74,7 +79,7 @@ __forceinline BOOL AnsiToUtf16Array(PCSTR ansiSrc, wchar_t* warr, int warr_len)
 
 __forceinline wchar_t* Utf8ToUtf16(PCSTR ansiSrc)
 {
-	wchar_t *pWide;
+	wchar_t* pWide;
 	int  iUnicodeLen = ::MultiByteToWideChar(CP_UTF8,
 											 0, ansiSrc, -1, NULL, 0);
 	pWide = new  wchar_t[iUnicodeLen + 1];
@@ -87,9 +92,11 @@ __forceinline wchar_t* Utf8ToUtf16(PCSTR ansiSrc)
 __inline const char* Utf16ToUtf8(const wchar_t* utf16, int& out_len)
 {
 	out_len = ::WideCharToMultiByte(CP_UTF8, 0, utf16, -1, NULL, 0, 0, 0);
-	char *p8 = new  char[out_len + 1];
-	memset(p8, 0, (out_len + 1) * sizeof(wchar_t));
+	char* p8 = new  char[out_len + 1];
+	memset(p8, 0, (out_len + 1) * sizeof(char));
 	::WideCharToMultiByte(CP_UTF8, 0, utf16, -1, p8, out_len, 0, 0);
 	return p8;
 }
 
+}
+}

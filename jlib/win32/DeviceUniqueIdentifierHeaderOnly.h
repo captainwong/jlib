@@ -1,15 +1,27 @@
 ﻿#pragma once
 
+#include <Windows.h>
+#include <winioctl.h>
+#include <WbemIdl.h>
+#include <ntddndis.h>
+#include <comdef.h>
+#include <comutil.h>
+#include <atlconv.h>
+#include <math.h>
+#include <strsafe.h>
+#include <tchar.h>
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <Windows.h>
-#include <winioctl.h>
-#include <comdef.h>
+#include <algorithm>
+#include "../utf8.h"
+
+#pragma comment (lib, "comsuppw.lib")
+#pragma comment (lib, "wbemuuid.lib")
 
 namespace jlib {
+namespace win32 {
 namespace DeviceUniqueIdentifier {
-
 
 /*
 参考1:
@@ -100,6 +112,22 @@ enum QueryType : size_t {
 	WINDOWS_MACHINE_GUID = 1 << 8,
 };
 
+static const wchar_t* queryTypeString(QueryType type)
+{
+	switch (type) {
+	case QueryType::MAC_ADDR:				return L"MAC_ADDR            ";
+	case QueryType::MAC_ADDR_REAL:			return L"MAC_ADDR_REAL       ";
+	case QueryType::HARDDISK_SERIAL:		return L"HARDDISK_SERIAL     ";
+	case QueryType::MOTHERBOARD_UUID:		return L"MOTHERBOARD_UUID    ";
+	case QueryType::MOTHERBOARD_MODEL:		return L"MOTHERBOARD_MODEL   ";
+	case QueryType::CPU_ID:					return L"CPU_ID              ";
+	case QueryType::BIOS_SERIAL:			return L"BIOS_SERIAL         ";
+	case QueryType::WINDOWS_PRODUCT_ID:		return L"WINDOWS_PRODUCT_ID  ";
+	case QueryType::WINDOWS_MACHINE_GUID:	return L"WINDOWS_MACHINE_GUID";
+	default:								return L"UNKNOWN QueryType   ";
+	}
+}
+
 enum {
 	RecommendedQueryTypes = WINDOWS_MACHINE_GUID
 	| WINDOWS_PRODUCT_ID
@@ -116,13 +144,7 @@ enum {
 	,
 };
 
-/**
-* @brief 查询信息
-* @param[in] queryTypes QueryType集合
-* @param[in,out] results 查询结果集合
-* @return 成功或失败
-*/
-static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>& results);
+typedef std::unordered_map<QueryType, std::wstring> QueryResults;
 
 /**
 * @brief 查询信息
@@ -130,7 +152,15 @@ static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>
 * @param[in,out] results 查询结果集合
 * @return 成功或失败
 */
-static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results);
+static bool query(size_t queryTypes, QueryResults& results);
+
+/**
+* @brief 查询信息
+* @param[in] queryTypes QueryType集合
+* @param[in,out] results 查询结果集合
+* @return 成功或失败
+*/
+static bool query(const std::vector<QueryType>& queryTypes, QueryResults& results);
 
 /**
 * @brief 连接查询结果为一个字符串
@@ -138,30 +168,13 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 * @param[in,out] conjunction 连词
 * @return 将结果以连词连接起来组成的字符串
 */
-static std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction);
+static std::wstring join_result(const QueryResults& results, const std::wstring& conjunction);
 
-}
-}
 
 // Implementation
-#include <Windows.h>
-#include <algorithm>
-#include <math.h>
-#include <strsafe.h>
-#include <tchar.h>
-#include <ntddndis.h>
-#include <WbemIdl.h>
-#include <comdef.h>
-#include <comutil.h>
-#include <atlconv.h>
-#include <jlib/utf8.h>
 
-#pragma comment (lib, "comsuppw.lib")
-#pragma comment (lib, "wbemuuid.lib")
-
-namespace jlib {
-namespace DeviceUniqueIdentifier {
-namespace detail {
+namespace detail
+{
 
 struct DeviceProperty {
 	enum { PROPERTY_MAX_LEN = 128 }; // 属性字段最大长度
@@ -213,8 +226,7 @@ inline WQL_QUERY getWQLQuery(QueryType queryType) {
 	}
 }
 
-
-static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
+static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t* SerialNumber, UINT uSize)
 {
 	UINT	iLen;
 	UINT	i;
@@ -271,9 +283,8 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 	return TRUE;
 }
 
-
 // 通过“PNPDeviceID”获取网卡原生MAC地址
-static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddress, UINT uSize)
+static BOOL WMI_DoWithPNPDeviceID(const wchar_t* PNPDeviceID, wchar_t* MacAddress, UINT uSize)
 {
 	wchar_t	DevicePath[MAX_PATH];
 	HANDLE	hDeviceFile;
@@ -319,8 +330,7 @@ static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddres
 	return isOK;
 }
 
-
-static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uSize)
+static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t* szProperty, UINT uSize)
 {
 	BOOL isOK = TRUE;
 	switch (queryType) {
@@ -340,8 +350,6 @@ static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uS
 	}
 	return isOK;
 }
-
-
 
 static std::wstring getMachineGUID()
 {
@@ -397,10 +405,10 @@ static std::wstring getMachineGUID()
 	return res;
 }
 
-} // end of namespace detail
+} // namespace detail
 
 
-static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>& results)
+static bool query(size_t queryTypes, QueryResults& results)
 {
 	std::vector<QueryType> vec;
 
@@ -438,30 +446,30 @@ static bool query(size_t queryTypes, std::unordered_map<QueryType, std::wstring>
 }
 
 // 基于Windows Management Instrumentation（Windows管理规范）
-static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<QueryType, std::wstring>& results)
+static bool query(const std::vector<QueryType>& queryTypes, QueryResults& results)
 {
 	bool ok = false;
 
 	// 初始化COM COINIT_APARTMENTTHREADED
 	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 		_com_error ce(hres);
 		qDebug() << "CoInitializeEx with COINIT_MULTITHREADED failed:\n" << ce.Error() << QString::fromWCharArray(ce.ErrorMessage()); // 
 #endif
 
 		if (hres == 0x80010106) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 			qDebug() << "already initilized, pass"; // 
 #endif
 		} else {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 			qDebug() << "trying CoInitializeEx with COINIT_APARTMENTTHREADED"; // 
 #endif
 			hres = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
 			if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 				qDebug() << "CoInitializeEx with COINIT_APARTMENTTHREADED failed, exit";
 #endif
 				return false;
@@ -482,16 +490,16 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		NULL
 	);
 	if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 		qDebug() << "CoInitializeSecurity:" << hres << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#else
+#elif defined(__AFXWIN_H__)
 		CString msg;
 		msg.Format(L"0x%X : %s", hres, _com_error(hres).ErrorMessage());
 		MessageBoxW(NULL, msg, L"error", MB_ICONERROR);
 #endif
 
 		if (hres == E_OUTOFMEMORY) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 			qDebug() << "E_OUTOFMEMORY";
 #else
 			MessageBoxW(NULL, L"E_OUTOFMEMORY", L"error", MB_ICONERROR);
@@ -502,7 +510,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		}
 	}
 	// 获得WMI连接COM接口
-	IWbemLocator *pLoc = NULL;
+	IWbemLocator* pLoc = NULL;
 	hres = CoCreateInstance(
 		CLSID_WbemLocator,
 		NULL,
@@ -511,7 +519,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		reinterpret_cast<LPVOID*>(&pLoc)
 	);
 	if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 		qDebug() << "CoCreateInstance:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
 #endif
 		CoUninitialize();
@@ -519,7 +527,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 	}
 
 	// 通过连接接口连接WMI的内核对象名"ROOT//CIMV2"
-	IWbemServices *pSvc = NULL;
+	IWbemServices* pSvc = NULL;
 	hres = pLoc->ConnectServer(
 		_bstr_t(L"ROOT\\CIMV2"),
 		NULL,
@@ -531,7 +539,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		&pSvc
 	);
 	if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 		qDebug() << "ConnectServer:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
 #endif
 		pLoc->Release();
@@ -551,7 +559,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		EOAC_NONE
 	);
 	if (FAILED(hres)) {
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 		qDebug() << "CoSetProxyBlanket:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
 #endif
 		pSvc->Release();
@@ -569,7 +577,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 		auto query = detail::getWQLQuery(queryType);
 
 		// 通过请求代理来向WMI发送请求
-		IEnumWbemClassObject *pEnumerator = NULL;
+		IEnumWbemClassObject* pEnumerator = NULL;
 		hres = pSvc->ExecQuery(
 			bstr_t("WQL"),
 			bstr_t(query.szSelect),
@@ -581,7 +589,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 			//pSvc->Release();
 			//pLoc->Release();
 			//CoUninitialize();
-#ifndef __AFXWIN_H__
+#ifdef QT_VERSION
 			qDebug() << "ExecQuery:\n" << QString::fromWCharArray(query.szSelect) << '\n' << QString::fromWCharArray(_com_error(hres).ErrorMessage());
 #endif
 			results[queryType] = _com_error(hres).ErrorMessage();
@@ -590,7 +598,7 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 
 		// 循环枚举所有的结果对象  
 		while (pEnumerator) {
-			IWbemClassObject *pclsObj = NULL;
+			IWbemClassObject* pclsObj = NULL;
 			ULONG uReturn = 0;
 
 			pEnumerator->Next(
@@ -634,20 +642,22 @@ static bool query(const std::vector<QueryType>& queryTypes, std::unordered_map<Q
 	return ok;
 }
 
-static std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring & conjunction)
+static std::wstring join_result(const QueryResults& results, const std::wstring& conjunction)
 {
 	std::wstring result;
 	auto itBegin = results.cbegin();
 	auto itEnd = results.cend();
 	if (itBegin != itEnd) {
-		result = *itBegin++;
+		result = itBegin->second;
+		itBegin++;
 	}
 	for (; itBegin != itEnd; itBegin++) {
 		result += conjunction;
-		result += *itBegin;
+		result += itBegin->second;
 	}
 	return result;
 }
 
-}
-}
+} // namespace DeviceUniqueIdentifier 
+} // namespace win32
+} // namespace jlib

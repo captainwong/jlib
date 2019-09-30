@@ -2,9 +2,13 @@
 #include <windows.h>
 #include <string>
 
-namespace jlib{
+namespace jlib
+{
 
-inline bool to_clipboard(const std::wstring &s)
+namespace win32
+{
+
+inline bool to_clipboard(const std::wstring& s)
 {
 	if (!OpenClipboard(nullptr)) return false;
 	if (!EmptyClipboard()) return false;
@@ -50,5 +54,5 @@ inline std::wstring from_clipboard()
 	return text;
 }
 
-    
+}
 }

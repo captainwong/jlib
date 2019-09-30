@@ -3,8 +3,12 @@
 #include <string>
 #include <vector>
 
-namespace jlib {
-namespace DeviceUniqueIdentifier {
+namespace jlib
+{
+namespace win32
+{
+namespace DeviceUniqueIdentifier
+{
 
 
 /*
@@ -136,5 +140,6 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 */
 std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction);
 
+}
 }
 }

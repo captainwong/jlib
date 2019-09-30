@@ -8,6 +8,8 @@
 
 namespace jlib
 {
+namespace win32
+{
 
 //! get first ipv4 of domain
 static std::string resolve(const std::string& domain)
@@ -153,4 +155,5 @@ static std::string resolve(const std::string& domain)
 	return "";
 }
 
+}
 }

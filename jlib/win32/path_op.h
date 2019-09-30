@@ -7,6 +7,7 @@
 #pragma comment(lib, "Shell32.lib")
 
 namespace jlib {
+namespace win32 {
 
 inline std::wstring get_exe_path()
 {
@@ -24,22 +25,22 @@ inline std::string get_exe_path_a()
 	return std::string(path).substr(0, pos);
 }
 
-inline std::wstring integrate_path(const std::wstring& path, wchar_t replace_by = L'_'){
-    static const wchar_t filter[] = L"\\/:*?\"<>| ";
-    auto ret = path;
-    for (auto c : filter) {
-        std::replace(ret.begin(), ret.end(), c, replace_by);
-    }
-    return ret;
+inline std::wstring integrate_path(const std::wstring& path, wchar_t replace_by = L'_') {
+	static const wchar_t filter[] = L"\\/:*?\"<>| ";
+	auto ret = path;
+	for (auto c : filter) {
+		std::replace(ret.begin(), ret.end(), c, replace_by);
+	}
+	return ret;
 }
 
-inline std::string integrate_path(const std::string& path, char replace_by = '_'){
-    static const char filter[] = "\\/:*?\"<>| ";
-    auto ret = path;
-    for (auto c : filter) {
-        std::replace(ret.begin(), ret.end(), c, replace_by);
-    }
-    return ret;
+inline std::string integrate_path(const std::string& path, char replace_by = '_') {
+	static const char filter[] = "\\/:*?\"<>| ";
+	auto ret = path;
+	for (auto c : filter) {
+		std::replace(ret.begin(), ret.end(), c, replace_by);
+	}
+	return ret;
 }
 
 inline std::wstring get_special_folder(int csidl) {
@@ -60,6 +61,5 @@ inline std::string get_special_folder_a(int csidl) {
 	return std::string();
 }
 
-
 }
-
+}

@@ -2,30 +2,31 @@
 #include <Windows.h>
 #include <string>
 
-namespace jlib {
-inline bool get_file_open_dialog_result(std::wstring& path, 
+namespace jlib
+{
+namespace win32
+{
+
+inline bool get_file_open_dialog_result(std::wstring& path,
 										HWND hWnd = nullptr,
 										const std::wstring& default_folder = L"",
 										const std::wstring& ext = L"",
 										UINT cFileTypes = 0,
-										const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
+										const COMDLG_FILTERSPEC * rgFilterSpec = nullptr)
+{
 	bool ok = false;
-
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
-								COINIT_DISABLE_OLE1DDE);
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
 	if (SUCCEEDED(hr)) {
-
-		IFileOpenDialog *pFileOpen;
+		IFileOpenDialog* pFileOpen;
 
 		// Create the FileOpenDialog object.
 		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
 							  IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
 
 		if (SUCCEEDED(hr)) {
-
 			if (!default_folder.empty()) {
-				IShellItem *psiFolder;
+				IShellItem* psiFolder;
 				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
 				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
 				//if (SUCCEEDED(hr))
@@ -59,7 +60,7 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 
 			// Get the file name from the dialog box.
 			if (SUCCEEDED(hr)) {
-				IShellItem *pItem;
+				IShellItem* pItem;
 				hr = pFileOpen->GetResult(&pItem);
 				if (SUCCEEDED(hr)) {
 					PWSTR pszFilePath;
@@ -89,24 +90,21 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 									const std::wstring& default_name = L"",
 									const std::wstring& ext = L"",
 									UINT cFileTypes = 0,
-									const COMDLG_FILTERSPEC *rgFilterSpec = nullptr) {
+									const COMDLG_FILTERSPEC * rgFilterSpec = nullptr)
+{
 	bool ok = false;
-
-	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
-								COINIT_DISABLE_OLE1DDE);
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
 	if (SUCCEEDED(hr)) {
-
-		IFileSaveDialog *pFileSave;
+		IFileSaveDialog* pFileSave;
 
 		// Create the FileOpenDialog object.
 		hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL,
 							  IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
 
 		if (SUCCEEDED(hr)) {
-
 			if (!default_folder.empty()) {
-				IShellItem *psiFolder;
+				IShellItem* psiFolder;
 				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
 				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
 				//if (SUCCEEDED(hr))
@@ -130,7 +128,7 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 			if (!ext.empty()) {
 				pFileSave->SetDefaultExtension(ext.data());
 			}
-			
+
 			if (cFileTypes != 0 && rgFilterSpec) {
 				pFileSave->SetFileTypes(cFileTypes, rgFilterSpec);
 			}
@@ -144,7 +142,7 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 
 			// Get the file name from the dialog box.
 			if (SUCCEEDED(hr)) {
-				IShellItem *pItem;
+				IShellItem* pItem;
 				hr = pFileSave->GetResult(&pItem);
 				if (SUCCEEDED(hr)) {
 					PWSTR pszFilePath;
@@ -168,4 +166,5 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 	return ok;
 }
 
+}
 }

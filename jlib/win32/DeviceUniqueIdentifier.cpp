@@ -9,13 +9,13 @@
 #include <comdef.h>
 #include <comutil.h>
 #include <atlconv.h>
-#include <jlib/3rdparty/win32/WinReg.hpp>
 #include <jlib/utf8.h>
 
 #pragma comment (lib, "comsuppw.lib")
 #pragma comment (lib, "wbemuuid.lib")
 
 namespace jlib {
+namespace win32 {
 namespace DeviceUniqueIdentifier {
 namespace detail {
 
@@ -70,7 +70,7 @@ inline WQL_QUERY getWQLQuery(QueryType queryType) {
 }
 
 
-static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
+static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t* SerialNumber, UINT uSize)
 {
 	UINT	iLen;
 	UINT	i;
@@ -129,7 +129,7 @@ static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t *SerialNumber, UINT uSize)
 
 
 // 通过“PNPDeviceID”获取网卡原生MAC地址
-static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddress, UINT uSize)
+static BOOL WMI_DoWithPNPDeviceID(const wchar_t* PNPDeviceID, wchar_t* MacAddress, UINT uSize)
 {
 	wchar_t	DevicePath[MAX_PATH];
 	HANDLE	hDeviceFile;
@@ -176,7 +176,7 @@ static BOOL WMI_DoWithPNPDeviceID(const wchar_t *PNPDeviceID, wchar_t *MacAddres
 }
 
 
-static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t *szProperty, UINT uSize)
+static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t* szProperty, UINT uSize)
 {
 	BOOL isOK = TRUE;
 	switch (queryType) {
@@ -320,7 +320,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 	}
 
 	// 获得WMI连接COM接口
-	IWbemLocator *pLoc = NULL;
+	IWbemLocator* pLoc = NULL;
 	hres = CoCreateInstance(
 		CLSID_WbemLocator,
 		NULL,
@@ -334,7 +334,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 	}
 
 	// 通过连接接口连接WMI的内核对象名"ROOT//CIMV2"
-	IWbemServices *pSvc = NULL;
+	IWbemServices* pSvc = NULL;
 	hres = pLoc->ConnectServer(
 		_bstr_t(L"ROOT\\CIMV2"),
 		NULL,
@@ -375,7 +375,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 		auto query = detail::getWQLQuery(queryType);
 
 		// 通过请求代理来向WMI发送请求
-		IEnumWbemClassObject *pEnumerator = NULL;
+		IEnumWbemClassObject* pEnumerator = NULL;
 		hres = pSvc->ExecQuery(
 			bstr_t("WQL"),
 			bstr_t(query.szSelect),
@@ -392,7 +392,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 
 		// 循环枚举所有的结果对象  
 		while (pEnumerator) {
-			IWbemClassObject *pclsObj = NULL;
+			IWbemClassObject* pclsObj = NULL;
 			ULONG uReturn = 0;
 
 			pEnumerator->Next(
@@ -436,7 +436,7 @@ bool query(const std::vector<QueryType>& queryTypes, std::vector<std::wstring>& 
 	return ok;
 }
 
-std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring & conjunction)
+std::wstring join_result(const std::vector<std::wstring>& results, const std::wstring& conjunction)
 {
 	std::wstring result;
 	auto itBegin = results.cbegin();
@@ -451,5 +451,6 @@ std::wstring join_result(const std::vector<std::wstring>& results, const std::ws
 	return result;
 }
 
+}
 }
 }
