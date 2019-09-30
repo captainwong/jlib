@@ -1,4 +1,4 @@
-#include <jlib/win32/DeviceUniqueIdentifierHeaderOnly.h>
+#include <jlib/win32/DeviceUniqueIdentifier.h>
 #include <stdio.h>
 #include <algorithm>
 #include <locale.h>

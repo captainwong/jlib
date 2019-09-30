@@ -1,15 +1,23 @@
 ﻿#pragma once
 
+/**
+* 主要参考了 https://blog.csdn.net/breaksoftware/article/category/9269057
+*/
+
 #include <Windows.h>
-#include <comdef.h>
 #include <WbemIdl.h>
 #include <atlbase.h>
 #include <atlcom.h>
+#include <comdef.h>
 #include <string>
 #include <functional>
 
 #pragma comment (lib, "comsuppw.lib")
 #pragma comment (lib, "wbemuuid.lib")
+
+#if !defined(UNICODE) && !defined(_UNICODE)
+#error wmi only works with unicode!
+#endif
 
 #define JLIB_CHECK_HR(hr) if (FAILED(hr)) break;
 #define JLIB_CHECK_HR2(hr, errorFunc) if (FAILED(hr)) { if (errorFunc) { errorFunc(hr, _com_error(hr).ErrorMessage()); } break; }
