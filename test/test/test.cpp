@@ -2,19 +2,17 @@
 //
 
 #define _CRT_SECURE_NO_WARNINGS
-#include "jlib/chrono_wrapper.h"
+#include "jlib/util/chrono_wrapper.h"
 #include "jlib/dp.h"
 #include "jlib/log2.h"
-#include "jlib/mem_tool.h"
-#include "jlib/micro_getter_setter.h"
-#include "jlib/net.h"
-#include "jlib/space.h"
-#include "jlib/std_util.h"
+#include "jlib/util/mem_tool.h"
+#include "jlib/util/micro_getter_setter.h"
+//#include "jlib/net.h"
+#include "jlib/util/space.h"
+#include "jlib/util/std_util.h"
 #include "jlib/utf8.h"
-#include "jlib/version_no.h"
-#include "jlib/vs_ver.h"
-#include "jlib/win32.h"
-#include <jlib/3rdparty/win32/Registry.hpp>
+#include "jlib/util/version_no.h"
+//#include "jlib/win32.h"
 
 
 int main()

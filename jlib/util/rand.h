@@ -8,7 +8,8 @@ namespace jlib
 {
 
 template <class T = std::mt19937, std::size_t N = T::state_size>
-inline auto seeded_random_engine() -> typename std::enable_if<!!N, T>::type {
+inline typename std::enable_if<!!N, T>::type
+seeded_random_engine() {
 	typename T::result_type random_data[N];
 	std::random_device source;
 	std::generate(std::begin(random_data), std::end(random_data), std::ref(source));
