@@ -29,8 +29,6 @@ typedef std::function<void(const std::wstring&, const std::wstring&)> OutputFunc
 class WmiBase
 {
 public:
-
-
 	WmiBase(const std::wstring& _namespace, OutputFunc outputFunc, ErrorFunc errorFunc = nullptr)
 		: namespace_(_namespace)
 		, outputFunc_(outputFunc)
@@ -100,107 +98,8 @@ public:
 
 		} while (0);
 
-		return hr;
+		return !FAILED(hr);
 	}
-
-	HRESULT parseIWbemClassObject(CComPtr<IWbemClassObject> object) {
-		HRESULT hr = WBEM_S_NO_ERROR;
-		do {
-			CComVariant vtClass;
-			hr = object->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
-
-			do {
-				CComBSTR key;
-				CComVariant value;
-				CIMTYPE type;
-				LONG flavor = 0;
-				hr = object->Next(0, &key, &value, &type, &flavor);
-				if (WBEM_S_NO_MORE_DATA == hr) { break; }
-				JLIB_CHECK_WMI_HR2(hr, errorFunc_);
-				hr = parseSingleItem(key, value, type, flavor);
-			} while (WBEM_S_NO_ERROR == hr);
-
-			hr = object->EndEnumeration();
-		} while (0);
-
-		return hr;
-	}
-
-	HRESULT parseSingleItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
-		HRESULT hr = WBEM_S_NO_ERROR;
-		switch (value.vt) {
-		case VT_UNKNOWN:
-			parseUnknownItem(key, value, type, flavor);
-			break;
-		default:
-			parseItem(key, value, type, flavor);
-			break;
-		}
-		return hr;
-	}
-
-	void parseItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
-		std::wstring Key = key.m_str;
-		std::wstring Value;
-
-		switch (value.vt) {
-		case VT_BSTR:
-			Value =  value.bstrVal;
-			break;
-
-		case VT_I1:
-		case VT_I2:
-		case VT_I4:
-		case VT_I8:
-		case VT_INT:
-		case VT_UI8:
-		case VT_UI1:
-		case VT_UI2:
-		case VT_UI4:
-		case VT_UINT:
-			Value = std::to_wstring(value.intVal);
-			break;
-
-		case VT_BOOL:
-			Value = value.boolVal ? L"TRUE" : L"FALSE";
-			break;
-
-		case VT_NULL:
-			Value = L"NULL";
-			break;
-
-		default:
-			ATLASSERT(FALSE);
-			break;
-		}
-
-		outputFunc_(Key, Value);
-	}
-
-	HRESULT parseUnknownItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
-		HRESULT hr = WBEM_S_NO_ERROR;
-		if (NULL == value.punkVal) {
-			return hr;
-		}
-		// object类型转换成IWbemClassObject接口指针，通过该指针枚举其他属性
-		CComPtr<IWbemClassObject> pObjInstance = (IWbemClassObject*)value.punkVal;
-
-		do {
-			hr = pObjInstance->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
-			JLIB_CHECK_HR2(hr, errorFunc_);
-			CComBSTR newKey;
-			CComVariant newValue;
-			CIMTYPE newtype;
-			LONG newFlavor = 0;
-			hr = pObjInstance->Next(0, &newKey, &newValue, &newtype, &newFlavor);
-			JLIB_CHECK_HR2(hr, errorFunc_);
-			parseItem(newKey, newValue, newtype, newFlavor);
-		} while (WBEM_S_NO_ERROR == hr);
-
-		hr = pObjInstance->EndEnumeration();
-		return WBEM_S_NO_ERROR;
-	}
-
 
 protected:
 	bool initCom(HRESULT& hr) {
@@ -258,6 +157,104 @@ protected:
 			NULL,                        // client identity
 			EOAC_NONE                    // proxy capabilities 
 		);
+	}
+
+	HRESULT parseIWbemClassObject(CComPtr<IWbemClassObject> object) {
+		HRESULT hr = WBEM_S_NO_ERROR;
+		do {
+			CComVariant vtClass;
+			hr = object->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
+
+			do {
+				CComBSTR key;
+				CComVariant value;
+				CIMTYPE type;
+				LONG flavor = 0;
+				hr = object->Next(0, &key, &value, &type, &flavor);
+				if (WBEM_S_NO_MORE_DATA == hr) { break; }
+				JLIB_CHECK_WMI_HR2(hr, errorFunc_);
+				hr = parseSingleItem(key, value, type, flavor);
+			} while (WBEM_S_NO_ERROR == hr);
+
+			hr = object->EndEnumeration();
+		} while (0);
+
+		return hr;
+	}
+
+	HRESULT parseSingleItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
+		HRESULT hr = WBEM_S_NO_ERROR;
+		switch (value.vt) {
+		case VT_UNKNOWN:
+			parseUnknownItem(key, value, type, flavor);
+			break;
+		default:
+			parseItem(key, value, type, flavor);
+			break;
+		}
+		return hr;
+	}
+
+	void parseItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
+		std::wstring Key = key.m_str;
+		std::wstring Value;
+
+		switch (value.vt) {
+		case VT_BSTR:
+			Value = value.bstrVal;
+			break;
+
+		case VT_I1:
+		case VT_I2:
+		case VT_I4:
+		case VT_I8:
+		case VT_INT:
+		case VT_UI8:
+		case VT_UI1:
+		case VT_UI2:
+		case VT_UI4:
+		case VT_UINT:
+			Value = std::to_wstring(value.intVal);
+			break;
+
+		case VT_BOOL:
+			Value = value.boolVal ? L"TRUE" : L"FALSE";
+			break;
+
+		case VT_NULL:
+			Value = L"NULL";
+			break;
+
+		default:
+			ATLASSERT(FALSE);
+			break;
+		}
+
+		outputFunc_(Key, Value);
+	}
+
+	HRESULT parseUnknownItem(CComBSTR key, CComVariant value, CIMTYPE type, LONG flavor) {
+		HRESULT hr = WBEM_S_NO_ERROR;
+		if (NULL == value.punkVal) {
+			return hr;
+		}
+		// object类型转换成IWbemClassObject接口指针，通过该指针枚举其他属性
+		CComPtr<IWbemClassObject> pObjInstance = (IWbemClassObject*)value.punkVal;
+
+		do {
+			hr = pObjInstance->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
+			JLIB_CHECK_HR2(hr, errorFunc_);
+			CComBSTR newKey;
+			CComVariant newValue;
+			CIMTYPE newtype;
+			LONG newFlavor = 0;
+			hr = pObjInstance->Next(0, &newKey, &newValue, &newtype, &newFlavor);
+			JLIB_CHECK_HR2(hr, errorFunc_);
+			parseItem(newKey, newValue, newtype, newFlavor);
+		} while (WBEM_S_NO_ERROR == hr);
+
+		hr = pObjInstance->EndEnumeration();
+		return WBEM_S_NO_ERROR;
 	}
 
 protected:

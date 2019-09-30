@@ -1,17 +1,10 @@
 ﻿#pragma once
 
-#include <Windows.h>
-#include <winioctl.h>
-#include <WbemIdl.h>
-#include <ntddndis.h>
-#include <comdef.h>
-#include <comutil.h>
+#include "wmi.h"
 #include <atlconv.h>
+#include <ntddndis.h>
 #include <math.h>
 #include <strsafe.h>
-#include <tchar.h>
-#include <string>
-#include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include "../utf8.h"
@@ -60,8 +53,9 @@ enum QueryType : size_t {
 	更换硬盘后设备ID也必须随之改变， 不然也会影响授权等应用。
 	因此，很多授权软件没有考虑使用硬盘序列号。
 	而且，不一定所有的电脑都能获取到硬盘序列号。
+	因此，采用bootable（唯一）硬盘作为标识
 	*/
-	HARDDISK_SERIAL = 1 << 2,
+	BOOTABLE_HARDDISK_SERIAL = 1 << 2,
 
 	//! 主板序列号
 	/*
@@ -115,33 +109,33 @@ enum QueryType : size_t {
 static const wchar_t* queryTypeString(QueryType type)
 {
 	switch (type) {
-	case QueryType::MAC_ADDR:				return L"MAC_ADDR            ";
-	case QueryType::MAC_ADDR_REAL:			return L"MAC_ADDR_REAL       ";
-	case QueryType::HARDDISK_SERIAL:		return L"HARDDISK_SERIAL     ";
-	case QueryType::MOTHERBOARD_UUID:		return L"MOTHERBOARD_UUID    ";
-	case QueryType::MOTHERBOARD_MODEL:		return L"MOTHERBOARD_MODEL   ";
-	case QueryType::CPU_ID:					return L"CPU_ID              ";
-	case QueryType::BIOS_SERIAL:			return L"BIOS_SERIAL         ";
-	case QueryType::WINDOWS_PRODUCT_ID:		return L"WINDOWS_PRODUCT_ID  ";
-	case QueryType::WINDOWS_MACHINE_GUID:	return L"WINDOWS_MACHINE_GUID";
-	default:								return L"UNKNOWN QueryType   ";
+	case QueryType::MAC_ADDR:					return L"MAC_ADDR                ";
+	case QueryType::MAC_ADDR_REAL:				return L"MAC_ADDR_REAL           ";
+	case QueryType::BOOTABLE_HARDDISK_SERIAL:	return L"BOOTABLE_HARDDISK_SERIAL";
+	case QueryType::MOTHERBOARD_UUID:			return L"MOTHERBOARD_UUID        ";
+	case QueryType::MOTHERBOARD_MODEL:			return L"MOTHERBOARD_MODEL       ";
+	case QueryType::CPU_ID:						return L"CPU_ID                  ";
+	case QueryType::BIOS_SERIAL:				return L"BIOS_SERIAL             ";
+	case QueryType::WINDOWS_PRODUCT_ID:			return L"WINDOWS_PRODUCT_ID      ";
+	case QueryType::WINDOWS_MACHINE_GUID:		return L"WINDOWS_MACHINE_GUID    ";
+	default:									return L"UNKNOWN QueryType       ";
 	}
 }
 
 enum {
-	RecommendedQueryTypes = WINDOWS_MACHINE_GUID
-	| WINDOWS_PRODUCT_ID
-	| BIOS_SERIAL
-	| CPU_ID
-	| MOTHERBOARD_MODEL
-	| MOTHERBOARD_UUID
-	,
+	RecommendedQueryTypes = BOOTABLE_HARDDISK_SERIAL
+		| MOTHERBOARD_UUID
+		| MOTHERBOARD_MODEL
+		| CPU_ID
+		| BIOS_SERIAL
+		| WINDOWS_PRODUCT_ID 
+		| WINDOWS_MACHINE_GUID
+		,
 
 	AllQueryTypes = RecommendedQueryTypes
-	| HARDDISK_SERIAL
-	| MAC_ADDR_REAL
-	| MAC_ADDR
-	,
+		| MAC_ADDR_REAL
+		| MAC_ADDR
+		,
 };
 
 typedef std::unordered_map<QueryType, std::wstring> QueryResults;
@@ -176,115 +170,40 @@ static std::wstring join_result(const QueryResults& results, const std::wstring&
 namespace detail
 {
 
-struct DeviceProperty {
-	enum { PROPERTY_MAX_LEN = 128 }; // 属性字段最大长度
-	wchar_t szProperty[PROPERTY_MAX_LEN];
-};
-
-struct WQL_QUERY
-{
-	const wchar_t* szSelect = nullptr;
-	const wchar_t* szProperty = nullptr;
-};
-
-inline WQL_QUERY getWQLQuery(QueryType queryType) {
+inline const wchar_t* getWQLQuery(QueryType queryType) {
 	switch (queryType) {
 	case DeviceUniqueIdentifier::MAC_ADDR:
 		return // 网卡当前MAC地址
-		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
-			L"MACAddress" };
+			L"SELECT MACAddress FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))" ;
 	case DeviceUniqueIdentifier::MAC_ADDR_REAL:
 		return // 网卡原生MAC地址
-		{ L"SELECT * FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))",
-			L"PNPDeviceID" };
-	case DeviceUniqueIdentifier::HARDDISK_SERIAL:
-		return // 硬盘序列号
-		{ L"SELECT * FROM Win32_DiskDrive WHERE (SerialNumber IS NOT NULL) AND (MediaType LIKE 'Fixed hard disk%')",
-			L"SerialNumber" };
+			L"SELECT PNPDeviceID FROM Win32_NetworkAdapter WHERE (MACAddress IS NOT NULL) AND (NOT (PNPDeviceID LIKE 'ROOT%'))";
 	case DeviceUniqueIdentifier::MOTHERBOARD_UUID:
 		return // 主板序列号
-		{ L"SELECT * FROM Win32_BaseBoard WHERE (SerialNumber IS NOT NULL)",
-			L"SerialNumber" };
+			L"SELECT SerialNumber FROM Win32_BaseBoard WHERE (SerialNumber IS NOT NULL)";
 	case DeviceUniqueIdentifier::MOTHERBOARD_MODEL:
 		return // 主板型号
-		{ L"SELECT * FROM Win32_BaseBoard WHERE (Product IS NOT NULL)",
-			L"Product" };
+			L"SELECT Product FROM Win32_BaseBoard WHERE (Product IS NOT NULL)";
 	case DeviceUniqueIdentifier::CPU_ID:
 		return // 处理器ID
-		{ L"SELECT * FROM Win32_Processor WHERE (ProcessorId IS NOT NULL)",
-			L"ProcessorId" };
+			L"SELECT ProcessorId FROM Win32_Processor WHERE (ProcessorId IS NOT NULL)";
 	case DeviceUniqueIdentifier::BIOS_SERIAL:
 		return // BIOS序列号
-		{ L"SELECT * FROM Win32_BIOS WHERE (SerialNumber IS NOT NULL)",
-			L"SerialNumber" };
+			L"SELECT SerialNumber FROM Win32_BIOS WHERE (SerialNumber IS NOT NULL)";
 	case DeviceUniqueIdentifier::WINDOWS_PRODUCT_ID:
 		return // Windows 产品ID
-		{ L"SELECT * FROM Win32_OperatingSystem WHERE (SerialNumber IS NOT NULL)",
-			L"SerialNumber" };
+			L"SELECT SerialNumber FROM Win32_OperatingSystem WHERE (SerialNumber IS NOT NULL)";
+	case WINDOWS_MACHINE_GUID:
+		return // 系统UUID
+			L"SELECT UUID FROM Win32_ComputerSystemProduct";
+		break;
 	default:
-		return { L"", L"" };
+		return L"" ;
 	}
-}
-
-static BOOL WMI_DoWithHarddiskSerialNumber(wchar_t* SerialNumber, UINT uSize)
-{
-	UINT	iLen;
-	UINT	i;
-
-	iLen = wcslen(SerialNumber);
-	if (iLen == 40)	// InterfaceType = "IDE"
-	{	// 需要将16进制编码串转换为字符串
-		wchar_t ch, szBuf[32];
-		BYTE b;
-
-		for (i = 0; i < 20; i++) {	// 将16进制字符转换为高4位
-			ch = SerialNumber[i * 2];
-			if ((ch >= '0') && (ch <= '9')) {
-				b = ch - '0';
-			} else if ((ch >= 'A') && (ch <= 'F')) {
-				b = ch - 'A' + 10;
-			} else if ((ch >= 'a') && (ch <= 'f')) {
-				b = ch - 'a' + 10;
-			} else {	// 非法字符
-				break;
-			}
-
-			b <<= 4;
-
-			// 将16进制字符转换为低4位
-			ch = SerialNumber[i * 2 + 1];
-			if ((ch >= '0') && (ch <= '9')) {
-				b += ch - '0';
-			} else if ((ch >= 'A') && (ch <= 'F')) {
-				b += ch - 'A' + 10;
-			} else if ((ch >= 'a') && (ch <= 'f')) {
-				b += ch - 'a' + 10;
-			} else {	// 非法字符
-				break;
-			}
-
-			szBuf[i] = b;
-		}
-
-		if (i == 20) {	// 转换成功
-			szBuf[i] = L'\0';
-			StringCchCopyW(SerialNumber, uSize, szBuf);
-			iLen = wcslen(SerialNumber);
-		}
-	}
-
-	// 每2个字符互换位置
-	for (i = 0; i < iLen; i += 2) {
-		std::swap(SerialNumber[i], SerialNumber[i + 1]);
-	}
-
-	// 去掉空格
-	std::remove(SerialNumber, SerialNumber + wcslen(SerialNumber) + 1, L' ');
-	return TRUE;
 }
 
 // 通过“PNPDeviceID”获取网卡原生MAC地址
-static BOOL WMI_DoWithPNPDeviceID(const wchar_t* PNPDeviceID, wchar_t* MacAddress, UINT uSize)
+static BOOL parsePNPDeviceID(const wchar_t* PNPDeviceID, std::wstring& macAddress)
 {
 	wchar_t	DevicePath[MAX_PATH];
 	HANDLE	hDeviceFile;
@@ -317,36 +236,14 @@ static BOOL WMI_DoWithPNPDeviceID(const wchar_t* PNPDeviceID, wchar_t* MacAddres
 		dwID = OID_802_3_PERMANENT_ADDRESS;
 		isOK = DeviceIoControl(hDeviceFile, IOCTL_NDIS_QUERY_GLOBAL_STATS, &dwID, sizeof(dwID), ucData, sizeof(ucData), &dwByteRet, NULL);
 		if (isOK) {	// 将字节数组转换成16进制字符串
+			macAddress.clear();
 			for (DWORD i = 0; i < dwByteRet; i++) {
-				StringCchPrintfW(MacAddress + (i << 1), uSize - (i << 1), L"%02X", ucData[i]);
+				wchar_t tmp[4];
+				swprintf_s(tmp, 4, i == dwByteRet - 1 ? L"%02X" : L"%02X:", ucData[i]);
+				macAddress += tmp;
 			}
-
-			MacAddress[dwByteRet << 1] = L'\0';	// 写入字符串结束标记
 		}
-
 		CloseHandle(hDeviceFile);
-	}
-
-	return isOK;
-}
-
-static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t* szProperty, UINT uSize)
-{
-	BOOL isOK = TRUE;
-	switch (queryType) {
-	case MAC_ADDR_REAL:		// 网卡原生MAC地址		
-		isOK = WMI_DoWithPNPDeviceID(szProperty, szProperty, uSize);
-		break;
-	case HARDDISK_SERIAL:	// 硬盘序列号
-		isOK = WMI_DoWithHarddiskSerialNumber(szProperty, uSize);
-		break;
-	case MAC_ADDR:			// 网卡当前MAC地址
-							// 去掉冒号
-		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L':');
-		break;
-	default:
-		// 去掉空格
-		std::remove(szProperty, szProperty + wcslen(szProperty) + 1, L' ');
 	}
 	return isOK;
 }
@@ -354,19 +251,8 @@ static BOOL WMI_DoWithProperty(QueryType queryType, wchar_t* szProperty, UINT uS
 static std::wstring getMachineGUID()
 {
 	std::wstring res;
-	/*using namespace winreg;
-	try {
-	RegKey key;
-	key.Open(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Cryptography");
-	res = key.GetStringValue(L"MachineGuid");
-	} catch (RegException& e) {
-	res = utf8::a2w(e.what());
-	} catch (std::exception& e) {
-	res = utf8::a2w(e.what());
-	} */
 
 	try {
-
 		std::wstring key = L"SOFTWARE\\Microsoft\\Cryptography";
 		std::wstring name = L"MachineGuid";
 
@@ -396,6 +282,7 @@ static std::wstring getMachineGUID()
 		if (value.back() == L'\0') {
 			value.erase(value.size() - 1, 1);
 		}
+
 		res = value;
 		RegCloseKey(hKey);
 
@@ -418,8 +305,8 @@ static bool query(size_t queryTypes, QueryResults& results)
 	if (queryTypes & MAC_ADDR_REAL) {
 		vec.push_back(MAC_ADDR_REAL);
 	}
-	if (queryTypes & HARDDISK_SERIAL) {
-		vec.push_back(HARDDISK_SERIAL);
+	if (queryTypes & BOOTABLE_HARDDISK_SERIAL) {
+		vec.push_back(BOOTABLE_HARDDISK_SERIAL);
 	}
 	if (queryTypes & MOTHERBOARD_UUID) {
 		vec.push_back(MOTHERBOARD_UUID);
@@ -438,208 +325,70 @@ static bool query(size_t queryTypes, QueryResults& results)
 	}
 
 	auto ok = query(vec, results);
-	if (queryTypes & WINDOWS_MACHINE_GUID) {
-		results[WINDOWS_MACHINE_GUID] = (detail::getMachineGUID());
-	}
-
 	return ok;
 }
 
-// 基于Windows Management Instrumentation（Windows管理规范）
 static bool query(const std::vector<QueryType>& queryTypes, QueryResults& results)
 {
-	bool ok = false;
+	std::vector<std::wstring> values, errors;
+	auto output = [&values](const std::wstring& key, const std::wstring& value) {
+		values.push_back(value);
+	};
 
-	// 初始化COM COINIT_APARTMENTTHREADED
-	HRESULT hres = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hres)) {
-#ifdef QT_VERSION
-		_com_error ce(hres);
-		qDebug() << "CoInitializeEx with COINIT_MULTITHREADED failed:\n" << ce.Error() << QString::fromWCharArray(ce.ErrorMessage()); // 
-#endif
+	auto error = [&errors](HRESULT hr, const std::wstring& msg) {
+		errors.push_back(msg);
+	};
 
-		if (hres == 0x80010106) {
-#ifdef QT_VERSION
-			qDebug() << "already initilized, pass"; // 
-#endif
-		} else {
-#ifdef QT_VERSION
-			qDebug() << "trying CoInitializeEx with COINIT_APARTMENTTHREADED"; // 
-#endif
-			hres = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-
-			if (FAILED(hres)) {
-#ifdef QT_VERSION
-				qDebug() << "CoInitializeEx with COINIT_APARTMENTTHREADED failed, exit";
-#endif
-				return false;
-			}
-		}
-	}
-
-	// 设置COM的安全认证级别
-	hres = CoInitializeSecurity(
-		NULL,
-		-1,
-		NULL,
-		NULL,
-		RPC_C_AUTHN_LEVEL_DEFAULT,
-		RPC_C_IMP_LEVEL_IMPERSONATE,
-		NULL,
-		EOAC_NONE,
-		NULL
-	);
-	if (FAILED(hres)) {
-#ifdef QT_VERSION
-		qDebug() << "CoInitializeSecurity:" << hres << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#elif defined(__AFXWIN_H__)
-		CString msg;
-		msg.Format(L"0x%X : %s", hres, _com_error(hres).ErrorMessage());
-		MessageBoxW(NULL, msg, L"error", MB_ICONERROR);
-#endif
-
-		if (hres == E_OUTOFMEMORY) {
-#ifdef QT_VERSION
-			qDebug() << "E_OUTOFMEMORY";
-#else
-			MessageBoxW(NULL, L"E_OUTOFMEMORY", L"error", MB_ICONERROR);
-#endif
-		} else {
-			CoUninitialize();
-			return false;
-		}
-	}
-	// 获得WMI连接COM接口
-	IWbemLocator* pLoc = NULL;
-	hres = CoCreateInstance(
-		CLSID_WbemLocator,
-		NULL,
-		CLSCTX_INPROC_SERVER,
-		IID_IWbemLocator,
-		reinterpret_cast<LPVOID*>(&pLoc)
-	);
-	if (FAILED(hres)) {
-#ifdef QT_VERSION
-		qDebug() << "CoCreateInstance:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#endif
-		CoUninitialize();
-		return false;
-	}
-
-	// 通过连接接口连接WMI的内核对象名"ROOT//CIMV2"
-	IWbemServices* pSvc = NULL;
-	hres = pLoc->ConnectServer(
-		_bstr_t(L"ROOT\\CIMV2"),
-		NULL,
-		NULL,
-		NULL,
-		0,
-		NULL,
-		NULL,
-		&pSvc
-	);
-	if (FAILED(hres)) {
-#ifdef QT_VERSION
-		qDebug() << "ConnectServer:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#endif
-		pLoc->Release();
-		CoUninitialize();
-		return false;
-	}
-
-	// 设置请求代理的安全级别
-	hres = CoSetProxyBlanket(
-		pSvc,
-		RPC_C_AUTHN_WINNT,
-		RPC_C_AUTHZ_NONE,
-		NULL,
-		RPC_C_AUTHN_LEVEL_CALL,
-		RPC_C_IMP_LEVEL_IMPERSONATE,
-		NULL,
-		EOAC_NONE
-	);
-	if (FAILED(hres)) {
-#ifdef QT_VERSION
-		qDebug() << "CoSetProxyBlanket:" << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#endif
-		pSvc->Release();
-		pLoc->Release();
-		CoUninitialize();
-		return false;
-	}
-
+	wmi::WmiBase wmi(L"ROOT\\CIMV2", output, error);
+	wmi.prepare();
 	for (auto queryType : queryTypes) {
-		if (queryType == WINDOWS_MACHINE_GUID) {
+		/*if (queryType == WINDOWS_MACHINE_GUID) {
 			results[WINDOWS_MACHINE_GUID] = (detail::getMachineGUID());
 			continue;
-		}
-
-		auto query = detail::getWQLQuery(queryType);
-
-		// 通过请求代理来向WMI发送请求
-		IEnumWbemClassObject* pEnumerator = NULL;
-		hres = pSvc->ExecQuery(
-			bstr_t("WQL"),
-			bstr_t(query.szSelect),
-			WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-			NULL,
-			&pEnumerator
-		);
-		if (FAILED(hres)) {
-			//pSvc->Release();
-			//pLoc->Release();
-			//CoUninitialize();
-#ifdef QT_VERSION
-			qDebug() << "ExecQuery:\n" << QString::fromWCharArray(query.szSelect) << '\n' << QString::fromWCharArray(_com_error(hres).ErrorMessage());
-#endif
-			results[queryType] = _com_error(hres).ErrorMessage();
-			continue;
-		}
-
-		// 循环枚举所有的结果对象  
-		while (pEnumerator) {
-			IWbemClassObject* pclsObj = NULL;
-			ULONG uReturn = 0;
-
-			pEnumerator->Next(
-				WBEM_INFINITE,
-				1,
-				&pclsObj,
-				&uReturn
-			);
-
-			if (uReturn == 0) {
-				break;
-			}
-
-			// 获取属性值
-			{
-				VARIANT vtProperty;
-				VariantInit(&vtProperty);
-				pclsObj->Get(query.szProperty, 0, &vtProperty, NULL, NULL);
-				detail::DeviceProperty deviceProperty{};
-				StringCchCopyW(deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN, vtProperty.bstrVal);
-				VariantClear(&vtProperty);
-				// 对属性值做进一步的处理
-				if (detail::WMI_DoWithProperty(queryType, deviceProperty.szProperty, detail::DeviceProperty::PROPERTY_MAX_LEN)) {
-					results[queryType] = (deviceProperty.szProperty);
-					ok = true;
-					pclsObj->Release();
-					break;
+		} else */if (queryType == BOOTABLE_HARDDISK_SERIAL) {
+			auto sz = values.size();
+			if (wmi.execute(L"SELECT DiskIndex FROM Win32_DiskPartition WHERE Bootable = TRUE") && values.size() == sz + 1) {
+				auto index = values.back(); values.pop_back();
+				if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + index)) {
+					results[queryType] = values.back(); values.pop_back();
+					continue;
 				}
 			}
+		} else {
+			auto wql = detail::getWQLQuery(queryType);
+			auto sz = values.size();
+			if (wmi.execute(wql) && values.size() > sz) {
+				if (queryType == MAC_ADDR_REAL) {
+					auto value = values.back(); values.pop_back();
+					if (detail::parsePNPDeviceID(value.data(), value)) {
+						results[queryType] = value;
+					}
+					while (values.size() > sz) {
+						value = values.back(); values.pop_back();
+						if (detail::parsePNPDeviceID(value.data(), value)) {
+							results[queryType] += L"|" + value;
+						}
+					}
+				} else {
+					results[queryType] = values.back(); values.pop_back();
+					while (values.size() > sz) {
+						results[queryType] += L"|" + values.back(); values.pop_back();
+					}
+				}
+				
+				continue;
+			} 
+		}
 
-			pclsObj->Release();
-		} // End While
-		  // 释放资源
-		pEnumerator->Release();
-
+		// error
+		if (!errors.empty()) {
+			results[queryType] = errors.back(); errors.pop_back();
+		} else {
+			results[queryType] = std::wstring(L"Get ") + queryTypeString(queryType) + L" failed";
+		}
 	}
 
-	pSvc->Release();
-	pLoc->Release();
-	CoUninitialize();
-	return ok;
+	return true;
 }
 
 static std::wstring join_result(const QueryResults& results, const std::wstring& conjunction)
