@@ -11,6 +11,7 @@
 #include <comdef.h>
 #include <string>
 #include <functional>
+#include <assert.h>
 
 #pragma comment (lib, "comsuppw.lib")
 #pragma comment (lib, "wbemuuid.lib")

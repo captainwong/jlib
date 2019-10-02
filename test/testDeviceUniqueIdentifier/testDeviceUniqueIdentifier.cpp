@@ -21,7 +21,7 @@ int main()
 	for (auto iter = results.begin(); iter != results.end(); iter++) {
 		printf("%ls: %ls\n", queryTypeString(iter->first), iter->second.data());
 	}
-
+	//IOCTL_NDIS_QUERY_GLOBAL_STATS
 	printf("\nJoined results:\n%ls\n", join_result(results, L",").data());
 
 	system("pause");

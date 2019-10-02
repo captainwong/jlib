@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "wmi.h"
+#include <winioctl.h> 
 #include <ntddndis.h> // OID_802_3_PERMANENT_ADDRESS ...
 #include <strsafe.h> // StringCch
 #include <unordered_map>
