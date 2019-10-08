@@ -14,6 +14,13 @@
 #include <Shlobj.h>
 #include "../UnicodeTool.h"
 
+namespace jlib
+{
+namespace win32 
+{
+namespace mfc
+{
+
 static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lParam,LPARAM lpData)
 {
 	switch(uMsg)
@@ -33,6 +40,8 @@ static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lParam,LPARAM 
 	}
 	return 0;   
 }
+
+
 
 class CFileOper  
 {
@@ -312,5 +321,10 @@ protected:
 		return RetValue;  
 	}
 };
+
+
+} // namespace mfc 
+} // namespace win32
+} // namespace jlib
 
 #endif // !defined(AFX_FILEOPER_H__25D4B209_DAC6_4D93_98B2_692621E5508F__INCLUDED_)

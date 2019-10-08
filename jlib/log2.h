@@ -5,6 +5,7 @@
 namespace jlib {
 
 #define init_logger
+#define JLOG_DBUG
 #define JLOG_INFO
 #define JLOG_WARN
 #define JLOG_ERRO
