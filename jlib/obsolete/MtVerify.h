@@ -111,25 +111,6 @@ __forceinline void WaitTillThreadExited(HANDLE &handle, DWORD dwMilliseconds = 5
 	handle = INVALID_HANDLE_VALUE;
 }
 
-__inline LPTSTR GetModuleFilePath()
-{
-	static TCHAR szPath[MAX_PATH] = { '\0' };
-	if (lstrlen(szPath) != 0)
-		return szPath;
-
-	TCHAR szExe[MAX_PATH];
-	GetModuleFileName(GetModuleHandle(NULL), szExe, MAX_PATH);
-	int len = lstrlen(szExe);
-	for (int i = len; i > 0; i--) {
-		if (szExe[i] == '\\') {
-			szExe[i] = '\0';
-			lstrcpy(szPath, szExe);
-			break;
-		}
-	}
-	return szPath;
-}
-
 #ifdef _DEBUG
 #define VERIFYPTR(p, cb) {MTVERIFY(!IsBadWritePtr(p, cb));}
 #else
