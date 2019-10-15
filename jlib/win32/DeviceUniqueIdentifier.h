@@ -348,11 +348,21 @@ static bool query(const std::vector<QueryType>& queryTypes, QueryResults& result
 
 		if (queryType == BOOTABLE_HARDDISK_SERIAL) {
 			auto sz = values.size();
-			if (wmi.execute(L"SELECT DiskIndex FROM Win32_DiskPartition WHERE Bootable = TRUE") && values.size() == sz + 1) {
+
+			// possible value:
+			// Microsoft Windows 10 Pro|C:\WINDOWS|\Device\Harddisk4\Partition4
+			if (wmi.execute(L"Select Name from Win32_OperatingSystem") && values.size() == sz + 1) {
 				auto index = values.back(); values.pop_back();
-				if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + index)) {
-					results[queryType] = values.back(); values.pop_back();
-					continue;
+				auto pos = index.find(L"Harddisk");
+				if (pos != index.npos) {
+					auto rpos = index.find(L"\\Partition", pos);
+					if (rpos != index.npos && rpos - pos > strlen("Harddisk")) {
+						auto n = index.substr(pos + strlen("Harddisk"), rpos - pos - strlen("Harddisk"));
+						if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + n)) {
+							results[queryType] = values.back(); values.pop_back();
+							continue;
+						}
+					}
 				}
 			}
 		} else {

@@ -1,15 +1,17 @@
 ﻿#pragma once
-#include <string>
+
 #include <algorithm>
 #include <Windows.h>
 #include <ShlObj.h>
+#include <string>
+#include <algorithm>
 
 #pragma comment(lib, "Shell32.lib")
 
 namespace jlib {
 namespace win32 {
 
-inline std::wstring get_exe_path()
+inline std::wstring getExePath()
 {
 	wchar_t path[1024] = { 0 };
 	GetModuleFileNameW(nullptr, path, 1024);
@@ -17,7 +19,7 @@ inline std::wstring get_exe_path()
 	return std::wstring(path).substr(0, pos);
 }
 
-inline std::string get_exe_path_a()
+inline std::string getExePathA()
 {
 	char path[1024] = { 0 };
 	GetModuleFileNameA(nullptr, path, 1024);
@@ -25,8 +27,10 @@ inline std::string get_exe_path_a()
 	return std::string(path).substr(0, pos);
 }
 
-inline std::wstring integrate_path(const std::wstring& path, wchar_t replace_by = L'_') {
-	static const wchar_t filter[] = L"\\/:*?\"<>| ";
+static constexpr wchar_t* DEFAULT_PATH_FILTERW = L"\\/:*?\"<>| ";
+static constexpr char* DEFAULT_PATH_FILTER = "\\/:*?\"<>| ";
+
+inline std::wstring integratePath(const std::wstring& path, const std::wstring& filter = DEFAULT_PATH_FILTERW, wchar_t replace_by = L'_') {
 	auto ret = path;
 	for (auto c : filter) {
 		std::replace(ret.begin(), ret.end(), c, replace_by);
@@ -34,8 +38,7 @@ inline std::wstring integrate_path(const std::wstring& path, wchar_t replace_by 
 	return ret;
 }
 
-inline std::string integrate_path(const std::string& path, char replace_by = '_') {
-	static const char filter[] = "\\/:*?\"<>| ";
+inline std::string integratePath(const std::string& path, const std::string& filter = DEFAULT_PATH_FILTER, char replace_by = '_') {
 	auto ret = path;
 	for (auto c : filter) {
 		std::replace(ret.begin(), ret.end(), c, replace_by);
@@ -43,16 +46,15 @@ inline std::string integrate_path(const std::string& path, char replace_by = '_'
 	return ret;
 }
 
-inline std::wstring get_special_folder(int csidl) {
+inline std::wstring getSpecialFolder(int csidl) {
 	wchar_t path[MAX_PATH] = { 0 };
 	if (SHGetSpecialFolderPathW(nullptr, path, csidl, false)) {
 		return std::wstring(path);
 	}
-
 	return std::wstring();
 }
 
-inline std::string get_special_folder_a(int csidl) {
+inline std::string getSpecialFolderA(int csidl) {
 	char path[MAX_PATH] = { 0 };
 	if (SHGetSpecialFolderPathA(nullptr, path, csidl, false)) {
 		return std::string(path);

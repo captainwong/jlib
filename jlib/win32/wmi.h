@@ -17,13 +17,21 @@
 #pragma comment (lib, "wbemuuid.lib")
 
 #if !defined(UNICODE) && !defined(_UNICODE)
-#error wmi only works with unicode!
+#error jlib::win32::wmi only works with unicode!
 #endif
 
+#define OUTPUT_ERROR_AND_BREAK(hr, errorFunc) if (errorFunc) { \
+	std::wstring msg = _com_error(hr).ErrorMessage(); \
+	msg += L" "; msg += __FILEW__; msg += L":"; msg += std::to_wstring(__LINE__); \
+	errorFunc(hr, msg); \
+} \
+break;
+
 #define JLIB_CHECK_HR(hr) if (FAILED(hr)) break;
-#define JLIB_CHECK_HR2(hr, errorFunc) if (FAILED(hr)) { if (errorFunc) { errorFunc(hr, _com_error(hr).ErrorMessage()); } break; }
+#define JLIB_CHECK_HR2(hr, errorFunc) if (FAILED(hr)) { OUTPUT_ERROR_AND_BREAK(hr, errorFunc); }
+
 #define JLIB_CHECK_WMI_HR(hr) if ((hr) != WBEM_S_NO_ERROR) break;
-#define JLIB_CHECK_WMI_HR2(hr, errorFunc) if ((hr) != WBEM_S_NO_ERROR) { if (errorFunc) { errorFunc(hr, _com_error(hr).ErrorMessage()); }break; }
+#define JLIB_CHECK_WMI_HR2(hr, errorFunc) if ((hr) != WBEM_S_NO_ERROR) { OUTPUT_ERROR_AND_BREAK(hr, errorFunc); }
 
 namespace jlib
 {
@@ -100,8 +108,9 @@ public:
 
 			while (pEnumerator) {
 				CComPtr<IWbemClassObject> object = NULL;
-				HRESULT hr = pEnumerator->Next(WBEM_INFINITE, 1, &object, &uReturn);
+				hr = pEnumerator->Next(WBEM_INFINITE, 1, &object, &uReturn);
 				if (0 == uReturn) { break; }
+				JLIB_CHECK_WMI_HR2(hr, errorFunc_);
 				parseIWbemClassObject(object);
 			}
 
@@ -235,7 +244,9 @@ protected:
 			break;
 
 		default:
-			ATLASSERT(FALSE);
+			//if(value.vt)
+			//ATLASSERT(FALSE);
+			Value = L"Failed with vt=" + std::to_wstring(value.vt);
 			break;
 		}
 

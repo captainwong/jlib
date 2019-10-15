@@ -6,16 +6,19 @@
 #include <fstream>
 #include <vector>
 
-namespace jlib {
+namespace jlib
+{
 
-struct version_no {
+struct Version {
 	int major = 0;
 	int minor = 0;
 	int revision = 0;
 	int build = 0;
 
-	version_no& from_string(const std::string& s) {
-		std::sscanf(s.c_str(), "%d.%d.%d.%d", &major, &minor, &revision, &build);
+	Version& fromString(const std::string& s) {
+		if (std::sscanf(s.c_str(), "%d.%d.%d.%d", &major, &minor, &revision, &build) != 4) {
+			reset(); return *this;
+		}
 		if (major < 0) major = 0;
 		if (minor < 0) minor = 0;
 		if (revision < 0) revision = 0;
@@ -23,10 +26,11 @@ struct version_no {
 		return *this;
 	}
 
-	std::string to_string() const {
-		std::stringstream ss;
-		ss << major << "." << minor << "." << revision << "." << build;
-		return ss.str();
+	std::string toString() const {
+		return std::to_string(major) + "."
+			+ std::to_string(minor) + "."
+			+ std::to_string(revision) + "."
+			+ std::to_string(build);
 	}
 
 	bool valid() {
@@ -37,14 +41,14 @@ struct version_no {
 		major = minor = revision = build = 0;
 	}
 
-	bool operator == (const version_no& ver) {
+	bool operator == (const Version& ver) {
 		return major == ver.major
 			&& minor == ver.minor
 			&& revision == ver.revision
 			&& build == ver.build;
 	}
 
-	bool operator < (const version_no& ver) {
+	bool operator < (const Version& ver) {
 		if (major > ver.major) return false;
 		if (minor > ver.minor) return false;
 		if (revision > ver.revision) return false;
@@ -52,30 +56,28 @@ struct version_no {
 		if (this->operator==(ver)) return false;
 		return true;
 	}
-
-
 };
 
-struct update_info_json {
-	version_no ver;
-	std::string change;
-	std::vector<std::string> dllinks;
+struct UpdateInfo {
+	Version version = {};
+	std::string change = {};
+	std::vector<std::string> dllinks = {};
 };
 
-struct update_info_text {
-	version_no ver;
-	std::string dllink;
+struct UpdateInfoText {
+	Version version = {};
+	std::string dllink = {};
 };
 
-inline bool get_version_no_from_file(version_no& ver, const std::string& file_path) {
+inline bool getVersionFromFile(const std::string& file_path, Version& version) {
 	std::ifstream in(file_path);
 	if (!in)return false;
 	std::stringstream is;
 	is << in.rdbuf();
-	version_no file_ver;
-	file_ver.from_string(is.str());
+	Version file_ver;
+	file_ver.fromString(is.str());
 	if (file_ver.valid()) {
-		ver = file_ver;
+		version = file_ver;
 		return true;
 	}
 	return false;

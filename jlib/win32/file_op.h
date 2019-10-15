@@ -1,18 +1,31 @@
 #pragma once
+
 #include <Windows.h>
+#include <ShlObj.h>
 #include <string>
+#pragma comment(lib, "Shell32.lib")
 
 namespace jlib
 {
 namespace win32
 {
 
-inline bool get_file_open_dialog_result(std::wstring& path,
-										HWND hWnd = nullptr,
-										const std::wstring& default_folder = L"",
-										const std::wstring& ext = L"",
-										UINT cFileTypes = 0,
-										const COMDLG_FILTERSPEC * rgFilterSpec = nullptr)
+/**
+example of COMDLG_FILTERSPEC:
+
+COMDLG_FILTERSPEC cf[2] = {};
+cf[0].pszName = L"Text Files";
+cf[0].pszSpec = L"*.txt";
+cf[1].pszName = L"All Files";
+cf[1].pszSpec = L"*.*";
+*/
+
+inline bool getOpenFileDialogResult(std::wstring& path,
+									HWND hWnd = nullptr,
+									const std::wstring& default_folder = L"",
+									const std::wstring& ext = L"",
+									UINT cFileTypes = 0,
+									const COMDLG_FILTERSPEC* filter = nullptr)
 {
 	bool ok = false;
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -27,11 +40,6 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 		if (SUCCEEDED(hr)) {
 			if (!default_folder.empty()) {
 				IShellItem* psiFolder;
-				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
-				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
-				//if (SUCCEEDED(hr))
-				//	hr = pFileOpen->SetDefaultFolder(psiFolder);
-
 				PIDLIST_ABSOLUTE pidl;
 				hr = SHParseDisplayName(default_folder.data(), 0, &pidl, SFGAO_FOLDER, 0);
 				if (SUCCEEDED(hr)) {
@@ -47,8 +55,8 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 				pFileOpen->SetDefaultExtension(ext.data());
 			}
 
-			if (cFileTypes != 0 && rgFilterSpec) {
-				pFileOpen->SetFileTypes(cFileTypes, rgFilterSpec);
+			if (cFileTypes != 0 && filter) {
+				pFileOpen->SetFileTypes(cFileTypes, filter);
 			}
 
 			if (!hWnd) {
@@ -84,13 +92,13 @@ inline bool get_file_open_dialog_result(std::wstring& path,
 	return ok;
 }
 
-inline bool get_save_as_dialog_path(std::wstring& path,
-									HWND hWnd = nullptr,
-									const std::wstring& default_folder = L"",
-									const std::wstring& default_name = L"",
-									const std::wstring& ext = L"",
-									UINT cFileTypes = 0,
-									const COMDLG_FILTERSPEC * rgFilterSpec = nullptr)
+inline bool getSaveAsDialogPath(std::wstring& path,
+								HWND hWnd = nullptr,
+								const std::wstring& default_folder = L"",
+								const std::wstring& default_name = L"",
+								const std::wstring& ext = L"",
+								UINT cFileTypes = 0,
+								const COMDLG_FILTERSPEC* filter = nullptr)
 {
 	bool ok = false;
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -105,11 +113,6 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 		if (SUCCEEDED(hr)) {
 			if (!default_folder.empty()) {
 				IShellItem* psiFolder;
-				//LPCWSTR szFilePath = SysAllocStringLen(default_folder.data(), default_folder.size());
-				//hr = SHCreateItemFromParsingName(szFilePath, NULL, IID_PPV_ARGS(&psiFolder));
-				//if (SUCCEEDED(hr))
-				//	hr = pFileSave->SetDefaultFolder(psiFolder);
-
 				PIDLIST_ABSOLUTE pidl;
 				hr = SHParseDisplayName(default_folder.data(), 0, &pidl, SFGAO_FOLDER, 0);
 				if (SUCCEEDED(hr)) {
@@ -129,8 +132,8 @@ inline bool get_save_as_dialog_path(std::wstring& path,
 				pFileSave->SetDefaultExtension(ext.data());
 			}
 
-			if (cFileTypes != 0 && rgFilterSpec) {
-				pFileSave->SetFileTypes(cFileTypes, rgFilterSpec);
+			if (cFileTypes != 0 && filter) {
+				pFileSave->SetFileTypes(cFileTypes, filter);
 			}
 
 			if (!hWnd) {
