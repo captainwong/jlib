@@ -26,7 +26,7 @@ inline void localtime_s(struct tm* tmtm, const time_t* t) {
 // 0 for YYYY-mm-dd HH:MM:SS
 // 1 for YYYY-mm-dd 
 // 2 for HH:MM:SS
-inline std::wstring time_t_to_wstring(time_t t, int section = 0)
+inline std::wstring time_tToWstring(time_t t, int section = 0)
 {
 	wchar_t wtime[32] = { 0 };
 	struct tm tmtm;
@@ -51,7 +51,7 @@ inline std::wstring time_t_to_wstring(time_t t, int section = 0)
 // 0 for YYYY-mm-dd HH:MM:SS
 // 1 for YYYY-mm-dd 
 // 2 for HH:MM:SS
-inline std::string time_t_to_string(time_t t, int section = 0)
+inline std::string time_tToString(time_t t, int section = 0)
 {
 	char stime[32] = { 0 };
 	struct tm tmtm;
@@ -72,7 +72,7 @@ inline std::string time_t_to_string(time_t t, int section = 0)
 	return std::string(stime);
 }
 
-inline std::string time_point_to_string(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
+inline std::string timePointToString(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
 {
 	std::stringstream ss;
 	auto t = std::chrono::system_clock::to_time_t(tp);
@@ -86,7 +86,7 @@ inline std::string time_point_to_string(const std::chrono::system_clock::time_po
 	return ss.str();
 }
 
-inline std::wstring time_point_to_wstring(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
+inline std::wstring timePointToWString(const std::chrono::system_clock::time_point& tp, bool with_milliseconds = false)
 {
 	std::wstringstream ss;
 	auto t = std::chrono::system_clock::to_time_t(tp);
@@ -100,7 +100,7 @@ inline std::wstring time_point_to_wstring(const std::chrono::system_clock::time_
 	return ss.str();
 }
 
-inline std::chrono::system_clock::time_point string_to_time_point(const std::string& s)
+inline std::chrono::system_clock::time_point timePointFromString(const std::string& s)
 {
 	std::tm tm = { 0 };
 	std::istringstream ss(s);
@@ -108,7 +108,7 @@ inline std::chrono::system_clock::time_point string_to_time_point(const std::str
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
-inline std::chrono::system_clock::time_point wstring_to_time_point(const std::wstring& s)
+inline std::chrono::system_clock::time_point timePointFromWString(const std::wstring& s)
 {
 	std::tm tm = { 0 };
 	std::wistringstream ss(s);
@@ -116,14 +116,14 @@ inline std::chrono::system_clock::time_point wstring_to_time_point(const std::ws
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
-inline std::string now_to_string(bool with_milliseconds = false)
+inline std::string nowToString(bool with_milliseconds = false)
 {
-	return time_point_to_string(std::chrono::system_clock::now(), with_milliseconds);
+	return timePointToString(std::chrono::system_clock::now(), with_milliseconds);
 }
 
-inline std::wstring now_to_wstring(bool with_milliseconds = false)
+inline std::wstring nowToWString(bool with_milliseconds = false)
 {
-	return time_point_to_wstring(std::chrono::system_clock::now(), with_milliseconds);
+	return timePointToWString(std::chrono::system_clock::now(), with_milliseconds);
 }
 
 };
