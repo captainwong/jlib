@@ -17,7 +17,7 @@ int main()
 	auto name2 = integrateFileName(name);
 	printf("integrateFileName:\nold=%s\nnew=%s\n", name.data(), name2.data());
 
-	printf("getAppDataPathA=%s\n", getAppDataPathA().data());
+	//printf("getAppDataPathA=%s\n", getAppDataPathA().data());
 	printf("getTempFileName=%s\n", getTempFileNameA().data());
 
 	system("pause");

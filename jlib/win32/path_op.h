@@ -1,12 +1,9 @@
 ﻿#pragma once
 
-#include <algorithm>
-#include <Windows.h>
 #include <ShlObj.h>
 #include <string>
 #include <algorithm>
 
-#pragma comment(lib, "Shell32.lib")
 
 namespace jlib {
 namespace win32 {
@@ -19,13 +16,17 @@ inline std::string getExePathA() {
 	char path[1024] = { 0 }; ::GetModuleFileNameA(nullptr, path, 1024); return path;
 }
 
-inline std::wstring getExeFolderPath() {
-	auto path = getExePath(); auto pos = path.find_last_of(L"\\/"); return path.substr(0, pos);
+inline std::wstring getFolder(const std::wstring& path) {
+	auto pos = path.find_last_of(L"\\/"); return pos != path.npos ? path.substr(0, pos) : path;
 }
 
-inline std::string getExeFolderPathA() {
-	auto path = getExePathA(); auto pos = path.find_last_of("\\/"); return path.substr(0, pos);
+inline std::string getFolder(const std::string& path) {
+	auto pos = path.find_last_of("\\/"); return pos != path.npos ? path.substr(0, pos) : path;
 }
+
+inline std::wstring getExeFolderPath() { return getFolder(getExePath()); }
+inline std::string getExeFolderPathA() { return getFolder(getExePathA()); }
+
 
 static constexpr const wchar_t* DEFAULT_PATH_FILTERW = L"\\/:*?\"<>| ";
 static constexpr const char* DEFAULT_PATH_FILTER = "\\/:*?\"<>| ";
@@ -78,6 +79,41 @@ inline std::wstring getTempFileName(const std::wstring& pre = L"JLIB") {
 inline std::string getTempFileNameA(const std::string& pre = "JLIB") {
 	return getTempFileName(getTempPathA(), pre);
 }
+
+inline bool folderExists(const std::wstring& folderPath) {
+	DWORD dwAttrib = ::GetFileAttributesW(folderPath.data());
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES) && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+inline bool folderExists(const std::string& folderPath) {
+	DWORD dwAttrib = ::GetFileAttributesA(folderPath.data());
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES) && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+inline bool fileExists(const std::wstring& filePath) {
+	DWORD dwAttrib = ::GetFileAttributesW(filePath.data());
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES) && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+inline bool fileExists(const std::string& filePath) {
+	DWORD dwAttrib = ::GetFileAttributesA(filePath.data());
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES) && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+inline bool createDirectory(const std::wstring& path) {
+	return ::CreateDirectoryW(path.data(), nullptr) ? true : false;
+}
+
+inline bool createDirectory(const std::string& path) {
+	return ::CreateDirectoryA(path.data(), nullptr) ? true : false;
+}
+
+//! 应用程序典型路径辅助
+//struct PathHelper {
+//
+//
+//};
+
 
 }
 }

@@ -90,7 +90,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{E13021FA-C
 		..\jlib\util\space.h = ..\jlib\util\space.h
 		..\jlib\util\std_util.h = ..\jlib\util\std_util.h
 		..\jlib\util\str_util.h = ..\jlib\util\str_util.h
-		..\jlib\util\version_no.h = ..\jlib\util\version_no.h
+		..\jlib\util\version.h = ..\jlib\util\version.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dp", "dp", "{8D9BBE8F-28BE-481B-A27F-A87526A78C67}"
@@ -230,6 +230,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_file_op", "test_file_o
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_path_op", "test_path_op\test_path_op.vcxproj", "{65C310A4-DAA5-4D94-91B3-848F4E5F5C17}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_version", "test_version\test_version.vcxproj", "{704FF7EB-D633-4D0A-957B-01D908478D6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -364,6 +366,14 @@ Global
 		{65C310A4-DAA5-4D94-91B3-848F4E5F5C17}.Release|x64.Build.0 = Release|x64
 		{65C310A4-DAA5-4D94-91B3-848F4E5F5C17}.Release|x86.ActiveCfg = Release|Win32
 		{65C310A4-DAA5-4D94-91B3-848F4E5F5C17}.Release|x86.Build.0 = Release|Win32
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Debug|x64.ActiveCfg = Debug|x64
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Debug|x64.Build.0 = Debug|x64
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Debug|x86.ActiveCfg = Debug|Win32
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Debug|x86.Build.0 = Debug|Win32
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Release|x64.ActiveCfg = Release|x64
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Release|x64.Build.0 = Release|x64
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Release|x86.ActiveCfg = Release|Win32
+		{704FF7EB-D633-4D0A-957B-01D908478D6D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -406,6 +416,7 @@ Global
 		{42F7EE20-C9AC-49CE-9D92-479576295810} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 		{82EF7CB9-D551-43FC-A2A5-485C37C7895B} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 		{65C310A4-DAA5-4D94-91B3-848F4E5F5C17} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
+		{704FF7EB-D633-4D0A-957B-01D908478D6D} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

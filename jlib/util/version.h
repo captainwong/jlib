@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../base/config.h"
 #include <string>
 #include <cstdlib>
 #include <sstream>
@@ -15,30 +16,43 @@ struct Version {
 	int revision = 0;
 	int build = 0;
 
-	Version& fromString(const std::string& s) {
+	Version() = default;
+	Version(int major, int minor, int revision, int build)
+		: major(major), minor(minor), revision(revision), build(build) {}
+	Version(const std::string& s) { _fromString(s); }
+	Version& fromString(const std::string& s) { _fromString(s); return *this; }
+
+	bool valid() { return !(major == 0 && minor == 0 && revision == 0 && build == 0); }
+	void reset() { major = minor = revision = build = 0; }
+
+	bool _fromString(const std::string& s) {
 		if (std::sscanf(s.c_str(), "%d.%d.%d.%d", &major, &minor, &revision, &build) != 4) {
-			reset(); return *this;
+			reset(); return false;
 		}
-		if (major < 0) major = 0;
-		if (minor < 0) minor = 0;
-		if (revision < 0) revision = 0;
-		if (build < 0) build = 0;
-		return *this;
+		if (major < 0) major = 0; if (minor < 0) minor = 0;
+		if (revision < 0) revision = 0; if (build < 0) build = 0;
+		return true;
 	}
 
 	std::string toString() const {
-		return std::to_string(major) + "."
-			+ std::to_string(minor) + "."
-			+ std::to_string(revision) + "."
-			+ std::to_string(build);
+		return std::to_string(major) + "." +
+			std::to_string(minor) + "." +
+			std::to_string(revision) + "." +
+			std::to_string(build);
 	}
 
-	bool valid() {
-		return !(major == 0 && minor == 0 && revision == 0 && build == 0);
+	bool fromFile(const std::string& path) {
+		std::ifstream in(path); if (!in) return false;
+		std::stringstream is; is << in.rdbuf();
+		Version file_ver(is.str());
+		if (file_ver.valid()) { *this = file_ver; return true; }
+		return false;
 	}
 
-	void reset() {
-		major = minor = revision = build = 0;
+	bool toFile(const std::string& path) {
+		std::ofstream out(path); if (!out) { return false; }
+		auto str = toString(); out.write(str.data(), str.size());
+		return true;
 	}
 
 	bool operator == (const Version& ver) {
@@ -56,6 +70,15 @@ struct Version {
 		if (this->operator==(ver)) return false;
 		return true;
 	}
+
+	bool operator > (const Version& ver) {
+		if (major < ver.major) return false;
+		if (minor < ver.minor) return false;
+		if (revision < ver.revision) return false;
+		if (build < ver.build) return false;
+		if (this->operator==(ver)) return false;
+		return true;
+	}
 };
 
 struct UpdateInfo {
@@ -68,19 +91,5 @@ struct UpdateInfoText {
 	Version version = {};
 	std::string dllink = {};
 };
-
-inline bool getVersionFromFile(const std::string& file_path, Version& version) {
-	std::ifstream in(file_path);
-	if (!in)return false;
-	std::stringstream is;
-	is << in.rdbuf();
-	Version file_ver;
-	file_ver.fromString(is.str());
-	if (file_ver.valid()) {
-		version = file_ver;
-		return true;
-	}
-	return false;
-}
 
 }
