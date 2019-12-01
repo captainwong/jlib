@@ -358,7 +358,7 @@ static bool query(const std::vector<QueryType>& queryTypes, QueryResults& result
 					auto rpos = index.find(L"\\Partition", pos);
 					if (rpos != index.npos && rpos - pos > strlen("Harddisk")) {
 						auto n = index.substr(pos + strlen("Harddisk"), rpos - pos - strlen("Harddisk"));
-						if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + n)) {
+						if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + n) && !values.empty()) {
 							results[queryType] = values.back(); values.pop_back();
 							continue;
 						}

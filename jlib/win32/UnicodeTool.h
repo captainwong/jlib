@@ -1,11 +1,64 @@
 #pragma once
 
 #include <windows.h>
+#include <string>
 
 namespace jlib
 {
 namespace win32
 {
+
+
+inline bool mbcs_to_u16(const char* mbcs, wchar_t* u16buffer, size_t u16size) {
+	size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs, -1, NULL, 0);
+	if (0 < request_size && request_size < u16size) {
+		MultiByteToWideChar(CP_ACP, 0, mbcs, -1, u16buffer, request_size);
+		return true;
+	}
+	return false;
+};
+
+inline std::wstring mbcs_to_u16(const std::string& mbcs) {
+	std::wstring res = L"";
+	size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, NULL, 0);
+	if (0 < request_size) {
+		auto u16buffer = new wchar_t[request_size];
+		MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, u16buffer, request_size);
+		res = u16buffer;
+		delete[] u16buffer;
+	}
+	return res;
+}
+
+inline std::string u16_to_mbcs(const std::wstring& u16) {
+	std::string res = "";
+	size_t request_size = WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, 0, 0, 0, 0);
+	if (0 < request_size) {
+		auto mbcs_buffer = new char[request_size];
+		WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, mbcs_buffer, request_size, 0, 0);
+		res = mbcs_buffer;
+		delete[] mbcs_buffer;
+	}
+	return res;
+}
+
+
+inline std::string mbcs_to_utf8(const std::wstring& mbcs) {
+	std::string res = "";
+	size_t request_size = WideCharToMultiByte(CP_UTF8, 0, mbcs.c_str(), -1, 0, 0, 0, 0);
+	if (0 < request_size) {
+		auto mbcs_buffer = new char[request_size];
+		WideCharToMultiByte(CP_UTF8, 0, mbcs.c_str(), -1, mbcs_buffer, request_size, 0, 0);
+		res = mbcs_buffer;
+		delete[] mbcs_buffer;
+	}
+	return res;
+}
+
+
+
+
+
 
 inline bool Utf16ToUtf8(const wchar_t* utf16String, char* utf8Buffer, size_t szBuff)
 {

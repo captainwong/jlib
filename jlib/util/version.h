@@ -41,7 +41,11 @@ struct Version {
 			std::to_string(build);
 	}
 
-	bool fromFile(const std::string& path) {
+	template <typename T>
+	bool fromFile(T const & path) {
+		if constexpr (std::is_convertible_v<T, std::string>);
+		else if constexpr (std::is_convertible_v<T, std::wstring>);
+		else { return false; }
 		std::ifstream in(path); if (!in) return false;
 		std::stringstream is; is << in.rdbuf();
 		Version file_ver(is.str());
@@ -49,7 +53,11 @@ struct Version {
 		return false;
 	}
 
-	bool toFile(const std::string& path) {
+	template <typename T>
+	bool toFile(T const& path) {
+		if constexpr (std::is_convertible_v<T, std::string>);
+		else if constexpr (std::is_convertible_v<T, std::wstring>);
+		else { return false; }
 		std::ofstream out(path); if (!out) { return false; }
 		auto str = toString(); out.write(str.data(), str.size());
 		return true;
@@ -78,6 +86,20 @@ struct Version {
 		if (build < ver.build) return false;
 		if (this->operator==(ver)) return false;
 		return true;
+	}
+
+	bool operator <= (const Version& ver) {
+		return (major <= ver.major) 
+			|| (minor <= ver.minor) 
+			|| (revision <= ver.revision) 
+			|| (build <= ver.build);
+	}
+
+	bool operator >= (const Version& ver) {
+		return (major >= ver.major)
+			|| (minor >= ver.minor)
+			|| (revision >= ver.revision)
+			|| (build >= ver.build);
 	}
 };
 
