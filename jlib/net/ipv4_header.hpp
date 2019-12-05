@@ -48,6 +48,9 @@
 // |                                                              |       v
 // +--------------------------------------------------------------+      ---
 
+namespace jlib {
+namespace net {
+
 class ipv4_header
 {
 public:
@@ -100,5 +103,8 @@ private:
 
 	unsigned char rep_[60];
 };
+
+} // namespace net
+} // namespace jlib
 
 #endif // IPV4_HEADER_HPP

@@ -6,19 +6,27 @@
 #include <istream>
 #include <iostream>
 #include <ostream>
+#include <functional>
 #include "icmp_header.hpp"
 #include "ipv4_header.hpp"
 
-using boost::asio::ip::icmp;
-using boost::asio::deadline_timer;
-namespace posix_time = boost::posix_time;
+
+namespace jlib {
+namespace net {
+
 
 class pinger
 {
+	typedef boost::asio::ip::icmp icmp;
+	typedef boost::asio::deadline_timer deadline_timer;
+	typedef std::function<void(const std::string&)> Output;
+
+	static void dummyOutput(const std::string&) {}
+
 public:
-	pinger(boost::asio::io_service& io_service, const char* destination, unsigned short max_sequence_number = 0)
+	explicit pinger(boost::asio::io_service& io_service, const char* destination, unsigned short max_sequence_number = 0, Output output = dummyOutput)
 		: io_service_(io_service), resolver_(io_service), socket_(io_service, icmp::v4()),
-		timer_(io_service), sequence_number_(0), num_replies_(0), max_sequence_number_(max_sequence_number)
+		timer_(io_service), sequence_number_(0), num_replies_(0), max_sequence_number_(max_sequence_number), reply_buffer_(65536), output_(output)
 	{
 		icmp::resolver::query query(icmp::v4(), destination, "");
 		destination_ = *resolver_.resolve(query);
@@ -39,8 +47,7 @@ public:
 	bool quiting() const { return quiting_; }
 
 private:
-	void start_send()
-	{
+	void start_send() {
 		std::string body("\"Hello!\" from Asio ping.");
 
 		if (max_sequence_number_ != 0 && sequence_number_ >= max_sequence_number_) {
@@ -65,31 +72,29 @@ private:
 		os << echo_request << body;
 
 		// Send the request.
-		time_sent_ = posix_time::microsec_clock::universal_time();
+		time_sent_ = boost::posix_time::microsec_clock::universal_time();
 		socket_.send_to(request_buffer.data(), destination_);
 
 		// Wait up to five seconds for a reply.
 		num_replies_ = 0;
-		timer_.expires_at(time_sent_ + posix_time::seconds(3));
+		timer_.expires_at(time_sent_ + boost::posix_time::seconds(3));
 		timer_.async_wait(boost::bind(&pinger::handle_timeout, this));
 	}
 
-	void handle_timeout()
-	{
+	void handle_timeout() {
 		if (num_replies_ == 0) {
 			total_time_ += std::chrono::milliseconds(5000);
-			JLOG_ERRO("Request timed out");
+			output_("Request timed out");
 		}
 
 		if (!quiting_) {
 			// Requests must be sent no less than one second apart.
-			timer_.expires_at(time_sent_ + posix_time::seconds(1));
+			timer_.expires_at(time_sent_ + boost::posix_time::seconds(1));
 			timer_.async_wait(boost::bind(&pinger::start_send, this));
 		}
 	}
 
-	void start_receive()
-	{
+	void start_receive() {
 		// Discard any data already in the buffer.
 		reply_buffer_.consume(reply_buffer_.size());
 
@@ -98,8 +103,7 @@ private:
 							  boost::bind(&pinger::handle_receive, this, _2));
 	}
 
-	void handle_receive(std::size_t length)
-	{
+	void handle_receive(std::size_t length) {
 		// The actual number of bytes received is committed to the buffer so that we
 		// can extract it using a std::istream object.
 		reply_buffer_.commit(length);
@@ -121,7 +125,7 @@ private:
 				timer_.cancel();
 
 			// Print out some information about the reply packet.
-			posix_time::ptime now = posix_time::microsec_clock::universal_time();
+			boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
 			auto ms = (now - time_sent_).total_milliseconds();
 			std::stringstream ss;
 			ss << length - ipv4_hdr.header_length()
@@ -129,12 +133,12 @@ private:
 				<< ": icmp_seq=" << icmp_hdr.sequence_number()
 				<< ", ttl=" << ipv4_hdr.time_to_live()
 				<< ", time=" << ms << " ms";
-			JLOG_INFO(ss.str());
+			output_(ss.str());
 			total_time_ += std::chrono::milliseconds(ms);
 			auto cnt = total_time_.count();
 			ss.str(""); ss.clear();
 			ss << "total_time_ " << cnt;
-			JLOG_INFO(ss.str());
+			output_(ss.str());
 		}
 
 		if (max_sequence_number_ != 0 && sequence_number_ < max_sequence_number_)
@@ -147,8 +151,7 @@ private:
 		}
 	}
 
-	static unsigned short get_identifier()
-	{
+	static unsigned short get_identifier() {
 #if defined(BOOST_WINDOWS)
 		return static_cast<unsigned short>(::GetCurrentProcessId());
 #else
@@ -163,9 +166,13 @@ private:
 	deadline_timer timer_;
 	unsigned short sequence_number_;
 	unsigned short max_sequence_number_;
-	posix_time::ptime time_sent_;
+	boost::posix_time::ptime time_sent_;
 	boost::asio::streambuf reply_buffer_;
 	std::size_t num_replies_;
 	bool quiting_ = false;
 	std::chrono::milliseconds total_time_ = {};
-};
+	Output output_;
+}; // class pinger
+
+} // namespace net
+} // namespace jlib

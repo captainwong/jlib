@@ -23,92 +23,90 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>moc;h;cpp</Extensions>
-      <SourceControlFiles>False</SourceControlFiles>
+    <Filter Include="jlib_qt">
+      <UniqueIdentifier>{b6cfb732-f3bc-497e-8e86-2992309b5057}</UniqueIdentifier>
     </Filter>
-    <Filter Include="qt">
-      <UniqueIdentifier>{9514ec45-59b4-415f-aa40-b0e9eb2e311d}</UniqueIdentifier>
+    <Filter Include="jlib_qt\View">
+      <UniqueIdentifier>{1562c0f6-b90a-4a18-8ab5-6daed249b6ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="qt\Model">
-      <UniqueIdentifier>{479dcc6b-8305-4ebf-bdbd-e6c1617e4d7a}</UniqueIdentifier>
+    <Filter Include="jlib_qt\Ctrl">
+      <UniqueIdentifier>{ad3bcdb3-03b6-4aa0-a0b8-731c85d61258}</UniqueIdentifier>
     </Filter>
-    <Filter Include="qt\Ctrl">
-      <UniqueIdentifier>{2a28e950-9b19-425b-b76a-c4da0b991342}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="qt\View">
-      <UniqueIdentifier>{7f4daad8-d572-47e4-ba33-03bd06a61f83}</UniqueIdentifier>
+    <Filter Include="jlib_qt\Model">
+      <UniqueIdentifier>{3e5f6680-de77-46c4-a80f-9a6ce7715eb7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_qt.cpp">
+    <ClCompile Include="qt_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="test_qt.h">
+    <QtMoc Include="qt_test.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\BgColorBtn.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\HttpDlg.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\IconBtn.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\LoadingView.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\PageTitle.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\View\RndButton.h">
-      <Filter>qt\View</Filter>
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
     <QtMoc Include="..\..\jlib\qt\Ctrl\ThreadCtrl.h">
-      <Filter>qt\Ctrl</Filter>
+      <Filter>jlib_qt\Ctrl</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="test_qt.ui">
+    <QtUic Include="qt_test.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="test_qt.qrc">
+    <QtRcc Include="qt_test.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\jlib\qt\View\HttpDlgErrorCode.h">
-      <Filter>qt\View</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtDebug.h">
-      <Filter>qt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtDebugOutput.h">
-      <Filter>qt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtPathHelper.h">
-      <Filter>qt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtStylesheet.h">
-      <Filter>qt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtUtils.h">
-      <Filter>qt</Filter>
+      <Filter>jlib_qt\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\jlib\qt\ErrorCode.h">
-      <Filter>qt</Filter>
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\QtDebug.h">
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\QtDebugOutput.h">
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\QtPathHelper.h">
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\QtStylesheet.h">
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\QtUtils.h">
+      <Filter>jlib_qt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\jlib\qt\signal_slot.h">
+      <Filter>jlib_qt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\jlib\qt\Model\ThreadModel.h">
-      <Filter>qt\Model</Filter>
+      <Filter>jlib_qt\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

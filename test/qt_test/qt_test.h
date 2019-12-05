@@ -1,14 +1,14 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_test_qt.h"
+#include "ui_qt_test.h"
 
-class test_qt : public QMainWindow
+class qt_test : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	test_qt(QWidget *parent = Q_NULLPTR);
+	qt_test(QWidget *parent = Q_NULLPTR);
 
 private:
 	Ui::test_qtClass ui;

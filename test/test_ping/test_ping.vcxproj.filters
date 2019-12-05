@@ -13,33 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="json-pch">
-      <UniqueIdentifier>{767f9b49-5f33-429a-9a51-0747b90a4505}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp-pch\json.h">
-      <Filter>json-pch</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="test_ping.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="test_json.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp-pch\json_reader.cpp">
-      <Filter>json-pch</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp-pch\json_value.cpp">
-      <Filter>json-pch</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp-pch\json_writer.cpp">
-      <Filter>json-pch</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

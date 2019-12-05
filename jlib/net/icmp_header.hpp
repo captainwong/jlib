@@ -30,6 +30,9 @@
 // |                               |                              |       v
 // +-------------------------------+------------------------------+      ---
 
+namespace jlib {
+namespace net {
+
 class icmp_header
 {
 public:
@@ -97,5 +100,8 @@ void compute_checksum(icmp_header& header,
 	sum += (sum >> 16);
 	header.checksum(static_cast<unsigned short>(~sum));
 }
+
+} // namespace net
+} // namespace jlib
 
 #endif // ICMP_HEADER_HPP

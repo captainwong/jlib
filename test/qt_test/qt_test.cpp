@@ -1,5 +1,5 @@
-#include "test_qt.h"
-#include <QtWidgets/QApplication>
+#include "qt_test.h"
+#include <qlayout.h>
 
 #include "../../jlib/log2.h"
 #include "../../jlib/qt/ErrorCode.h"
@@ -18,10 +18,18 @@
 #include "../../jlib/qt/View/PageTitle.h"
 #include "../../jlib/qt/View/RndButton.h"
 
-int main(int argc, char *argv[])
+using namespace jlib::qt;
+
+qt_test::qt_test(QWidget *parent)
+	: QMainWindow(parent)
 {
-	QApplication a(argc, argv);
-	test_qt w;
-	w.show();
-	return a.exec();
+	ui.setupUi(this);
+
+	auto hbox = new QHBoxLayout();
+	ui.centralWidget->setLayout(hbox);
+
+	auto bgColorBtn = new BgColorBtn();
+	bgColorBtn->setText(QString::fromLocal8Bit("BgColorBtn°´Å¥"));
+	bgColorBtn->set_btn_attr(def_colors::control_bk, def_colors::control_bk_suspend, def_colors::control_text_font, 12);
+	hbox->addWidget(bgColorBtn);
 }
