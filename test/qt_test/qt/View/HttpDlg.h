@@ -14,13 +14,12 @@
 #include "../QtUtils.h"
 #include "../QtStylesheet.h"
 #include "HttpDlgErrorCode.h"
-#include "../../3rdparty/json/jsoncpp/json.h"
+#include <jlib/3rdparty/json/jsoncpp/json.h>
 
 namespace jlib
 {
 namespace qt
 {
-
 
 class HttpDlg : public QDialog
 {
@@ -53,7 +52,6 @@ public:
 		//elapse_->hide();
 
 		parent ? center_to_parent(this, parent) : center_to_desktop(this);
-
 		mgr = new QNetworkAccessManager(this);
 	}
 
@@ -89,8 +87,7 @@ public:
 		if (root_.isMember(name.toStdString())) {
 			value = root_[name.toStdString()];
 			return true;
-		}
-		return false;
+		} return false;
 	}
 
 	bool getValue(const QString& name, QString& value) {
@@ -98,8 +95,7 @@ public:
 		if (getValue(name, val)) {
 			value = QString::fromUtf8(val.asCString());
 			return true;
-		}
-		return false;
+		} return false;
 	}
 
 	bool getValue(const QString& name, int& value) {
@@ -107,8 +103,7 @@ public:
 		if (getValue(name, val)) {
 			value = val.asInt();
 			return true;
-		}
-		return false;
+		} return false;
 	}
 
 	int getHttpStatusCode() const { return httpStatusCode_; }
@@ -135,7 +130,6 @@ protected:
 		auto movie = new QMovie(path);
 		label_->setMovie(movie);
 		movie->start();
-
 		timer_.start();
 
 		auto p = parentWidget();
@@ -150,12 +144,10 @@ protected:
 
 	virtual void timerEvent(QTimerEvent * e) override {
 		MYQDEBUG << time_out_sec_;
-		if (--time_out_sec_ > 0) {
-			elapse_->setText(QString::number(time_out_sec_));
-		} else {
+		if (--time_out_sec_ > 0) { elapse_->setText(QString::number(time_out_sec_)); } 
+		else {
 			MYQCRITICAL << "timeout";
-			disconnect(connection_);
-			result_ = HttpDlgErrorCode::NetworkError;
+			disconnect(connection_); result_ = HttpDlgErrorCode::NetworkError;
 			QDialog::reject();
 		}
 	}
@@ -164,14 +156,12 @@ private slots:
 	void onFinished(QNetworkReply* reply) {
 		do {
 			if (!reply) {
-				MYQCRITICAL << "no reply";
-				result_ = HttpDlgErrorCode::NetworkError;
+				MYQCRITICAL << "no reply"; result_ = HttpDlgErrorCode::NetworkError;
 				break;
 			}
 
 			if (QNetworkReply::NoError != reply->error()) {
-				httpReason_ = reply->errorString();
-				MYQCRITICAL << httpReason_;
+				httpReason_ = reply->errorString(); MYQCRITICAL << httpReason_;
 				result_ = HttpDlgErrorCode::NetworkError;
 				break;
 			}
@@ -188,15 +178,13 @@ private slots:
 			}
 
 			auto res = reply->readAll();
-			Json::Reader reader;
-			root_.clear();
+			Json::Reader reader; root_.clear();
 			if (!reader.parse(res.constData(), root_)) {
 				//result_ = HttpDlgErrorCode::ParseJsonError;
 				//break;
 			}
 
 			MYQDEBUG << reply->url() << "reply:\n" << root_.toStyledString().data();
-
 		} while (false);
 
 		QDialog::accept();

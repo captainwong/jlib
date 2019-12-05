@@ -1,7 +1,7 @@
 
 #include "../../jlib/base/config.h"
-#include <stdio.h>
 #include "../../jlib/net.h"
+#include <stdio.h>
 
 
 int main(int argc, char** argv)

@@ -67,6 +67,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <AdditionalIncludeDirectories>$(DEVLIBS)\jlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,6 +89,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_reader.cpp" />
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_value.cpp" />
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_writer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qt_test.cpp" />
   </ItemGroup>
@@ -101,26 +105,23 @@
     <QtRcc Include="qt_test.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\..\jlib\qt\View\BgColorBtn.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="..\..\jlib\qt\View\HttpDlg.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\jlib\qt\Model\ThreadModel.h" />
-    <QtMoc Include="..\..\jlib\qt\Ctrl\ThreadCtrl.h" />
-    <ClInclude Include="..\..\jlib\qt\ErrorCode.h" />
-    <ClInclude Include="..\..\jlib\qt\QtDebug.h" />
-    <ClInclude Include="..\..\jlib\qt\QtDebugOutput.h" />
-    <ClInclude Include="..\..\jlib\qt\QtPathHelper.h" />
-    <ClInclude Include="..\..\jlib\qt\QtStylesheet.h" />
-    <ClInclude Include="..\..\jlib\qt\QtUtils.h" />
-    <ClInclude Include="..\..\jlib\qt\signal_slot.h" />
-    <ClInclude Include="..\..\jlib\qt\View\HttpDlgErrorCode.h" />
-    <QtMoc Include="..\..\jlib\qt\View\RndButton.h" />
-    <QtMoc Include="..\..\jlib\qt\View\PageTitle.h" />
-    <QtMoc Include="..\..\jlib\qt\View\LoadingView.h" />
-    <QtMoc Include="..\..\jlib\qt\View\IconBtn.h" />
+    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h" />
+    <ClInclude Include="qt\ErrorCode.h" />
+    <ClInclude Include="qt\Model\ThreadModel.h" />
+    <ClInclude Include="qt\QtDebug.h" />
+    <ClInclude Include="qt\QtDebugOutput.h" />
+    <ClInclude Include="qt\QtPathHelper.h" />
+    <ClInclude Include="qt\QtStylesheet.h" />
+    <ClInclude Include="qt\QtUtils.h" />
+    <ClInclude Include="qt\signal_slot.h" />
+    <ClInclude Include="qt\View\HttpDlgErrorCode.h" />
+    <QtMoc Include="qt\View\RndButton.h" />
+    <QtMoc Include="qt\View\PageTitle.h" />
+    <QtMoc Include="qt\View\LoadingView.h" />
+    <QtMoc Include="qt\View\IconBtn.h" />
+    <QtMoc Include="qt\View\HttpDlg.h" />
+    <QtMoc Include="qt\View\BgColorBtn.h" />
+    <QtMoc Include="qt\Ctrl\ThreadCtrl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

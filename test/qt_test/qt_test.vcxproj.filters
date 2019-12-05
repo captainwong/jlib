@@ -35,6 +35,9 @@
     <Filter Include="jlib_qt\Model">
       <UniqueIdentifier>{3e5f6680-de77-46c4-a80f-9a6ce7715eb7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="jsoncpp">
+      <UniqueIdentifier>{0ea00850-28a6-45f9-af68-6c656c3572f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -43,31 +46,40 @@
     <ClCompile Include="qt_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_reader.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_value.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_writer.cpp">
+      <Filter>jsoncpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qt_test.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\BgColorBtn.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\HttpDlg.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\IconBtn.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\LoadingView.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\PageTitle.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\View\RndButton.h">
-      <Filter>jlib_qt\View</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\jlib\qt\Ctrl\ThreadCtrl.h">
+    <QtMoc Include="qt\Ctrl\ThreadCtrl.h">
       <Filter>jlib_qt\Ctrl</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\BgColorBtn.h">
+      <Filter>jlib_qt\View</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\HttpDlg.h">
+      <Filter>jlib_qt\View</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\IconBtn.h">
+      <Filter>jlib_qt\View</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\LoadingView.h">
+      <Filter>jlib_qt\View</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\PageTitle.h">
+      <Filter>jlib_qt\View</Filter>
+    </QtMoc>
+    <QtMoc Include="qt\View\RndButton.h">
+      <Filter>jlib_qt\View</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -81,32 +93,35 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\jlib\qt\View\HttpDlgErrorCode.h">
+    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h">
+      <Filter>jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="qt\Model\ThreadModel.h">
+      <Filter>jlib_qt\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="qt\View\HttpDlgErrorCode.h">
       <Filter>jlib_qt\View</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\ErrorCode.h">
+    <ClInclude Include="qt\ErrorCode.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtDebug.h">
+    <ClInclude Include="qt\QtDebug.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtDebugOutput.h">
+    <ClInclude Include="qt\QtDebugOutput.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtPathHelper.h">
+    <ClInclude Include="qt\QtPathHelper.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtStylesheet.h">
+    <ClInclude Include="qt\QtStylesheet.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\QtUtils.h">
+    <ClInclude Include="qt\QtUtils.h">
       <Filter>jlib_qt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\signal_slot.h">
+    <ClInclude Include="qt\signal_slot.h">
       <Filter>jlib_qt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\jlib\qt\Model\ThreadModel.h">
-      <Filter>jlib_qt\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
