@@ -1,5 +1,7 @@
 #pragma once
 
+#include "base/config.h"
+
 #ifdef JLIB_DISABLE_LOG
 
 namespace jlib {
@@ -31,21 +33,18 @@ public:
 
 #define JLIB_LOG2_ENABLED
 
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 #define SPDLOG_WCHAR_FILENAMES
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif // _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
-#endif // _WIN32
+#endif // JLIB_WINDOWS
 
 #include <stdio.h>
 #include "3rdparty/spdlog/spdlog.h"
 
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 #include "3rdparty/spdlog/sinks/msvc_sink.h"
 #include "utf8.h"
-#endif // _WIN32
+#endif // JLIB_WINDOWS
 
 #include "utf8.h"
 
@@ -54,14 +53,14 @@ namespace jlib {
 static constexpr char g_logger_name[] = "jlogger";
     
 inline void init_logger( 
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 std::wstring
 #else
 std::string
 #endif
 file_name)
 {
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 	file_name += L".log";
 #else
 	file_name += ".log";
@@ -69,7 +68,7 @@ file_name)
 
     try {
 		std::vector<spdlog::sink_ptr> sinks;
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
@@ -81,7 +80,7 @@ file_name)
 		spdlog::register_logger(combined_logger);
 		combined_logger->flush_on(spdlog::level::trace);
 	} catch (const spdlog::spdlog_ex& ex) {
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 		char msg[1024] = { 0 };
 		sprintf_s(msg, "Log initialization failed: %s\n", ex.what());
 		MessageBoxA(nullptr, msg, "Error", MB_ICONERROR);
@@ -100,11 +99,11 @@ file_name)
 #define JLOG_ERRO spdlog::get(jlib::g_logger_name)->error
 #define JLOG_CRTC spdlog::get(jlib::g_logger_name)->critical
 
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 #define JLOG_ALL(args, ...) spdlog::get(jlib::g_logger_name)->log(spdlog::level::off, args, __VA_ARGS__)
 #else
 #define JLOG_ALL(args...) spdlog::get(jlib::g_logger_name)->log(spdlog::level::off, args)
-#endif /* _WIN32 */
+#endif /* JLIB_WINDOWS */
 
 class range_log
 {
@@ -131,7 +130,7 @@ public:
 	}
 };
 
-#ifdef _WIN32
+#ifdef JLIB_WINDOWS
 #define __the_pretty_name_of_this_function__ __FUNCTION__
 #else
 #define __the_pretty_name_of_this_function__ __PRETTY_FUNCTION__

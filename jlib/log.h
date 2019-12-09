@@ -1,10 +1,8 @@
 #pragma once
 
-#ifdef WIN32
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-//#include <Windows.h>
+#include "base/config.h"
+
+#ifdef JLIB_WINDOWS
 #include "win32.h"
 #endif
 
