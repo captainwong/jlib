@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-4
 		..\jlib\base\config.h = ..\jlib\base\config.h
 		..\jlib\base\copyable.h = ..\jlib\base\copyable.h
 		..\jlib\base\currentthread.h = ..\jlib\base\currentthread.h
+		..\jlib\base\date.h = ..\jlib\base\date.h
 		..\jlib\base\logging.h = ..\jlib\base\logging.h
 		..\jlib\base\logstream.h = ..\jlib\base\logstream.h
 		..\jlib\base\noncopyable.h = ..\jlib\base\noncopyable.h
@@ -235,6 +236,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qt_test", "qt_test\qt_test.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_ping", "test_ping\test_ping.vcxproj", "{26D2B628-713F-419A-B2E2-32BDFA803E3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_date", "test_date\test_date.vcxproj", "{2252B5D4-2D13-4F02-8008-AB2E0D38A154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -385,6 +388,14 @@ Global
 		{26D2B628-713F-419A-B2E2-32BDFA803E3C}.Release|x64.Build.0 = Release|x64
 		{26D2B628-713F-419A-B2E2-32BDFA803E3C}.Release|x86.ActiveCfg = Release|Win32
 		{26D2B628-713F-419A-B2E2-32BDFA803E3C}.Release|x86.Build.0 = Release|Win32
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Debug|x64.ActiveCfg = Debug|x64
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Debug|x64.Build.0 = Debug|x64
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Debug|x86.ActiveCfg = Debug|Win32
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Debug|x86.Build.0 = Debug|Win32
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Release|x64.ActiveCfg = Release|x64
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Release|x64.Build.0 = Release|x64
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Release|x86.ActiveCfg = Release|Win32
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -429,6 +440,7 @@ Global
 		{704FF7EB-D633-4D0A-957B-01D908478D6D} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
 		{EAAE08F7-6CD8-4708-9FD4-ADD856CC6658} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
 		{26D2B628-713F-419A-B2E2-32BDFA803E3C} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
+		{2252B5D4-2D13-4F02-8008-AB2E0D38A154} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
