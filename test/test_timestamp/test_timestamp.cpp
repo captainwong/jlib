@@ -3,16 +3,16 @@
 #include <stdio.h>
 #include <chrono>
 
-using jlib::Timestamp;
+using namespace jlib;
 
 void passByConstReference(const Timestamp& x)
 {
-	printf("passByConstReference: %s\n", x.toString().c_str());
+	printf("passByConstReference: %s\n", format("%F %T", x).c_str());
 }
 
 void passByValue(Timestamp x)
 {
-	printf("passByValue: %s\n", x.toString().c_str());
+	printf("passByValue: %s\n", format("%F %T", x).c_str());
 }
 
 void benchmark()
@@ -23,16 +23,16 @@ void benchmark()
 	std::vector<Timestamp> stamps;
 	stamps.reserve(kNumber);
 	for (int i = 0; i < kNumber; ++i) {
-		stamps.push_back(Timestamp::now());
+		stamps.push_back(nowTimestamp());
 	}
-	printf("front %s\n", stamps.front().toString().c_str());
-	printf("back %s\n", stamps.back().toString().c_str());
-	printf("timeDifference %f\n", timeDifference(stamps.back(), stamps.front()));
+	printf("front %s\n", format("%F %T", stamps.front()).c_str());
+	printf("back %s\n", format("%F %T", stamps.back()).c_str());
+	printf("timeDifference %lld\n", (stamps.back() - stamps.front()).count());
 
 	int increments[100] = { 0 };
-	int64_t start = stamps.front().microSecondsSinceEpoch();
+	int64_t start = stamps.front().time_since_epoch().count();
 	for (int i = 1; i < kNumber; ++i) {
-		int64_t next = stamps[i].microSecondsSinceEpoch();
+		int64_t next = stamps[i].time_since_epoch().count();
 		int64_t inc = next - start;
 		start = next;
 		if (inc < 0) {
@@ -52,9 +52,8 @@ void benchmark()
 int main()
 {
 	printf("sizeof Timestamp=%zd, sizeof int64_t=%zd\n", sizeof(Timestamp), sizeof(int64_t));
-	Timestamp now(Timestamp::now());
-	printf("now.toString(): %s\n", now.toString().c_str());
-	printf("now.toFormattedString(): %s\n", now.toFormattedString().c_str());
+	Timestamp now(nowTimestamp());
+	printf("now.toString(): %s\n", format("%F %T", now).c_str());
 	passByValue(now);
 	passByConstReference(now);
 	benchmark();
