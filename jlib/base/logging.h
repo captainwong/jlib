@@ -197,7 +197,7 @@ static const char* strerror_t(int savedErrno) {
 /******** Logger::Impl *********/
 
 Logger::Impl::Impl(LogLevel level, int old_errno, const SourceFile& file, int line)
-	: time_(Timestamp::now())
+	: time_(nowTimestamp())
 	, stream_()
 	, level_(level)
 	, line_(line)

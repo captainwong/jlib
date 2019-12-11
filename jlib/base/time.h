@@ -9,10 +9,23 @@
 
 #ifdef JLIB_WINDOWS
 #	include <windows.h>
-	static inline struct tm* gmtime_r(const time_t* timep, struct tm* result)
-	{
-		gmtime_s(result, timep);
-		return result;
+#   include <iomanip> // for std::get_time
+
+	static inline struct tm* gmtime_r(const time_t* timep, struct tm* result) {
+		gmtime_s(result, timep); return result;
+	}
+
+	// https://stackoverflow.com/a/29411795/2963736
+	static inline time_t timegm(tm* t) {
+		return _mkgmtime(t);
+	}
+
+	// https://stackoverflow.com/a/33542189/2963736
+	static inline char* strptime(const char* str, const char* format, struct tm* tm) {
+		std::istringstream input(str);
+		input.imbue(std::locale(setlocale(LC_ALL, nullptr)));
+		input >> std::get_time(tm, format);
+		return (!input.fail()) ? (char*)(str + (int)input.tellg()) : nullptr;
 	}
 #else
 #   include <sys/time.h> // gettimeofday
@@ -28,8 +41,38 @@ static constexpr int MICRO_SECONDS_PER_SECOND = 1000 * 1000;
 static constexpr uint64_t EPOCH = 116444736000000000UL;
 
 
-static inline int64_t gettimeofdayUsec()
-{
+
+/********** Windows & Linux *******/
+
+//! make struct tm
+static inline tm makeTm(int y, int m, int d, int h, int mm, int s) {
+	tm t = { 0 };
+	t.tm_year = y - 1900;
+	t.tm_mon = m - 1;
+	t.tm_mday = d;
+	t.tm_hour = h;
+	t.tm_min = mm;
+	t.tm_sec = s;
+	return t;
+}
+
+// make struct tm from time string
+static inline tm makeTm(const char* s) {
+	tm t = { 0 }; strptime(s, "%Y-%m-%d %T", &t); return t;
+}
+
+//! make time_t
+static inline time_t makeTime_t(int y, int m, int d, int h, int mm, int s) {
+	tm t = makeTm(y, m, d, h, mm, s); return timegm(&t);
+}
+
+//! make time_t from time string
+static inline time_t makeTime_t(const char* s) {
+	tm t = makeTm(s); return timegm(&t);
+}
+
+//! gettimeofday
+static inline int64_t gettimeofdayUsec() {
 #ifdef JLIB_WINDOWS
 	FILETIME ft = { 0 };
 
@@ -62,8 +105,7 @@ static inline int64_t gettimeofdayUsec()
 
 #ifdef JLIB_WINDOWS
 
-static inline tm systemTimeToTm(const SYSTEMTIME& st)
-{
+static inline tm systemTimeToTm(const SYSTEMTIME& st) {
 	tm tm;
 	tm.tm_year	= st.wYear - 1900;
 	tm.tm_mon	= st.wMonth - 1;
@@ -75,8 +117,7 @@ static inline tm systemTimeToTm(const SYSTEMTIME& st)
 	return tm;
 }
 
-static inline SYSTEMTIME tmToSystemTime(const tm& tm)
-{
+static inline SYSTEMTIME tmToSystemTime(const tm& tm) {
 	SYSTEMTIME st = { 0 };
 	st.wYear	= tm.tm_year + 1900;
 	st.wMonth	= tm.tm_mon + 1;
@@ -88,24 +129,21 @@ static inline SYSTEMTIME tmToSystemTime(const tm& tm)
 	return st;
 }
 
-static inline time_t systemTimeToTime_t(const SYSTEMTIME& st)
-{
-	tm tm = systemTimeToTm(st);
-	return mktime(&tm);
+static inline time_t systemTimeToTime_t(const SYSTEMTIME& st) {
+	tm tm = systemTimeToTm(st); return mktime(&tm);
 }
 
-static inline SYSTEMTIME time_tToSystemTime(time_t t)
-{
-	tm tm; gmtime_s(&tm, &t);
-	return tmToSystemTime(tm);
+static inline SYSTEMTIME time_tToSystemTime(time_t t) {
+	tm tm; gmtime_s(&tm, &t); return tmToSystemTime(tm);
 }
 
-static inline SYSTEMTIME time_tToSystemTimeLocal(time_t t)
-{
-	tm tm; localtime_s(&tm, &t);
-	return tmToSystemTime(tm);
+static inline SYSTEMTIME time_tToSystemTimeLocal(time_t t) {
+	tm tm; localtime_s(&tm, &t); return tmToSystemTime(tm);
 }
 
 #endif // JLIB_WINDOWS
+
+
+
 
 }
