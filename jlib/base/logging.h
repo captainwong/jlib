@@ -99,7 +99,7 @@ private:
 	static OutputFunc outputFunc_;
 	static FlushFunc flushFunc_;
 	static LogLevel logLevel_;
-	static TimeZone timeZone_;
+	static const TimeZone* timeZone_;
 
 	Impl impl_;
 };
@@ -175,7 +175,7 @@ static constexpr unsigned int T_TIME_STR_LEN = 17;
 Logger::OutputFunc Logger::outputFunc_ = detail::defaultOutput;
 Logger::FlushFunc Logger::flushFunc_ = detail::defaultFlush;
 Logger::LogLevel Logger::logLevel_ = detail::initLogLevel();
-TimeZone Logger::timeZone_ = {};
+const jlib::TimeZone* Logger::timeZone_ = date::locate_zone("Etc/UTC");
 
 
 /******** LogStream operators *********/
@@ -214,30 +214,32 @@ Logger::Impl::Impl(LogLevel level, int old_errno, const SourceFile& file, int li
 
 void Logger::Impl::formatTime()
 {
-	int64_t microSecsSinceEpoch = time_.microSecondsSinceEpoch();
-	time_t seconds = static_cast<time_t>(microSecsSinceEpoch / MICRO_SECONDS_PER_SECOND);
-	int microsecs = static_cast<int>(microSecsSinceEpoch % MICRO_SECONDS_PER_SECOND);
-	if (seconds != detail::t_lastSecond) {
-		detail::t_lastSecond = seconds;
-		struct tm tm_time;
-		if (timeZone_.valid()) {
-			// TODO
-		} else {
-			gmtime_r(&seconds, &tm_time);
-		}
+	//int64_t microSecsSinceEpoch = time_.microSecondsSinceEpoch();
+	//time_t seconds = static_cast<time_t>(microSecsSinceEpoch / MICRO_SECONDS_PER_SECOND);
+	//int microsecs = static_cast<int>(microSecsSinceEpoch % MICRO_SECONDS_PER_SECOND);
+	//if (seconds != detail::t_lastSecond) {
+	//	detail::t_lastSecond = seconds;
+	//	struct tm tm_time;
+	//	if (timeZone_.valid()) {
+	//		// TODO
+	//	} else {
+	//		gmtime_r(&seconds, &tm_time);
+	//	}
 
-		int len = snprintf(detail::t_time, sizeof(detail::t_time), "%4d%02d%02d %02d:%02d:%02d",
-						   tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday,
-						   tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
-		assert(len == detail::T_TIME_STR_LEN); (void)len;
-	}
+	//	int len = snprintf(detail::t_time, sizeof(detail::t_time), "%4d%02d%02d %02d:%02d:%02d",
+	//					   tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday,
+	//					   tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
+	//	assert(len == detail::T_TIME_STR_LEN); (void)len;
+	//}
 
-	if (timeZone_.valid()) {
-		// TODO
-	} else {
-		Format us(".%06dZ ", microsecs); assert(us.length() == 9);
-		stream_ << detail::T(detail::t_time, detail::T_TIME_STR_LEN) << detail::T(us.data(), 9);
-	}
+	//if (timeZone_.valid()) {
+	//	// TODO
+	//} else {
+	//	Format us(".%06dZ ", microsecs); assert(us.length() == 9);
+	//	stream_ << detail::T(detail::t_time, detail::T_TIME_STR_LEN) << detail::T(us.data(), 9);
+	//}
+
+	stream_ << format("%F %T(%Z) ", time_);
 }
 
 void Logger::Impl::finish()

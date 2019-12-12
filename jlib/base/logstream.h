@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.h"
 #include "noncopyable.h"
 #include "stringpiece.h"
 #include "cast.h"
@@ -36,21 +37,12 @@ private:
 	char *cur_;
 
 public:
-    FixedBuffer()
-        : cur_(data_)
-    {
-        setCookie(cookieStart);
-    }
-
-    ~FixedBuffer()
-    {
-        setCookie(cookieEnd);
-    }
+    FixedBuffer() : cur_(data_) { setCookie(cookieStart); }
+    ~FixedBuffer() { setCookie(cookieEnd); }
 
     void append(const char* buf, size_t len) {
         if (implicit_cast<size_t>(avail()) > len) {
-            memcpy(cur_, buf, len);
-            cur_ += len;
+            memcpy(cur_, buf, len); cur_ += len;
         }
     }
 
@@ -90,16 +82,12 @@ inline size_t convert(char buf[], T value)
     T i = value;
     char *p = buf;
 
-    do
-    {
+    do {
         int lsd = static_cast<int>(i % 10);
-        i /= 10;
-        *p++ = zero[lsd];
+        i /= 10; *p++ = zero[lsd];
     } while (i != 0);
 
-    if (value < 0) {
-        *p++ = '-';
-    }
+    if (value < 0) { *p++ = '-'; }
     *p = '\0';
     std::reverse(buf, p);
 
@@ -114,11 +102,9 @@ static size_t convertHex(char buf[], uintptr_t value)
     uintptr_t i = value;
     char *p = buf;
 
-    do
-    {
+    do {
         int lsd = static_cast<int>(i % 16);
-        i /= 16;
-        *p++ = digitsHex[lsd];
+        i /= 16; *p++ = digitsHex[lsd];
     } while (i != 0);
 
     *p = '\0';
@@ -156,18 +142,14 @@ public:
         uintptr_t v = reinterpret_cast<uintptr_t>(p);
         if (buffer_.avail() >= MAX_NUMERIC_SIZE) {
             char* buf = buffer_.current();
-            buf[0] = '0';
-            buf[1] = 'x';
+            buf[0] = '0'; buf[1] = 'x';
             size_t len = detail::convertHex(buf + 2, v);
             buffer_.add(len + 2);
         }
         return *this;
     }
 
-	self& operator<<(float v) {
-		*this << static_cast<double>(v);
-		return *this;
-	}
+	self& operator<<(float v) { *this << static_cast<double>(v); return *this; }
 
 	self& operator<<(double v) {
         if (buffer_.avail() >= MAX_NUMERIC_SIZE) {
@@ -179,41 +161,21 @@ public:
 
 	// self& operator<<(long double);
 
-	self& operator<<(char v) {
-		buffer_.append(&v, 1);
-		return *this;
-	}
+	self& operator<<(char v) { buffer_.append(&v, 1); return *this; }
 
 	// self& operator<<(signed char);
 	// self& operator<<(unsigned char);
 
 	self& operator<<(const char *str) {
-		if (str) {
-			buffer_.append(str, strlen(str));
-		} else {
-			buffer_.append("(null)", 6);
-		}
+		if (str) { buffer_.append(str, strlen(str));
+		} else { buffer_.append("(null)", 6); }
 		return *this;
 	}
 
-	self& operator<<(const unsigned char *str) {
-		return operator<<(reinterpret_cast<const char *>(str));
-	}
-
-	self& operator<<(const std::string& v) {
-		buffer_.append(v.c_str(), v.size());
-		return *this;
-	}
-
-	self& operator<<(const StringPiece& v) {
-		buffer_.append(v.data(), v.size());
-		return *this;
-	}
-
-	self& operator<<(const Buffer& v) {
-		*this << v.toStringPiece();
-		return *this;
-	}
+	self& operator<<(const unsigned char *str) { return operator<<(reinterpret_cast<const char *>(str)); }
+	self& operator<<(const std::string& v) { buffer_.append(v.c_str(), v.size()); return *this; }
+	self& operator<<(const StringPiece& v) { buffer_.append(v.data(), v.size()); return *this; }
+	self& operator<<(const Buffer& v) { *this << v.toStringPiece(); return *this; }
 
 	void append(const char *data, int len) { buffer_.append(data, len); }
 	const Buffer& buffer() const { return buffer_; }
@@ -266,7 +228,6 @@ private:
 // Explicit instantiations
 
 template Format::Format(const char* fmt, char);
-
 template Format::Format(const char* fmt, short);
 template Format::Format(const char* fmt, unsigned short);
 template Format::Format(const char* fmt, int);
@@ -275,7 +236,6 @@ template Format::Format(const char* fmt, long);
 template Format::Format(const char* fmt, unsigned long);
 template Format::Format(const char* fmt, long long);
 template Format::Format(const char* fmt, unsigned long long);
-
 template Format::Format(const char* fmt, float);
 template Format::Format(const char* fmt, double);
 

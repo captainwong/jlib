@@ -43,7 +43,6 @@ public:
 
 #ifdef JLIB_WINDOWS
 #include "3rdparty/spdlog/sinks/msvc_sink.h"
-#include "utf8.h"
 #endif // JLIB_WINDOWS
 
 #include "utf8.h"
