@@ -16,14 +16,12 @@ void test()
 
 		thread t1([&x, &y, &r1, &r2]() {
 			// Thread 1:
-			this_thread::sleep_for(0ms); 
 			r1 = y.load(memory_order_relaxed); // A
 			x.store(r1, memory_order_relaxed); // B
 		});
 		
 		thread t2([&x, &y, &r1, &r2]() {
 			// Thread 2:
-			this_thread::sleep_for(0ms);
 			r2 = x.load(memory_order_relaxed); // C 
 			y.store(42, memory_order_relaxed); // D
 		});
@@ -32,7 +30,9 @@ void test()
 		t2.join();
 		count++;
 
+		printf("\r%zd", count);
 		if (r1 == 42 && r2 == 42) {
+			printf("\n");
 			break;
 		}
 	}
