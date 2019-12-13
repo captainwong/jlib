@@ -9,7 +9,7 @@ void test()
 	using namespace std;
 	using namespace std::chrono;
 
-	uint32_t count = 0;
+	uintmax_t count = 0;
 	while (true) {
 		atomic_int x(0), y(0);
 		int r1 = 0, r2 = 0;
@@ -30,14 +30,14 @@ void test()
 		t2.join();
 		count++;
 
-		printf("\r%zd", count);
+		printf("%lld\r", count);
 		if (r1 == 42 && r2 == 42) {
 			printf("\n");
 			break;
 		}
 	}
 	
-	printf("after %d times trying, r1,r2 are finally 42!\n", count);
+	printf("after %lld times trying, r1,r2 are finally 42!\n", count);
 }
 
 int main()
