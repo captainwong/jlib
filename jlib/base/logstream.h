@@ -124,8 +124,9 @@ public:
     typedef detail::FixedBuffer<detail::SMALL_BUFFER> Buffer;
 
     self& operator<<(bool v) {
-        if (v) { buffer_.append("true", 4); }
-        else { buffer_.append("false", 5); }
+        //if (v) { buffer_.append("true ", 5); }
+        //else { buffer_.append("false", 5); }
+		buffer_.append(v ? "1" : "0", 1);
 		return *this;
 	}
 
@@ -239,6 +240,10 @@ template Format::Format(const char* fmt, unsigned long long);
 template Format::Format(const char* fmt, float);
 template Format::Format(const char* fmt, double);
 
+inline LogStream& operator<<(LogStream& s, const Format& fmt) {
+	s.append(fmt.data(), fmt.length());
+	return s;
+}
 
 // Format quantity n in SI units (k, M, G, T, P, E).
 // The returned string is atmost 5 characters long.
