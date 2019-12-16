@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "config.h"
 #include "../3rdparty/date/include/date/date.h"

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 // getter & setter
@@ -44,7 +44,7 @@
 		} \
 	}
 
-#define DECLARE_GETTER_SETTER_STRING(val) \
+#define DECLARE_GETTER_SETTER_CSTRING(val) \
 	DECLARE_GETTER(CString, val); \
 	DECLARE_SETTER(CString, val);
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../base/config.h"
 #include <string>

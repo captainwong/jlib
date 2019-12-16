@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "noncopyable.h"
 #include <mutex>
