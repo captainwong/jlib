@@ -21,11 +21,28 @@ namespace jlib
 using namespace date;
 using Timestamp = date::sys_time<std::chrono::microseconds>;
 
-static constexpr Timestamp nowTimestamp() { return floor<std::chrono::microseconds>(std::chrono::system_clock::now()); }
+//! now
+inline constexpr Timestamp nowTimestamp() { return floor<std::chrono::microseconds>(std::chrono::system_clock::now()); }
 
+//! (first - second) duration in micro-seconds
+inline constexpr long long timeDifference(const Timestamp& first, const Timestamp& second) {
+	return floor<std::chrono::microseconds>(first - second).count();
+}
 
+//! (nowTimestamp - t) duration in micro-seconds
+inline constexpr long long timeDifference(const Timestamp& t) {
+	return floor<std::chrono::microseconds>(nowTimestamp() - t).count();
+}
 
+//! (first - second) duration in seconds(double)
+inline constexpr double timeDifferenceInS(const Timestamp& first, const Timestamp& second) {
+	return static_cast<double>(floor<std::chrono::microseconds>(first - second).count()) / 1000000.0;
+}
 
+//! (nowTimestamp - t) duration in seconds(double)
+inline constexpr double timeDifferenceInS(const Timestamp& t) {
+	return static_cast<double>(floor<std::chrono::microseconds>(nowTimestamp() - t).count()) / 1000000.0;
+}
 
 
 //class ENABLE_EBO Timestamp : public jlib::copyable 

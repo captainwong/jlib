@@ -245,6 +245,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_atomic", "test_atomic\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logstream_unittest", "logstream_unittest\logstream_unittest.vcxproj", "{B8F4AB37-A049-443B-8B75-4D0C831B234B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_mutex", "test_mutex\test_mutex.vcxproj", "{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -427,6 +429,14 @@ Global
 		{B8F4AB37-A049-443B-8B75-4D0C831B234B}.Release|x64.Build.0 = Release|x64
 		{B8F4AB37-A049-443B-8B75-4D0C831B234B}.Release|x86.ActiveCfg = Release|Win32
 		{B8F4AB37-A049-443B-8B75-4D0C831B234B}.Release|x86.Build.0 = Release|Win32
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Debug|x64.ActiveCfg = Debug|x64
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Debug|x64.Build.0 = Debug|x64
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Debug|x86.ActiveCfg = Debug|Win32
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Debug|x86.Build.0 = Debug|Win32
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Release|x64.ActiveCfg = Release|x64
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Release|x64.Build.0 = Release|x64
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Release|x86.ActiveCfg = Release|Win32
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -475,6 +485,7 @@ Global
 		{7DC0D84B-7F96-4BB9-9B8A-D86B7B031E61} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{58DA7AE8-9975-4F28-A1BF-44A7C01B6F7F} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{B8F4AB37-A049-443B-8B75-4D0C831B234B} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
+		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
