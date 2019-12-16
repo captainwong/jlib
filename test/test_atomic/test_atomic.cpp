@@ -276,6 +276,130 @@ void test6() {
 	}
 }
 
+bool test_memory_order_consume()
+{
+	std::atomic<std::string*> ptr{};
+	int data{};
+
+	auto producer = [&]() {
+		std::string* p = new std::string("Hello");
+		data = 42;
+		ptr.store(p, std::memory_order_release);
+	};
+
+	bool data_is_42 = false;
+
+	auto consumer = [&]() {
+		std::string* p2;
+		while (!(p2 = ptr.load(std::memory_order_consume)))
+			;
+		assert(*p2 == "Hello"); // never fires: *p2 carries dependency from ptr
+		//assert(data == 42); // may or may not fire: data does not carry dependency from ptr
+		data_is_42 = data == 42;
+	};
+
+	std::thread t1(producer);
+	std::thread t2(consumer);
+	t1.join(); t2.join();
+
+	return data_is_42;
+}
+
+void test7()
+{
+	int ok = 0;
+	for (int i = 0; i < 10000; i++) {
+		if (test_memory_order_consume()) {
+			ok++;
+		}
+	}
+	printf("test_memory_order_consume data is 42: %d/10000\n", ok);
+}
+
+int test_memory_order_seq_cst() {
+	std::atomic<bool> x = { false };
+	std::atomic<bool> y = { false };
+	std::atomic<int> z = { 0 };
+
+	auto write_x = [&x, &y, &z]() {
+		x.store(true, std::memory_order_seq_cst);
+	};
+
+	auto write_y = [&x, &y, &z]() {
+		y.store(true, std::memory_order_seq_cst);
+	};
+
+	auto read_x_then_y = [&x, &y, &z]() {
+		while (!x.load(std::memory_order_seq_cst))
+			;
+		if (y.load(std::memory_order_seq_cst)) {
+			++z;
+		}
+	};
+
+	auto read_y_then_x = [&x, &y, &z]() {
+		while (!y.load(std::memory_order_seq_cst))
+			;
+		if (x.load(std::memory_order_seq_cst)) {
+			++z;
+		}
+	};
+
+	std::thread a(write_x);
+	std::thread b(write_y);
+	std::thread c(read_x_then_y);
+	std::thread d(read_y_then_x);
+	a.join(); b.join(); c.join(); d.join();
+	assert(z.load() != 0);  // will never happen
+	return z.load();
+}
+
+void test8() {
+	for (int i = 0; i < 50; i++) {
+		printf("test_memory_order_seq_cst z=%d\n", test_memory_order_seq_cst());
+	}
+}
+
+void muduo_test() {
+	{
+		std::atomic_int64_t a0{ 0 };
+		assert(a0.load() == 0);
+		assert(a0.fetch_add(1) == 0);
+		assert(a0.load() == 1);
+		assert(a0.fetch_add(2) + 2 == 3);
+		assert(a0.load() == 3);
+		assert(++a0 == 4);
+		assert(a0.load() == 4);
+		a0++;
+		assert(a0.load() == 5);
+		assert(a0.fetch_add(-3) - 3 == 2);
+		int64_t expected = 100;
+		a0.compare_exchange_strong(expected, 100);
+		assert(expected == 2);
+		a0.compare_exchange_strong(expected, 100);
+		assert(a0.load() == 100);
+	}
+
+	{
+		std::atomic_int32_t a0{ 0 };
+		assert(a0.load() == 0);
+		assert(a0.fetch_add(1) == 0);
+		assert(a0.load() == 1);
+		assert(a0.fetch_add(2) + 2 == 3);
+		assert(a0.load() == 3);
+		assert(++a0 == 4);
+		assert(a0.load() == 4);
+		a0++;
+		assert(a0.load() == 5);
+		assert(a0.fetch_add(-3) - 3 == 2);
+		int expected = 100;
+		a0.compare_exchange_strong(expected, 100);
+		assert(expected == 2);
+		a0.compare_exchange_strong(expected, 100);
+		assert(a0.load() == 100);
+	}
+}
+
 int main()
 {
 	//test(); // most likely infinite
@@ -283,13 +407,10 @@ int main()
 	//test3();
 	//test4();
 	//test5();
-	test6();
+	//test6();
+	//test7();
+	//test8();
 
-
-	/*{
-		std::atomic_int32_t a0;
-		assert(a0.load() == 0);
-		assert(a0.fetch_add(1) == 0);
-		assert(a0.load() == 1);
-	}*/
+	muduo_test();
+	
 }
