@@ -6,6 +6,7 @@
 #include "timezone.h"
 #include "currentthread.h"
 #include <stdlib.h> // getenv
+#include <errno.h>
 #include <string.h> // strerror_s
 
 namespace jlib
