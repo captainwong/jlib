@@ -3,6 +3,7 @@
 #include "../../jlib/base/threadpool.h"
 #include "../../jlib/base/countdownlatch.h"
 #include "../../jlib/base/currentthread.h"
+#include "../../jlib/base/process.h"
 
 using namespace jlib;
 using namespace std::chrono;
@@ -45,7 +46,7 @@ void test(int maxSize) {
 int main()
 {
 	Logger::setLogLevel(Logger::LOGLEVEL_DEBUG);
-	LOG_INFO << _getpid();
+	LOG_INFO << getPid();
 	//test(0);
 	//test(1);
 	//test(5);

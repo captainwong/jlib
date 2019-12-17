@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-4
 		..\jlib\base\logging.h = ..\jlib\base\logging.h
 		..\jlib\base\logstream.h = ..\jlib\base\logstream.h
 		..\jlib\base\noncopyable.h = ..\jlib\base\noncopyable.h
+		..\jlib\base\process.h = ..\jlib\base\process.h
 		..\jlib\base\singleton.h = ..\jlib\base\singleton.h
 		..\jlib\base\stringpiece.h = ..\jlib\base\stringpiece.h
 		..\jlib\base\thread.h = ..\jlib\base\thread.h
