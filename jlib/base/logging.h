@@ -7,7 +7,13 @@
 #include "currentthread.h"
 #include <stdlib.h> // getenv
 #include <errno.h>
-#include <string.h> // strerror_s
+#include <string.h> // strerror_r
+
+#ifdef JLIB_WINDOWS
+inline void strerror_r(int errnum, char* buf, size_t buflen) {
+	strerror_s(buf, buflen, errnum);
+}
+#endif
 
 namespace jlib
 {
@@ -191,7 +197,7 @@ inline LogStream& operator<<(LogStream& s, detail::T t) {
 }
 
 inline const char* strerror_t(int savedErrno) {
-	strerror_s(detail::t_errnobuf, sizeof(detail::t_errnobuf), savedErrno);
+	strerror_r(savedErrno, detail::t_errnobuf, sizeof(detail::t_errnobuf));
 	return detail::t_errnobuf;
 }
 
