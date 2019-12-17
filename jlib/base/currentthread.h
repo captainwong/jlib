@@ -5,7 +5,9 @@
 #include <stdio.h>
 
 #ifdef JLIB_LINUX
+#include <unistd.h>
 #include <sys/syscall.h>
+#include <sys/types.h>
 #elif defined(JLIB_WINDOWS)
 #include <Windows.h>
 #endif
