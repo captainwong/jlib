@@ -190,8 +190,8 @@ inline LogStream& operator<<(LogStream& s, detail::T t) {
 	s.append(t.str_, t.len_); return s;
 }
 
-static const char* strerror_t(int savedErrno) {
-	strerror_s(detail::t_errnobuf, savedErrno);
+inline const char* strerror_t(int savedErrno) {
+	strerror_s(detail::t_errnobuf, sizeof(detail::t_errnobuf), savedErrno);
 	return detail::t_errnobuf;
 }
 
