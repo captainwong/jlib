@@ -47,7 +47,7 @@ inline void cacheTid() {
 inline uint64_t tid() {
 #ifdef JLIB_LINUX
     if (__builtin_expect(t_cachedTid == 0, 0)) {
-        cachedTid();
+		cacheTid();
     }
 #else
     if (t_cachedTid != 0) {
