@@ -3,6 +3,7 @@
 #include "config.h"
 #include "noncopyable.h"
 #include <mutex>
+#include <condition_variable>
 #include <thread>
 #include <functional>
 #include <vector>
