@@ -22,7 +22,7 @@ using namespace date;
 using Timestamp = date::sys_time<std::chrono::microseconds>;
 
 //! now
-inline constexpr Timestamp nowTimestamp() { return floor<std::chrono::microseconds>(std::chrono::system_clock::now()); }
+inline Timestamp nowTimestamp() { return floor<std::chrono::microseconds>(std::chrono::system_clock::now()); }
 
 //! (first - second) duration in micro-seconds
 inline constexpr long long timeDifference(const Timestamp& first, const Timestamp& second) {
