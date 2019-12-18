@@ -40,7 +40,7 @@ thread_local const char* t_threadName = "unknown";
 inline void cacheTid() {
     if (t_cachedTid == 0) {
         t_cachedTid = detail::gettid();
-        t_tidStringLength = snprintf(t_tidString, sizeof(t_tidString), "%lld ", t_cachedTid);
+        t_tidStringLength = snprintf(t_tidString, sizeof(t_tidString), "%llu ", t_cachedTid);
     }
 }
 

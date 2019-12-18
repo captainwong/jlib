@@ -21,7 +21,7 @@ inline bool is_contain(const C& c, const T& t) {
  * @note All 和 Sub 必须为同样类型的容器
  */
 template <class C>
-inline typename C get_other(const C & All, const C& Sub) {
+inline C get_other(const C & All, const C& Sub) {
 	typename C res, tmp;
 	std::copy(Sub.begin(), Sub.end(), std::back_inserter(tmp));
 	for (const auto& i : All) {
