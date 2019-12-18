@@ -252,6 +252,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_mutex", "test_mutex\te
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_threadpool", "test_threadpool\test_threadpool.vcxproj", "{96714588-A974-49B5-95BE-BF843FBFD260}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_stdutil", "test_stdutil\test_stdutil.vcxproj", "{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -450,6 +452,14 @@ Global
 		{96714588-A974-49B5-95BE-BF843FBFD260}.Release|x64.Build.0 = Release|x64
 		{96714588-A974-49B5-95BE-BF843FBFD260}.Release|x86.ActiveCfg = Release|Win32
 		{96714588-A974-49B5-95BE-BF843FBFD260}.Release|x86.Build.0 = Release|Win32
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Debug|x64.ActiveCfg = Debug|x64
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Debug|x64.Build.0 = Debug|x64
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Debug|x86.ActiveCfg = Debug|Win32
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Debug|x86.Build.0 = Debug|Win32
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x64.ActiveCfg = Release|x64
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x64.Build.0 = Release|x64
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x86.ActiveCfg = Release|Win32
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -500,6 +510,7 @@ Global
 		{B8F4AB37-A049-443B-8B75-4D0C831B234B} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{96714588-A974-49B5-95BE-BF843FBFD260} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
+		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <vector>
 #include <algorithm>
 #include <iterator>
 
@@ -18,11 +19,11 @@ inline bool is_contain(const C& c, const T& t) {
 
 /**
  * @brief Sub 是 All 的子集，返回 All 内 Sub 的补集
- * @note All 和 Sub 必须为同样类型的容器
+ * @note All 和 Sub 必须为同样类型的容器（不支持initializer-list）
  */
 template <class C>
 inline C get_other(const C & All, const C& Sub) {
-	typename C res, tmp;
+	C res, tmp;
 	std::copy(Sub.begin(), Sub.end(), std::back_inserter(tmp));
 	for (const auto& i : All) {
 		bool in_Sub = false;
@@ -41,8 +42,7 @@ inline C get_other(const C & All, const C& Sub) {
 }
 
 /**
- * @brief Sub 是 All 的子集，返回 All 内 Sub 的补集
- * @note All 和 Sub 必须为同样类型的容器
+ * @brief t 是 v 的子集，返回 v 内 t 的补集
  */
 template <class V>
 std::vector<std::wstring> get_other(const V& v, const std::wstring& t) {
@@ -51,6 +51,9 @@ std::vector<std::wstring> get_other(const V& v, const std::wstring& t) {
 	return ret;
 }
 
+/**
+ * @brief t 是 v 的子集，返回 v 内 t 的补集
+ */
 template <class V>
 std::vector<std::string> get_other(const V& v, const std::string& t) {
 	std::vector<std::string> ret = {};
