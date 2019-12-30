@@ -88,6 +88,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{E13021FA-C
 	ProjectSection(SolutionItems) = preProject
 		..\jlib\util\chrono_wrapper.h = ..\jlib\util\chrono_wrapper.h
 		..\jlib\util\curl_wrapper.h = ..\jlib\util\curl_wrapper.h
+		..\jlib\util\jsoncpp_helper.h = ..\jlib\util\jsoncpp_helper.h
 		..\jlib\util\mem_tool.h = ..\jlib\util\mem_tool.h
 		..\jlib\util\micro_getter_setter.h = ..\jlib\util\micro_getter_setter.h
 		..\jlib\util\rand.h = ..\jlib\util\rand.h

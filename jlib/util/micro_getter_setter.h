@@ -25,12 +25,12 @@
 	DECLARE_GETTER(int, val) \
 	DECLARE_SETTER(int, val)
 
-#define DECLARE_GETTER_STRING(val) \
+#define DECLARE_GETTER_WCHAR_CSTR(val) \
 	const wchar_t* get##val() const { \
 		return val; \
 	}
 
-#define DECLARE_SETTER_STRING(val) \
+#define DECLARE_SETTER_WCHAR_CSTR(val) \
 	void set##val(const wchar_t* param) { \
 		if (param) { \
 			int len = wcslen(param); \
@@ -40,14 +40,14 @@
 		} else { \
 			if (val) { delete[] val; } \
 			val = new wchar_t[1]; \
-			val[0] = 0; \
+			val[0] = '\0'; \
 		} \
 	}
 
-#define DECLARE_GETTER_SETTER_CSTRING(val) \
-	DECLARE_GETTER(CString, val); \
-	DECLARE_SETTER(CString, val);
+#define DECLARE_GETTER_SETTER_WCHAR_STR(val) \
+	DECLARE_SETTER_WCHAR_CSTR(val); \
+	DECLARE_SETTER_WCHAR_CSTR(val);
 
 
-#define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = 0; }
+#define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = '\0'; }
 

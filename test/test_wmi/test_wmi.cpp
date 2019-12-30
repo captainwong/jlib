@@ -28,7 +28,8 @@ int main()
 		//wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = 4");
 		//wmi.execute(L"SELECT * FROM Win32_DiskPartition");
 		//wmi.execute(L"SELECT Caption FROM Win32_BootConfiguration");
-		wmi.execute(L"Select Name from Win32_OperatingSystem");
+		//wmi.execute(L"Select Name from Win32_OperatingSystem");
+		wmi.execute(L"SELECT * FROM Win32_VideoController");
 		//wmi.execute(L"SELECT PNPDeviceID FROM Win32_LogicalDisk WHERE NAME = 'C:'");
 	}
 

@@ -25,6 +25,8 @@ void test()
 	printf("\nDone!\n");
 }
 
+
+
 int main()
 {
 	QueryResults results;

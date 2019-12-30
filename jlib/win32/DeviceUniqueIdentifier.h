@@ -137,6 +137,14 @@ enum {
 typedef std::unordered_map<QueryType, std::wstring> QueryResults;
 
 /**
+* @brief 查询单个信息
+* @param[in] queryType QueryType
+* @return 查询结果
+*/
+static std::wstring query(QueryType type);
+
+
+/**
 * @brief 查询信息
 * @param[in] queryTypes QueryType集合
 * @param[in,out] results 查询结果集合
@@ -322,6 +330,17 @@ static bool query(size_t queryTypes, QueryResults& results)
 
 	auto ok = query(vec, results);
 	return ok;
+}
+
+static std::wstring query(QueryType type)
+{
+	QueryResults results;
+	auto ok = query(static_cast<size_t>(type), results);
+	if (ok && !results.empty()) {
+		return results.begin()->second;
+	} else {
+		return std::wstring(L"Query ") + queryTypeString(type) + L" failed";
+	}
 }
 
 static bool query(const std::vector<QueryType>& queryTypes, QueryResults& results)

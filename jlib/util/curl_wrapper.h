@@ -10,6 +10,8 @@
 
 #include <curl/curl.h>
 #include <string>
+#include <initializer_list>
+#include <memory>
 #include "mem_tool.h"
 
 namespace jlib
@@ -30,6 +32,7 @@ struct Curl
 	Curl() { static CurlHelper helper = {}; }
 
 	~Curl() {
+		headerFreer_.reset();
 		curl_easy_cleanup(curl_);
 	}
 
@@ -53,6 +56,15 @@ struct Curl
 	std::string lastErrorMsg() const { return lastErrorMsg_; }
 	long lastHttpCode() const { return lastHttpCode_; }
 	std::string lastHttpContent() const { return lastHttpContent_; }
+
+	void setHeaders(std::initializer_list<const char*> headers) {
+		curl_slist* cheaders = nullptr;
+		for (auto& header : headers) {
+			cheaders = curl_slist_append(cheaders, header);
+		}
+		curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers);
+		headerFreer_ = std::make_shared<jlib::auto_free<curl_slist>>(cheaders, [](curl_slist* p) { curl_slist_free_all(p); });
+	}
 
 	bool get(const std::string& url, int timeout = 10) {
 		curl_easy_setopt(curl_, CURLOPT_URL, url.data());
@@ -100,6 +112,7 @@ struct Curl
 ///////////////////////////// details ///////////////////////////////
 
 	CURL* curl_ = nullptr;
+	std::shared_ptr<jlib::auto_free<curl_slist>> headerFreer_ = {};
 	std::string buffer_ = {};
 	CURLcode lastErorrCode_ = CURLcode::CURLE_OK;
 	std::string lastErrorMsg_ = {};
