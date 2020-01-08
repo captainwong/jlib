@@ -353,6 +353,28 @@ QCheckBox::indicator:unchecked
 }
 )";
 
+
+static const auto check_box_48px = R"(
+QCheckBox
+{
+	font-size: 16px;
+	color: white;
+}
+QCheckBox::indicator
+{
+	width: 48px;
+	height: 48px;
+}
+QCheckBox::indicator:checked
+{
+	image: url(:/Skin/checkbox/checked_checkbox_48px.png);
+}
+QCheckBox::indicator:unchecked
+{
+	image: url(:/Skin/checkbox/unchecked_checkbox_48px.png);
+}
+)";
+
 } // end of namespace def_style_sheets
 
 

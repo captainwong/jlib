@@ -63,14 +63,14 @@ struct Version {
 		return true;
 	}
 
-	bool operator == (const Version& ver) {
+	bool operator == (const Version& ver) const {
 		return major == ver.major
 			&& minor == ver.minor
 			&& revision == ver.revision
 			&& build == ver.build;
 	}
 
-	bool operator < (const Version& ver) {
+	bool operator < (const Version& ver) const {
 		if (major > ver.major) return false;
 		if (minor > ver.minor) return false;
 		if (revision > ver.revision) return false;
@@ -79,7 +79,7 @@ struct Version {
 		return true;
 	}
 
-	bool operator > (const Version& ver) {
+	bool operator > (const Version& ver) const {
 		if (major < ver.major) return false;
 		if (minor < ver.minor) return false;
 		if (revision < ver.revision) return false;
@@ -88,18 +88,18 @@ struct Version {
 		return true;
 	}
 
-	bool operator <= (const Version& ver) {
+	bool operator <= (const Version& ver) const {
 		return (major <= ver.major) 
-			|| (minor <= ver.minor) 
-			|| (revision <= ver.revision) 
-			|| (build <= ver.build);
+			&& (minor <= ver.minor) 
+			&& (revision <= ver.revision) 
+			&& (build <= ver.build);
 	}
 
-	bool operator >= (const Version& ver) {
+	bool operator >= (const Version& ver) const {
 		return (major >= ver.major)
-			|| (minor >= ver.minor)
-			|| (revision >= ver.revision)
-			|| (build >= ver.build);
+			&& (minor >= ver.minor)
+			&& (revision >= ver.revision)
+			&& (build >= ver.build);
 	}
 };
 

@@ -45,9 +45,9 @@ static inline void showInGraphicalShell(const QString &pathIn) {
 
 static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path, QString file_line)
 {
-	if (!QDir().isAbsolutePath(icon_path)) {
+	/*if (!QDir().isAbsolutePath(icon_path)) {
 		icon_path = PathHelper::program() + "/" + icon_path;
-	}
+	}*/
 	
 	if (!pixmap.load(icon_path) && !pixmap.load(icon_path, "png")) {
 		qCritical() << file_line << "load pixmap failed: " << icon_path;
@@ -57,7 +57,7 @@ static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path
 	return true;
 }
 
-#define LOAD_PIXMAP_EX(icon_path) jlib::qt::warn_if_load_pixmap_failed(pixmap, icon_path, QDEBUG_FILE_LINE_VER)
+#define LOAD_PIXMAP_EX(icon_path) jlib::qt::warn_if_load_pixmap_failed(pixmap, icon_path, JLIBQT_QDEBUG_FILE_LINE_VALUE)
 
 static QIcon icon_from_path(QString path, QSize icon_sz) {
 	QPixmap pixmap;

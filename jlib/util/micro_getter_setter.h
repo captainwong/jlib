@@ -51,3 +51,36 @@
 
 #define INITIALIZE_STRING(val) { val = new wchar_t[1]; val[0] = '\0'; }
 
+//! public: int member;
+#define DECLREA_MEMBER(region, type, val) \
+region: \
+	type val;
+
+//! public: int member = {};
+#define DECLREA_MEMBER_DEFAULT_INITED(region, type, val) \
+region: \
+	type val = {};
+
+//! public: int getVal() const { return val; }
+#define DECLARE_GETTER_WITH_REGION_AND_NAME(region, type, val, getter) \
+region: \
+	type getter() const { return val; }
+
+//! private: int val; public: int getVal() const { return val; }
+#define DECLARE_MEMBER_WITH_GETTER(mregion, type, val, fregion, getter) \
+DECLREA_MEMBER(mregion, type, val) \
+DECLARE_GETTER_WITH_REGION_AND_NAME(fregion, type, val, getter)
+
+//! private: int val = {}; public: int getVal() const { return val; }
+#define DECLARE_MEMBER_DEFAULT_INITED_WITH_GETTER(mregion, type, val, fregion, getter) \
+DECLREA_MEMBER_DEFAULT_INITED(mregion, type, val) \
+DECLARE_GETTER_WITH_REGION_AND_NAME(fregion, type, val, getter)
+
+
+#define DECLARE_PRI_M_PUB_G(type, val, getter) \
+DECLREA_MEMBER(private, type, val) \
+DECLARE_GETTER_WITH_REGION_AND_NAME(public, type, val, getter)
+
+#define DECLARE_PRI_MDI_PUB_G(type, val, getter) \
+DECLREA_MEMBER_DEFAULT_INITED(private, type, val) \
+DECLARE_GETTER_WITH_REGION_AND_NAME(public, type, val, getter)

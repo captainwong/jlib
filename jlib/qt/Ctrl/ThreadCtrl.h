@@ -1,56 +1,44 @@
 #pragma once
 
+#include "../qt_global.h"
 #include <QThread>
 #include "../Model/ThreadModel.h"
-#include <thread>
 
-namespace jlib
-{
-namespace qt
-{
-
+JLIB_QT_NAMESPACE_BEGIN
 
 class ThreadCtrl : public QThread
 {
 	Q_OBJECT
 
 public:
-	ThreadCtrl(QObject *parent, ThreadWorker worker)
-		: QThread(parent)
-		, worker_(worker)
-	{
+	ThreadCtrl(QObject* parent, int proto_type = -1);
+	~ThreadCtrl();
+
+	void setWorker(ThreadWorker worker) { worker_ = worker; }
+
+	void setParam(void* input = nullptr, void* output = nullptr) {
+		input_ = input;
+		output_ = output;
 	}
 
-	~ThreadCtrl() {}
-
-	void set_worker(ThreadWorker worker) { worker_ = worker; }
-
-	void set_tag(int tag) { tag_ = tag; }
-	int get_tag() const { return tag_; }
+	void setTag(int tag) { tag_ = tag; }
+	int getTag() const { return tag_; }
 
 protected:
-	virtual void run() override {
-		std::error_code result;
-
-		if (worker_) {
-			result = worker_();
-		}
-
-		emit sig_ready(tag_, result);
-	}
+	virtual void run() override;
 
 signals:
-	void sig_ready(int tag, std::error_code result);
-	void sig_progress(int tag, jlib::qt::ThreadProgress progress);
+	void sig_progress(int tag, ThreadProgress progress);
+	void sig_done(int tag, int result_code);
 
 private:
 	ThreadWorker worker_ = {};
-
+	int proto_type_ = -1;
+	int result_code_ = -1;
 	void* input_ = nullptr;
 	void* output_ = nullptr;
 
-	int tag_ = 0;
+	int tag_ = -1;
 };
 
-}
-}
+JLIB_QT_NAMESPACE_END

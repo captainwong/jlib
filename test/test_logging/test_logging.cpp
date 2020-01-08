@@ -1,4 +1,6 @@
 #include "../../jlib/base/logging.h"
+#include "../../jlib/base/threadpool.h"
+#include "../../jlib/base/timezone.h"
 
 using namespace jlib;
 

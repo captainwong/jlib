@@ -1,5 +1,6 @@
 #pragma once
 
+//#include <system_error>
 #include <QString>
 #include <functional>
 
@@ -8,8 +9,7 @@ namespace jlib
 namespace qt
 {
 
-
-typedef std::function<std::error_code(void)> ThreadWorker;
+typedef std::function<int(void)> ThreadWorker;
 
 struct ThreadProgress {
 	int pos = 0;
@@ -24,5 +24,5 @@ typedef std::function<void(ThreadProgress)> ThreadProgressCB;
 }
 }
 
-Q_DECLARE_METATYPE(std::error_code)
+//Q_DECLARE_METATYPE(std::error_code)
 Q_DECLARE_METATYPE(jlib::qt::ThreadProgress)

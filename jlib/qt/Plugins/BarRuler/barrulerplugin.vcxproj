@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}</ProjectGuid>
+    <RootNamespace>barrulerplugin</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>release\</IntermediateDirectory>
+    <PrimaryOutput>barrulerplugin</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <OutputDirectory>debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <IntermediateDirectory>debug\</IntermediateDirectory>
+    <PrimaryOutput>barrulerplugind</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">barrulerplugin</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">barrulerplugind</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtDesigner;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtUiPlugin;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtWidgets;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtGui;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtANGLE;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtXml;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtCore;release;C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>release\</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;QT_NO_DEBUG;QT_PLUGIN;QT_DESIGNER_LIB;QT_UIPLUGIN_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;QDESIGNER_EXPORT_WIDGETS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Designer.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Widgets.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Gui.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Xml.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\barrulerplugin.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;QT_NO_DEBUG;QT_PLUGIN;QT_DESIGNER_LIB;QT_UIPLUGIN_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;QDESIGNER_EXPORT_WIDGETS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtDesigner;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtUiPlugin;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtWidgets;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtGui;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtANGLE;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtXml;C:\Qt\Qt5.9.8\5.9.8\msvc2015\include\QtCore;debug;C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\win32-msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>debug\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>debug\</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;QT_PLUGIN;QT_DESIGNER_LIB;QT_UIPLUGIN_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;QDESIGNER_EXPORT_WIDGETS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Designerd.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Widgetsd.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Guid.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Xmld.lib;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.;C:\Qt\Qt5.9.8\5.9.8\msvc2015\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\barrulerplugind.dll</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;QT_PLUGIN;QT_DESIGNER_LIB;QT_UIPLUGIN_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_XML_LIB;QT_CORE_LIB;QDESIGNER_EXPORT_WIDGETS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="barruler.cpp" />
+    <ClCompile Include="barrulerplugin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="barruler.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">barruler.h;release\moc_predefs.h;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -DQT_NO_DEBUG -DQT_PLUGIN -DQT_DESIGNER_LIB -DQT_UIPLUGIN_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQDESIGNER_EXPORT_WIDGETS --compiler-flavor=msvc --include release/moc_predefs.h -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/mkspecs/win32-msvc -IG:/dev_libs/jlib/jlib/qt/Plugins/BarRuler -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtDesigner -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtUiPlugin -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtWidgets -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtGui -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtANGLE -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtXml -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" barruler.h -o release\moc_barruler.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC barruler.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\moc_barruler.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">barruler.h;debug\moc_predefs.h;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -DQT_PLUGIN -DQT_DESIGNER_LIB -DQT_UIPLUGIN_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQDESIGNER_EXPORT_WIDGETS --compiler-flavor=msvc --include debug/moc_predefs.h -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/mkspecs/win32-msvc -IG:/dev_libs/jlib/jlib/qt/Plugins/BarRuler -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtDesigner -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtUiPlugin -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtWidgets -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtGui -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtANGLE -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtXml -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" barruler.h -o debug\moc_barruler.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC barruler.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_barruler.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="barrulerplugin.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">barrulerplugin.h;release\moc_predefs.h;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -DQT_NO_DEBUG -DQT_PLUGIN -DQT_DESIGNER_LIB -DQT_UIPLUGIN_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQDESIGNER_EXPORT_WIDGETS --compiler-flavor=msvc --include release/moc_predefs.h -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/mkspecs/win32-msvc -IG:/dev_libs/jlib/jlib/qt/Plugins/BarRuler -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtDesigner -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtUiPlugin -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtWidgets -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtGui -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtANGLE -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtXml -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" barrulerplugin.h -o release\moc_barrulerplugin.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC barrulerplugin.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\moc_barrulerplugin.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">barrulerplugin.h;debug\moc_predefs.h;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\moc.exe  -DUNICODE -D_UNICODE -DWIN32 -DQT_PLUGIN -DQT_DESIGNER_LIB -DQT_UIPLUGIN_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -DQDESIGNER_EXPORT_WIDGETS --compiler-flavor=msvc --include debug/moc_predefs.h -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/mkspecs/win32-msvc -IG:/dev_libs/jlib/jlib/qt/Plugins/BarRuler -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtDesigner -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtUiPlugin -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtWidgets -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtGui -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtANGLE -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtXml -IC:/Qt/Qt5.9.8/5.9.8/msvc2015/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\cppwinrt" barrulerplugin.h -o debug\moc_barrulerplugin.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC barrulerplugin.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_barrulerplugin.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug\moc_barruler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\moc_barruler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="debug\moc_barrulerplugin.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\moc_barrulerplugin.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cl -BxC:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zi -MDd -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;debug\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cl -BxC:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -O2 -MD -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E C:\Qt\Qt5.9.8\5.9.8\msvc2015\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;release\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\moc_predefs.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClCompile Include="debug\qrc_icons.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\qrc_icons.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="icons.qrc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">icons.qrc;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\rcc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\rcc.exe -name icons icons.qrc -o release\qrc_icons.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RCC icons.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\qrc_icons.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">icons.qrc;C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\rcc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Qt\Qt5.9.8\5.9.8\msvc2015\bin\rcc.exe -name icons icons.qrc -o debug\qrc_icons.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">RCC icons.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\qrc_icons.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

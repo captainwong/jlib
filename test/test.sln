@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "base", "base", "{608A105E-4
 		..\jlib\base\countdownlatch.h = ..\jlib\base\countdownlatch.h
 		..\jlib\base\currentthread.h = ..\jlib\base\currentthread.h
 		..\jlib\base\date.h = ..\jlib\base\date.h
+		..\jlib\base\fileutil.h = ..\jlib\base\fileutil.h
+		..\jlib\base\logfile.h = ..\jlib\base\logfile.h
 		..\jlib\base\logging.h = ..\jlib\base\logging.h
 		..\jlib\base\logstream.h = ..\jlib\base\logstream.h
 		..\jlib\base\noncopyable.h = ..\jlib\base\noncopyable.h
@@ -190,6 +192,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "qt", "qt", "{F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}"
 	ProjectSection(SolutionItems) = preProject
 		..\jlib\qt\ErrorCode.h = ..\jlib\qt\ErrorCode.h
+		..\jlib\qt\monitor.h = ..\jlib\qt\monitor.h
 		..\jlib\qt\QtDebug.h = ..\jlib\qt\QtDebug.h
 		..\jlib\qt\QtDebugOutput.h = ..\jlib\qt\QtDebugOutput.h
 		..\jlib\qt\QtPathHelper.h = ..\jlib\qt\QtPathHelper.h
@@ -254,6 +257,16 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_threadpool", "test_threadpool\test_threadpool.vcxproj", "{96714588-A974-49B5-95BE-BF843FBFD260}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_stdutil", "test_stdutil\test_stdutil.vcxproj", "{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_logfile", "test_logfile\test_logfile.vcxproj", "{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "staticlib", "staticlib", "{729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qt", "..\jlib\qt\qt.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{44FC9BE2-8C8B-4A84-9C3A-28DA3F6C2DC1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "barrulerplugin", "..\jlib\qt\Plugins\BarRuler\barrulerplugin.vcxproj", "{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -461,6 +474,26 @@ Global
 		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x64.Build.0 = Release|x64
 		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x86.ActiveCfg = Release|Win32
 		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB}.Release|x86.Build.0 = Release|Win32
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Debug|x64.ActiveCfg = Debug|x64
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Debug|x64.Build.0 = Debug|x64
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Debug|x86.ActiveCfg = Debug|Win32
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Debug|x86.Build.0 = Debug|Win32
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Release|x64.ActiveCfg = Release|x64
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Release|x64.Build.0 = Release|x64
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Release|x86.ActiveCfg = Release|Win32
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A}.Release|x86.Build.0 = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x86.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x86.Build.0 = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x86.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x86.Build.0 = Release|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Debug|x64.ActiveCfg = Debug|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Debug|x86.ActiveCfg = Debug|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Debug|x86.Build.0 = Debug|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Release|x64.ActiveCfg = Release|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Release|x86.ActiveCfg = Release|Win32
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -512,6 +545,10 @@ Global
 		{F1EFC4C7-AF79-4A65-9FE1-7C5305DC2E6A} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{96714588-A974-49B5-95BE-BF843FBFD260} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
 		{2457D30D-2DE9-4DF2-9047-CFA652E4F6CB} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
+		{0CCBAB78-35DD-46FF-B369-AE4920BEA43A} = {D9BC4E5B-7E8F-4C86-BF15-CCB75CBC256F}
+		{B12702AD-ABFB-343A-A199-8E24837244A3} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
+		{44FC9BE2-8C8B-4A84-9C3A-28DA3F6C2DC1} = {F118E1C9-F461-4CAA-A0F1-75F5A5C8ADF3}
+		{C1066CE5-C22E-3BC0-A99A-9E37E3DB9724} = {44FC9BE2-8C8B-4A84-9C3A-28DA3F6C2DC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
