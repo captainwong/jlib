@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../base/config.h"
 #include <ShlObj.h>
 #include <string>
 #include <algorithm>

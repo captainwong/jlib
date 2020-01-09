@@ -1,10 +1,10 @@
 #pragma once
 
+#include "qt_global.h"
 #include <QString>
 #include <QColor>
 
-namespace jlib {
-namespace qt {
+JLIBQT_NAMESPACE_BEGIN
 
 namespace def_sizes {
 
@@ -378,5 +378,4 @@ QCheckBox::indicator:unchecked
 } // end of namespace def_style_sheets
 
 
-} // end of namespace qt
-} // end of namespace jlib
+JLIBQT_NAMESPACE_END

@@ -1,7 +1,10 @@
 #include "ThreadCtrl.h"
 
 
-JLIB_QT_NAMESPACE_BEGIN
+namespace jlib
+{
+namespace qt
+{
 
 ThreadCtrl::ThreadCtrl(QObject* parent, int proto_type)
 	: QThread(parent)
@@ -22,4 +25,5 @@ void ThreadCtrl::run()
 	emit sig_done(tag_, result_code_);
 }
 
-JLIB_QT_NAMESPACE_END
+}
+}

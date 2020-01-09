@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "qt_global.h"
 #include <cassert>
 #include <QString>
 #include <QColor>
@@ -14,8 +15,7 @@
 #include "QtPathHelper.h"
 
 
-namespace jlib {
-namespace qt {
+JLIBQT_NAMESPACE_BEGIN
 
 /**
 * @brief 不阻塞UI响应的情况下，等待一段时间
@@ -48,6 +48,10 @@ static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path
 	/*if (!QDir().isAbsolutePath(icon_path)) {
 		icon_path = PathHelper::program() + "/" + icon_path;
 	}*/
+
+	if (!icon_path.startsWith(":/")) {
+		icon_path = ":/" + icon_path;
+	}
 	
 	if (!pixmap.load(icon_path) && !pixmap.load(icon_path, "png")) {
 		qCritical() << file_line << "load pixmap failed: " << icon_path;
@@ -57,7 +61,7 @@ static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path
 	return true;
 }
 
-#define LOAD_PIXMAP_EX(icon_path) jlib::qt::warn_if_load_pixmap_failed(pixmap, icon_path, JLIBQT_QDEBUG_FILE_LINE_VALUE)
+#define LOAD_PIXMAP_EX(icon_path) JLIBQT_NAMESPACE warn_if_load_pixmap_failed(pixmap, icon_path, JLIBQT_QDEBUG_FILE_LINE_VALUE)
 
 static QIcon icon_from_path(QString path, QSize icon_sz) {
 	QPixmap pixmap;
@@ -121,7 +125,4 @@ static inline void center_to_desktop(QWidget* widget, int new_width, int new_hei
 }
 
 
-
-
-}
-}
+JLIBQT_NAMESPACE_END

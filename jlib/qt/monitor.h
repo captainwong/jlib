@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "qt_global.h"
 #include <qstring.h>
 #include <Windows.h>
 #include <qrect.h>
@@ -7,10 +8,7 @@
 #include <assert.h>
 #include <qdebug.h>
 
-namespace jlib
-{
-namespace qt
-{
+JLIBQT_NAMESPACE_BEGIN
 
 struct MonitorInfo {
 
@@ -454,5 +452,4 @@ std::list<DisplayDevice> dev_list;
 
 #endif
 
-} // end namespace qt
-} // end namespace jlib
+JLIBQT_NAMESPACE_END

@@ -4,7 +4,10 @@
 #include <QThread>
 #include "../Model/ThreadModel.h"
 
-JLIB_QT_NAMESPACE_BEGIN
+namespace jlib
+{
+namespace qt
+{
 
 class ThreadCtrl : public QThread
 {
@@ -41,4 +44,5 @@ private:
 	int tag_ = -1;
 };
 
-JLIB_QT_NAMESPACE_END
+}
+}

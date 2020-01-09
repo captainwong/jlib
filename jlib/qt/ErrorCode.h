@@ -1,14 +1,11 @@
 #pragma once
 
+#include "qt_global.h"
 #include <system_error>
 #include <QString>
 
 
-namespace jlib
-{
-namespace qt
-{
-
+JLIBQT_NAMESPACE_BEGIN
 
 //! ªÒ»°¥ÌŒÛ¬ÎŒƒ◊÷√Ë ˆ
 inline QString ecString(const std::error_code& ec) {
@@ -33,8 +30,7 @@ enum class CommonErrorCode {
 
 };
 
-}
-}
+JLIBQT_NAMESPACE_END
 
 namespace std
 {
@@ -43,8 +39,7 @@ namespace std
 template <> struct is_error_code_enum<type> : true_type {}; \
 std::error_code make_error_code(type);
 
-
-ENABLE_ENUM_AS_ERROR_CODE(jlib::qt::CommonErrorCode)
+ENABLE_ENUM_AS_ERROR_CODE(JLIBQT_NAMESPACE CommonErrorCode)
 
 }
 
@@ -58,12 +53,12 @@ struct CommonErrorCatagory : public std::error_category
 	}
 
 	std::string message(int ev) const override {
-		switch (static_cast<jlib::qt::CommonErrorCode>(ev)) {
-			case jlib::qt::CommonErrorCode::OpenDbFailed:
+		switch (static_cast<JLIBQT_NAMESPACE CommonErrorCode>(ev)) {
+			case JLIBQT_NAMESPACE CommonErrorCode::OpenDbFailed:
 				return QObject::tr("Failed to open database").toLocal8Bit().toStdString();
-			case jlib::qt::CommonErrorCode::CreateDbTableFailed:
+			case JLIBQT_NAMESPACE CommonErrorCode::CreateDbTableFailed:
 				return QObject::tr("Failed to create table").toLocal8Bit().toStdString();
-			case jlib::qt::CommonErrorCode::QueryDbFailed:
+			case JLIBQT_NAMESPACE CommonErrorCode::QueryDbFailed:
 				return QObject::tr("Failed to query database").toLocal8Bit().toStdString();
 			default:
 				return QObject::tr("Unkown Error").toLocal8Bit().toStdString();
@@ -75,7 +70,7 @@ static const CommonErrorCatagory theCommonErrorCatagory = {};
 
 }
 
-inline std::error_code std::make_error_code(jlib::qt::CommonErrorCode ec)
+inline std::error_code std::make_error_code(JLIBQT_NAMESPACE CommonErrorCode ec)
 {
 	return { static_cast<int>(ec), theCommonErrorCatagory };
 }

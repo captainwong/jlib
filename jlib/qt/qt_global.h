@@ -13,12 +13,14 @@
 #endif
 
 
-// #define ENABLE_JLIBQT_NAMESPACE
+#define ENABLE_JLIBQT_NAMESPACE
 
 #ifdef ENABLE_JLIBQT_NAMESPACE
 #define JLIBQT_NAMESPACE_BEGIN namespace jlib { namespace qt { 
 #define JLIBQT_NAMESPACE_END } }
+#define JLIBQT_NAMESPACE jlib::qt::
 #else
 #define JLIBQT_NAMESPACE_BEGIN
 #define JLIBQT_NAMESPACE_END
+#define JLIBQT_NAMESPACE
 #endif

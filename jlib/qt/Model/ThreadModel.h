@@ -1,5 +1,6 @@
 #pragma once
 
+#include "qt_global.h"
 //#include <system_error>
 #include <QString>
 #include <functional>
