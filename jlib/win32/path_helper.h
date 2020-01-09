@@ -44,7 +44,7 @@ protected:
 	explicit PathHelper() {}
 	//! 应用程序安装目录
 	std::string programPath_ = {};
-	//! 应用程序目录
+	//! 应用程序路径
 	std::string exePath_ = {};
 };
 

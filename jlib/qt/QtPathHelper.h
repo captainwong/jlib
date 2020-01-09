@@ -24,6 +24,7 @@ struct PathHelper
 	virtual ~PathHelper() {}
 
 	virtual QString program()	const { return programPath_; }
+	virtual QString exe()		const { return exePath_; }
 	virtual QString bin()		const { return program() + "/bin"; }
 	virtual QString data()		const { return program() + "/data"; }
 	virtual QString log()		const { return program() + "/log"; }
@@ -34,7 +35,10 @@ struct PathHelper
 protected:
 	// disable constructor
 	explicit PathHelper() {}
+	//! 应用程序安装目录
 	QString programPath_ = {};
+	//! 应用程序路径
+	QString exePath_ = {};
 };
 
 struct AutoSwithToBin {
@@ -65,15 +69,9 @@ struct AutoSwithToBin {
 struct PathHelperLocal : PathHelper
 {
 	PathHelperLocal() : PathHelper() {
-		struct Helper {
-			Helper() {
-				QDir dir(QCoreApplication::applicationDirPath());
-				dir.cdUp(); path = dir.absolutePath();
-			}
-			QString path = {};
-		};
-		static Helper helper;
-		programPath_ = helper.path;
+		exePath_ = QCoreApplication::applicationFilePath();
+		QDir dir(QCoreApplication::applicationDirPath());
+		dir.cdUp(); programPath_ = dir.absolutePath();
 	}
 };
 
@@ -93,15 +91,9 @@ struct PathHelperLocal : PathHelper
 struct PathHelperLocalWithoutBin : PathHelper
 {
 	PathHelperLocalWithoutBin() : PathHelper() {
-		struct Helper {
-			Helper() {
-				QDir dir(QCoreApplication::applicationDirPath());
-				path = dir.absolutePath();
-			}
-			QString path = {};
-		};
-		static Helper helper;
-		programPath_ = helper.path;
+		exePath_ = QCoreApplication::applicationFilePath();
+		QDir dir(QCoreApplication::applicationDirPath());
+		programPath_ = dir.absolutePath();
 	}
 
 	virtual QString bin() const override { return program(); }
@@ -109,7 +101,9 @@ struct PathHelperLocalWithoutBin : PathHelper
 
 /*
 * @brief 路径辅助类，数据保存在其他可写目录，如 C:/Users/[USER]/AppData/Roaming
-* @note 在调用此类之前先调用 QCoreApplication::setOrganizationName("your-organization-name");
+* @note program-name 无需设置，Qt会自动设置
+* @note 如果在调用此类之前先调用了 QCoreApplication::setOrganizationName("your-organization-name");
+* @note 那么program-name在your-organization-name下
 * @note 大致结构树为：
 * @note |-- program-install-dir
 * @note |   |-- bin
@@ -126,20 +120,27 @@ struct PathHelperLocalWithoutBin : PathHelper
 */
 struct PathHelperDataSeperated : PathHelperLocal
 {
-	PathHelperDataSeperated() : PathHelperLocal() {}
+	PathHelperDataSeperated(bool useTmpAsLogFolder = false)
+		: PathHelperLocal(), useTmpAsLogFolder(useTmpAsLogFolder)
+	{}
 
 	virtual QString data()		const override {
 		return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 	}
-	virtual QString log()		const override { return data() + "/log"; }
+	virtual QString log()		const override { return useTmpAsLogFolder ? QStandardPaths::writableLocation(QStandardPaths::TempLocation) : (data() + "/log"); }
 	virtual QString dumps()		const override { return data() + "/dumps"; }
 	virtual QString config()	const override { return data() + "/config"; }
 	virtual QString db()		const override { return data() + "/db"; }
+
+protected:
+	bool useTmpAsLogFolder = false;
 };
 
 /*
 * @brief 路径辅助类，数据保存在其他可写目录，如 C:/Users/[USER]/AppData/Roaming
-* @note 在调用此类之前先调用 QCoreApplication::setOrganizationName("your-organization-name");
+* @note program-name 无需设置，Qt会自动设置
+* @note 如果在调用此类之前先调用了 QCoreApplication::setOrganizationName("your-organization-name");
+* @note 那么program-name在your-organization-name下
 * @note 大致结构树为：
 * @note |-- program-install-dir
 * @note |   |-- program.exe
@@ -155,15 +156,20 @@ struct PathHelperDataSeperated : PathHelperLocal
 */
 struct PathHelperDataSeperatedWithoutBin : PathHelperLocalWithoutBin
 {
-	PathHelperDataSeperatedWithoutBin() : PathHelperLocalWithoutBin() {}
+	PathHelperDataSeperatedWithoutBin(bool useTmpAsLogFolder = false)
+		: PathHelperLocalWithoutBin(), useTmpAsLogFolder(useTmpAsLogFolder)
+	{}
 
 	virtual QString data()		const override {
 		return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 	}
-	virtual QString log()		const override { return data() + "/log"; }
+	virtual QString log()		const override { return useTmpAsLogFolder ? QStandardPaths::writableLocation(QStandardPaths::TempLocation) : (data() + "/log"); }
 	virtual QString dumps()		const override { return data() + "/dumps"; }
 	virtual QString config()	const override { return data() + "/config"; }
 	virtual QString db()		const override { return data() + "/db"; }
+
+protected:
+	bool useTmpAsLogFolder = false;
 };
 
 
