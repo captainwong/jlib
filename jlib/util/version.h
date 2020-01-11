@@ -184,7 +184,7 @@ int resolveLatestRelease(const JsonValue& value, LatestRelease& latestRelease) {
 	for (int i = 0; i < (int)Branch::BranchCount; i++) {
 		Branch branch = Branch(i);
 		if (value.isMember(branchName(branch))) {
-			const auto& detail = value[BranchNameTest];
+			const auto& detail = value[branchName(branch)];
 			Release release;
 			release.branch = branch;
 			release.version = detail["version"].asString();
