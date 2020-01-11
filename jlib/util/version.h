@@ -10,6 +10,41 @@
 namespace jlib
 {
 
+//! 应用程序版本分支
+enum class Branch : int {
+	//! 测试版，一般仅用于测试人员测试
+	Test,
+	//! 体验版，可以投放给少量用户进行灰度测试
+	Experimental,
+	//! 正式版
+	Stable,
+
+	BranchCount,
+
+	InvalidBranch = 0x0FFFFFFF,
+};
+
+static constexpr const char* BranchNameTest			= "test";
+static constexpr const char* BranchNameExperimental = "experimental";
+static constexpr const char* BranchNameStable		= "stable";
+
+inline const char* branchName(Branch branch) {
+	switch (branch) {
+	case jlib::Branch::Test:			return BranchNameTest;
+	case jlib::Branch::Experimental:	return BranchNameExperimental;
+	case jlib::Branch::Stable:			return BranchNameStable;
+	default:							return "InvalidBranch";
+	}
+}
+
+inline Branch branchFromString(const std::string& name) {
+	if (name == BranchNameTest) { return Branch::Test; }
+	else if (name == BranchNameExperimental) { return Branch::Experimental; }
+	else if (name == BranchNameStable) { return Branch::Stable; }
+	else { return Branch::InvalidBranch; }
+}
+
+//! 应用程序版本号
 struct Version {
 	int major = 0;
 	int minor = 0;
@@ -22,7 +57,7 @@ struct Version {
 	Version(const std::string& s) { _fromString(s); }
 	Version& fromString(const std::string& s) { _fromString(s); return *this; }
 
-	bool valid() { return !(major == 0 && minor == 0 && revision == 0 && build == 0); }
+	bool valid() const { return !(major == 0 && minor == 0 && revision == 0 && build == 0); }
 	void reset() { major = minor = revision = build = 0; }
 
 	bool _fromString(const std::string& s) {
@@ -103,15 +138,77 @@ struct Version {
 	}
 };
 
-struct UpdateInfo {
-	Version version = {};
-	std::string change = {};
-	std::vector<std::string> dllinks = {};
+struct DownLoadLink {
+	std::string host = {}; // local, qcloud, ...
+	std::string link = {};
+	std::string md5 = {};
 };
 
-struct UpdateInfoText {
-	Version version = {};
-	std::string dllink = {};
+//! 发布
+struct Release {
+	Branch branch = Branch::InvalidBranch;
+	Version version = {}; 
+	std::string change = {};
+	std::vector<DownLoadLink> dllinks = {};
+
+	std::string toString() const {
+		auto s = std::string(branchName(branch)) + " " + version.toString() + "\nchange=" + change + "\ndownload_links=\n";
+		if (!dllinks.empty()) {
+			for (const auto& link : dllinks) { s += link.host + " : link=" + link.link + " md5=" + link.md5 + "\n"; }
+		} else { s += "empty"; }
+		return s;
+	}
+
+	bool valid() const {
+		return (branch != Branch::InvalidBranch) && version.valid() && !dllinks.empty();
+	}
 };
+
+//! 最新的发布
+struct LatestRelease {
+	std::vector<Release> releases = {};
+
+	std::string toString() const {
+		std::string str;
+		for (const auto& r : releases) {
+			if (r.valid()) { str += r.toString() + "\n"; }
+		}
+		return str;
+	}
+};
+
+//! value 为从服务器获取的最新发布信息，以 JSON 表示
+template <typename JsonValue>
+int resolveLatestRelease(const JsonValue& value, LatestRelease& latestRelease) {
+	int count = 0;
+	for (int i = 0; i < (int)Branch::BranchCount; i++) {
+		Branch branch = Branch(i);
+		if (value.isMember(branchName(branch))) {
+			const auto& detail = value[BranchNameTest];
+			Release release;
+			release.branch = branch;
+			release.version = detail["version"].asString();
+			release.change = detail["release_note"].asString();
+			if (detail["download_links"].isMember("local")) {
+				DownLoadLink dl;
+				dl.host = "local";
+				dl.link = detail["download_links"]["local"]["link"].asString();
+				dl.md5 = detail["download_links"]["local"]["md5"].asString();
+				release.dllinks.push_back(dl);
+			}
+			if (detail["download_links"].isMember("qcloud")) {
+				DownLoadLink dl;
+				dl.host = "qcloud";
+				dl.link = detail["download_links"]["qcloud"]["link"].asString();
+				dl.md5 = detail["download_links"]["qcloud"]["md5"].asString();
+				release.dllinks.push_back(dl);
+			}
+			latestRelease.releases.push_back(release);
+			count++;
+		}
+	}
+	
+	return count;
+}
 
 }
