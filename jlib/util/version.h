@@ -46,9 +46,13 @@ inline Branch branchFromString(const std::string& name) {
 
 //! 应用程序版本号
 struct Version {
+	//! 主版本
 	int major = 0;
+	//! 功能更新
 	int minor = 0;
+	//! bug 修复
 	int revision = 0;
+	//! 随意，我一般用来表示程序总迭代（编译成功）次数
 	int build = 0;
 
 	Version() = default;
@@ -76,6 +80,7 @@ struct Version {
 			std::to_string(build);
 	}
 
+	//! require cpp17
 	template <typename T>
 	bool fromFile(T const & path) {
 		if constexpr (std::is_convertible_v<T, std::string>);
@@ -88,6 +93,7 @@ struct Version {
 		return false;
 	}
 
+	//! require cpp17
 	template <typename T>
 	bool toFile(T const& path) {
 		if constexpr (std::is_convertible_v<T, std::string>);
@@ -138,8 +144,9 @@ struct Version {
 	}
 };
 
+//! 安装包下载链接
 struct DownLoadLink {
-	std::string host = {}; // local, qcloud, ...
+	std::string host = {}; // local, qcloud, aliyun, ...
 	std::string link = {};
 	std::string md5 = {};
 };
@@ -148,6 +155,7 @@ struct DownLoadLink {
 struct Release {
 	Branch branch = Branch::InvalidBranch;
 	Version version = {}; 
+	//! 版本更新说明
 	std::string change = {};
 	std::vector<DownLoadLink> dllinks = {};
 
@@ -164,7 +172,7 @@ struct Release {
 	}
 };
 
-//! 最新的发布
+//! 最新的发布，包含各个分支的最新版本
 struct LatestRelease {
 	std::vector<Release> releases = {};
 
@@ -177,7 +185,41 @@ struct LatestRelease {
 	}
 };
 
-//! value 为从服务器获取的最新发布信息，以 JSON 表示
+/*
+* @brief 从服务器获取最新版本信息，包含各个分支的最新版本
+* @param value 为从服务器获取的最新发布信息，以 JSON 表示
+* @param latestReleases 版本信息
+* @return count 
+* @note 示例数据
+* @code{.json}
+* {
+* 	"test": {
+* 		"version": "2.2.11.13262",
+* 		"release_note": "测试;",
+* 		"download_links": {
+* 			"local": {
+* 				"link": "https://your-host.com/download/installer.exe",
+* 				"md5": "06907d59d7a656be62fc93bbf867604b"
+* 			}
+* 		}
+* 	},
+* 	"stable": {
+* 		"version": "2.2.12.13282",
+* 		"release_note": "测试稳定",
+* 		"download_links": {
+* 			"local": {
+* 				"link": "https://your-host.com/download/installer.exe",
+* 				"md5": "06907d59d7a656be62fc93bbf867604b"
+* 			},
+*	        "qcloud": {
+* 				"link": "https://xxx.file.myqcloud.com/xxx/installer.exe",
+* 				"md5": "06907d59d7a656be62fc93bbf867604b"
+* 			}
+* 		}
+* 	}
+* }
+* @endcode
+*/
 template <typename JsonValue>
 int resolveLatestRelease(const JsonValue& value, LatestRelease& latestRelease) {
 	int count = 0;
@@ -211,4 +253,4 @@ int resolveLatestRelease(const JsonValue& value, LatestRelease& latestRelease) {
 	return count;
 }
 
-}
+} // end namespace jlib
