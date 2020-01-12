@@ -12,6 +12,9 @@
 #include <string>
 #include <functional>
 #include <assert.h>
+#include <vector>
+#include <unordered_map>
+#include "../util/str_util.h"
 
 #pragma comment (lib, "comsuppw.lib")
 #pragma comment (lib, "wbemuuid.lib")
@@ -43,6 +46,14 @@ namespace wmi
 typedef std::function<void(HRESULT, const std::wstring&)> ErrorFunc;
 typedef std::function<void(const std::wstring&, const std::wstring&)> OutputFunc;
 
+//struct ResultItem {
+//	std::wstring key = {};
+//	std::wstring value = {};
+//};
+
+typedef std::unordered_map<std::wstring, std::wstring> ResultItem;
+typedef std::vector<ResultItem> Result;
+
 class WmiBase
 {
 public:
@@ -57,6 +68,45 @@ public:
 	~WmiBase() {
 		services_.Release();
 		CoUninitialize();
+	}
+
+	/*
+	* @brief 快速查询
+	* @note 默认namespace 为 root\\CIMV2
+	* @param keys 要查询的键名，例如 Caption, Desc, ..., 必须有序，否则结果的key:value无法对应
+	* @param provider 例如 Win32_Process 
+	* @param[in|out] result 结果
+	* @return 成功或失败
+	* @note 例：keys=["captian, key"], provider="Win32_Process", 则result结构应为：[ {caption: value, key:value}, {caption: value, key:value}, ...]
+	*/
+	static bool simpleSelect(const std::vector<std::wstring>& keys, const std::wstring& provider, Result& result) {
+		std::vector<std::wstring> values, errors;
+		auto output = [&values](const std::wstring& key, const std::wstring& value) {
+			values.push_back(value);
+		};
+
+		auto error = [&errors](HRESULT hr, const std::wstring& msg) {
+			errors.push_back(msg);
+		};
+
+		wmi::WmiBase wmi(L"ROOT\\CIMV2", output, error);
+		if (!wmi.prepare()) {
+			return false;
+		}
+
+		if (!wmi.execute(std::wstring(L"select ") + join(keys, std::wstring(L",")) + L" from " + provider) || !errors.empty()) {
+			return false;
+		}
+
+		for (size_t i = 0; i < values.size(); i += keys.size()) {
+			ResultItem item;
+			for (size_t j = 0; j < keys.size(); j++) {
+				item.insert({ keys.at(j % keys.size()), values.at(i + j) });				
+			}
+			result.emplace_back(item);
+		}
+
+		return true;
 	}
 
 	bool prepare() {

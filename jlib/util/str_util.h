@@ -7,6 +7,9 @@
 namespace jlib
 {
 
+
+/**************************** trim ***************************/
+
 // Taken from https://stackoverflow.com/a/217605/2963736
 // Thanks https://stackoverflow.com/users/13430/evan-teran
 
@@ -78,6 +81,31 @@ inline std::wstring rtrim_copy(std::wstring s) {
 // trim from both ends (copying)
 inline std::wstring trim_copy(std::wstring s) {
 	trim(s); return s;
+}
+
+
+/**************************** join ***************************/
+
+/**
+* @brief join 字符串
+* @note StringType 可以为std::string或std::wstring
+* @note StringContainer 必须为上述StringType的iterable容器类，如vector，list
+*/
+template <typename StringType, typename StringContainer>
+StringType join(const StringContainer& container, const StringType& conjunction = StringType())
+{
+	StringType result;
+	auto itBegin = container.cbegin();
+	auto itEnd = container.cend();
+	if (itBegin != itEnd) {
+		result = *itBegin;
+		itBegin++;
+	}
+	for (; itBegin != itEnd; itBegin++) {
+		result += conjunction;
+		result += *itBegin;
+	}
+	return result;
 }
 
 } // namespace jlib

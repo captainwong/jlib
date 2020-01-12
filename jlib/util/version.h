@@ -24,9 +24,9 @@ enum class Branch : int {
 	InvalidBranch = 0x0FFFFFFF,
 };
 
-static constexpr const char* BranchNameTest			= "test";
-static constexpr const char* BranchNameExperimental = "experimental";
-static constexpr const char* BranchNameStable		= "stable";
+static constexpr auto BranchNameTest		 = "test";
+static constexpr auto BranchNameExperimental = "experimental";
+static constexpr auto BranchNameStable		 = "stable";
 
 inline const char* branchName(Branch branch) {
 	switch (branch) {
@@ -60,6 +60,7 @@ struct Version {
 		: major(major), minor(minor), revision(revision), build(build) {}
 	Version(const std::string& s) { _fromString(s); }
 	Version& fromString(const std::string& s) { _fromString(s); return *this; }
+	Version& operator=(const std::string& s) { _fromString(s); return *this; }
 
 	bool valid() const { return !(major == 0 && minor == 0 && revision == 0 && build == 0); }
 	void reset() { major = minor = revision = build = 0; }
