@@ -98,7 +98,7 @@ public:
 			return false;
 		}
 
-		for (size_t i = 0; i < values.size(); i += keys.size()) {
+		for (size_t i = 0; (i + 1) < values.size(); i += keys.size()) {
 			ResultItem item;
 			for (size_t j = 0; j < keys.size(); j++) {
 				item.insert({ keys.at(j % keys.size()), values.at(i + j) });				
