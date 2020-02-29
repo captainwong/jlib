@@ -289,6 +289,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testPathHelperDataSeperated
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple7zwrapper", "simple7zwrapper\simple7zwrapper.vcxproj", "{41C26D67-0174-41AC-850E-1F84181138E5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_strutil", "test_strutil\test_strutil.vcxproj", "{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -579,6 +581,14 @@ Global
 		{41C26D67-0174-41AC-850E-1F84181138E5}.Release|x64.Build.0 = Release|x64
 		{41C26D67-0174-41AC-850E-1F84181138E5}.Release|x86.ActiveCfg = Release|Win32
 		{41C26D67-0174-41AC-850E-1F84181138E5}.Release|x86.Build.0 = Release|Win32
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Debug|x64.ActiveCfg = Debug|x64
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Debug|x64.Build.0 = Debug|x64
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Debug|x86.ActiveCfg = Debug|Win32
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Debug|x86.Build.0 = Debug|Win32
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x64.ActiveCfg = Release|x64
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x64.Build.0 = Release|x64
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x86.ActiveCfg = Release|Win32
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -644,6 +654,7 @@ Global
 		{281CEC62-CE6E-4FD6-B186-AEF2BA926BF8} = {5AFB3C82-FDEA-458C-9B56-E28A3F96F113}
 		{ECF057F3-AB01-4129-8C5C-E59DD4261770} = {5AFB3C82-FDEA-458C-9B56-E28A3F96F113}
 		{41C26D67-0174-41AC-850E-1F84181138E5} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
+		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
