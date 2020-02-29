@@ -99,4 +99,42 @@ inline std::wstring remove_all_copy(std::wstring str, wchar_t c) {
 }
 
 
+/**************************** case-conv ***************************/
+
+void to_upper(std::string& str) {
+	std::for_each(str.begin(), str.end(), [](char& c) { c = ::toupper(c); });
+}
+
+void to_upper(std::wstring& str) {
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::toupper(c); });
+}
+
+std::string to_upper_copy(std::string str) {
+	std::for_each(str.begin(), str.end(), [](char& c) { c = ::toupper(c); });
+	return str;
+}
+
+std::wstring to_upper_copy(std::wstring str) {
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::toupper(c); });
+	return str;
+}
+
+void to_lower(std::string& str) {
+	std::for_each(str.begin(), str.end(), [](char& c) { c = ::tolower(c); });
+}
+
+void to_lower(std::wstring& str) {
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::tolower(c); });
+}
+
+std::string to_lower_copy(std::string str) {
+	std::for_each(str.begin(), str.end(), [](char& c) { c = ::tolower(c); });
+	return str;
+}
+
+std::wstring to_lower_copy(std::wstring str) {
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::tolower(c); });
+	return str;
+}
+
 } // namespace jlib

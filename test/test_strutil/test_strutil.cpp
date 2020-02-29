@@ -58,4 +58,20 @@ int main()
 		remove_all(wstr, L'b'); assert(wstr == L"cc");
 		remove_all(wstr, L'c'); assert(wstr == L"");
 	}
+
+	// case-conv
+	{
+		string str = "abc";
+		assert(to_upper_copy(str) == "ABC");
+		to_upper(str); assert(str == "ABC");
+		assert(to_lower_copy(str) == "abc");
+		to_lower(str); assert(str == "abc");
+
+		wstring wstr = L"abc";
+		assert(to_upper_copy(wstr) == L"ABC");
+		to_upper(wstr); assert(wstr == L"ABC");
+		assert(to_lower_copy(wstr) == L"abc");
+		to_lower(wstr); assert(wstr == L"abc");
+
+	}
 }
