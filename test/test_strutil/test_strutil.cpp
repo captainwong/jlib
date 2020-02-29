@@ -41,22 +41,22 @@ int main()
 	// remove_all
 	{
 		string str = "aabbcc";
-		assert(remove_all_copy(str, 'a') == "bbcc");
-		assert(remove_all_copy(str, 'b') == "aacc");
-		assert(remove_all_copy(str, 'c') == "aabb");
+		assert(erase_all_copy(str, 'a') == "bbcc");
+		assert(erase_all_copy(str, 'b') == "aacc");
+		assert(erase_all_copy(str, 'c') == "aabb");
 
-		remove_all(str, 'a'); assert(str == "bbcc");
-		remove_all(str, 'b'); assert(str == "cc");
-		remove_all(str, 'c'); assert(str == "");
+		erase_all(str, 'a'); assert(str == "bbcc");
+		erase_all(str, 'b'); assert(str == "cc");
+		erase_all(str, 'c'); assert(str == "");
 
 		wstring wstr = L"aabbcc";
-		assert(remove_all_copy(wstr, L'a') == L"bbcc");
-		assert(remove_all_copy(wstr, L'b') == L"aacc");
-		assert(remove_all_copy(wstr, L'c') == L"aabb");
+		assert(erase_all_copy(wstr, L'a') == L"bbcc");
+		assert(erase_all_copy(wstr, L'b') == L"aacc");
+		assert(erase_all_copy(wstr, L'c') == L"aabb");
 
-		remove_all(wstr, L'a'); assert(wstr == L"bbcc");
-		remove_all(wstr, L'b'); assert(wstr == L"cc");
-		remove_all(wstr, L'c'); assert(wstr == L"");
+		erase_all(wstr, L'a'); assert(wstr == L"bbcc");
+		erase_all(wstr, L'b'); assert(wstr == L"cc");
+		erase_all(wstr, L'c'); assert(wstr == L"");
 	}
 
 	// case-conv
