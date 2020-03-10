@@ -93,6 +93,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="qt.cpp" />
+    <ClCompile Include="View\BaseScrollView.cpp" />
     <ClCompile Include="View\BgColorBtn.cpp" />
     <ClCompile Include="View\IconBtn.cpp" />
     <ClCompile Include="View\PageTitle.cpp" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <QtMoc Include="View\BaseScrollView.h" />
     <QtMoc Include="View\RndButton.h" />
     <QtMoc Include="View\PageTitle.h" />
     <QtMoc Include="View\IconBtn.h" />
