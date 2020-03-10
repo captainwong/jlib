@@ -54,6 +54,9 @@
     <ClCompile Include="View\TitleBar.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="View\TextMenu.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt.h">
@@ -112,6 +115,9 @@
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\TitleBar.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\TextMenu.h">
       <Filter>View</Filter>
     </QtMoc>
   </ItemGroup>
