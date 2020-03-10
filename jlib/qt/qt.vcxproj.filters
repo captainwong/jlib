@@ -48,6 +48,9 @@
     <ClCompile Include="View\BaseScrollView.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="View\CheckBtn.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt.h">
@@ -100,6 +103,9 @@
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\BaseScrollView.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\CheckBtn.h">
       <Filter>View</Filter>
     </QtMoc>
   </ItemGroup>

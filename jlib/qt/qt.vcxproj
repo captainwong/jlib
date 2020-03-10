@@ -95,12 +95,14 @@
     <ClCompile Include="qt.cpp" />
     <ClCompile Include="View\BaseScrollView.cpp" />
     <ClCompile Include="View\BgColorBtn.cpp" />
+    <ClCompile Include="View\CheckBtn.cpp" />
     <ClCompile Include="View\IconBtn.cpp" />
     <ClCompile Include="View\PageTitle.cpp" />
     <ClCompile Include="View\RndButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <QtMoc Include="View\CheckBtn.h" />
     <QtMoc Include="View\BaseScrollView.h" />
     <QtMoc Include="View\RndButton.h" />
     <QtMoc Include="View\PageTitle.h" />
