@@ -5,15 +5,18 @@
 //namespace HBVideoPlatform {
 //namespace common {
 
+#include <QtWidgets>
+
 class RndButton : public QWidget
 {
 	Q_OBJECT
 
 public:
-	RndButton(QWidget *parent);
+	RndButton(QWidget* parent);
 	~RndButton();
 
 	void set_attr(QString txt, QSize btn_sz = { 60, 30 }, int font_size = 14);
+
 	void set_highlight(bool on = true);
 
 protected:
@@ -36,6 +39,7 @@ private:
 	bool is_pressed_ = false;
 	bool is_highlighted_ = false;
 };
+
 
 //}
 //}

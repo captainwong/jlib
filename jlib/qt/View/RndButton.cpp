@@ -1,9 +1,8 @@
 #include "RndButton.h"
+#include "../QtUtils.h"
 #include "../QtStylesheet.h"
 
 using namespace jlib::qt;
-
-
 
 RndButton::RndButton(QWidget* parent)
 	: QWidget(parent)
@@ -23,12 +22,6 @@ void RndButton::set_attr(QString txt, QSize sz, int font_size)
 	txt_->setStyleSheet(build_style(Qt::white, font_size));
 	txt_->setText(txt);
 	setFixedSize(sz);
-
-	/*QPixmap pixmap;
-	LOAD_PIXMAP_EX(QString::fromLocal8Bit(":/Skin/Ó¦ÓÃ¿ò1.png"));
-	QSize pixSize = pixmap.size();
-	pixSize.scale(sz, Qt::KeepAspectRatio);
-	pixmap_ = pixmap.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);*/
 
 	txt_->resize(size());
 	txt_->move(0, 0);
@@ -51,7 +44,6 @@ void RndButton::paintEvent(QPaintEvent* e)
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	QPainterPath path;
-	//int radius = std::min(rect().width() / 20, rect().height() / 20);
 	path.addRoundedRect(QRectF(0, 0, width(), height()), 10, 10);
 	QPen pen(Qt::black, 1);
 	painter.setPen(pen);
