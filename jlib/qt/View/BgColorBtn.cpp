@@ -1,8 +1,8 @@
 #include "BgColorBtn.h"
-#include <jlib/qt/QtStylesheet.h>
 
-namespace HBVideoPlatform {
-namespace common {
+
+//namespace HBVideoPlatform {
+//namespace common {
 
 BgColorBtn::BgColorBtn(QWidget *parent)
 	: QPushButton(parent)
@@ -60,5 +60,5 @@ void BgColorBtn::slot_clicked()
 	} 
 }
 
-}
-}
+//}
+//}

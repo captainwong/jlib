@@ -30,9 +30,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>jlibqt</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>jlibqt</TargetName>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -51,7 +53,7 @@
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <QtInstall>5.9.8</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>5.9.8</QtInstall>
@@ -90,21 +92,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ctrl\ThreadCtrl.cpp" />
     <ClCompile Include="qt.cpp" />
+    <ClCompile Include="View\BgColorBtn.cpp" />
+    <ClCompile Include="View\IconBtn.cpp" />
+    <ClCompile Include="View\PageTitle.cpp" />
+    <ClCompile Include="View\RndButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="View\HttpDlgErrorCode.h" />
     <QtMoc Include="View\RndButton.h" />
     <QtMoc Include="View\PageTitle.h" />
-    <QtMoc Include="View\LoadingView.h" />
     <QtMoc Include="View\IconBtn.h" />
-    <QtMoc Include="View\HttpDlg.h" />
     <QtMoc Include="View\BgColorBtn.h" />
-    <QtMoc Include="Ctrl\ThreadCtrl.h" />
     <ClInclude Include="ErrorCode.h" />
-    <ClInclude Include="Model\ThreadModel.h" />
     <ClInclude Include="monitor.h" />
     <ClInclude Include="qt.h" />
     <ClInclude Include="QtDebug.h" />

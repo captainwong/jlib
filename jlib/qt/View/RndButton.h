@@ -2,8 +2,8 @@
 
 #include <QtWidgets>
 
-namespace HBVideoPlatform {
-namespace common {
+//namespace HBVideoPlatform {
+//namespace common {
 
 class RndButton : public QWidget
 {
@@ -14,7 +14,6 @@ public:
 	~RndButton();
 
 	void set_attr(QString txt, QSize btn_sz = { 60, 30 }, int font_size = 14);
-
 	void set_highlight(bool on = true);
 
 protected:
@@ -26,6 +25,7 @@ protected:
 
 signals:
 	void clicked();
+	void sig_focus_on();
 
 private:
 	QLabel* txt_ = {};
@@ -37,5 +37,5 @@ private:
 	bool is_highlighted_ = false;
 };
 
-}
-}
+//}
+//}

@@ -11,8 +11,8 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-namespace HBVideoPlatform {
-namespace common {
+//namespace HBVideoPlatform {
+//namespace common {
 
 class HttpDlg : public QDialog
 {
@@ -101,5 +101,5 @@ private:
 
 };
 
-}
-}
+//}
+//}

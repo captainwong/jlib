@@ -1,14 +1,10 @@
 #pragma once
 
-#include "qt_global.h"
+#include "../qt_global.h"
 //#include <system_error>
 #include <QString>
 #include <functional>
 
-namespace jlib
-{
-namespace qt
-{
 
 typedef std::function<int(void)> ThreadWorker;
 
@@ -22,8 +18,6 @@ struct ThreadProgress {
 
 typedef std::function<void(ThreadProgress)> ThreadProgressCB;
 
-}
-}
 
 //Q_DECLARE_METATYPE(std::error_code)
-Q_DECLARE_METATYPE(jlib::qt::ThreadProgress)
+Q_DECLARE_METATYPE(ThreadProgress)

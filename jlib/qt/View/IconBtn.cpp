@@ -1,159 +1,129 @@
 #include "IconBtn.h"
-#include <QtGui/QMouseEvent>
-#include <QtGui/QBitMap>
-#include <QtGui/QPainter>
-#include <QDebug>
-#include <QTimer>
-#include <jlib/qt/QtUtils.h>
+#include <QPainter>
+#include <QStylePainter>
+#include <QStyleOption>
+#include <QMouseEvent>
+#include "../QtUtils.h"
+#include "../QtStylesheet.h"
 
-namespace HBVideoPlatform {
-namespace common {
+using namespace jlib::qt;
 
-IconBtn::IconBtn(QWidget *parent, QString icon_path, uint32_t state_set)
+IconBtn::IconBtn(QWidget* parent, QString icon_path, int tag)
 	: QLabel(parent)
-	, icon_path_(icon_path)
-	, state_set_(state_set)
+	, tag_(tag)
 {
 	setAttribute(Qt::WA_TranslucentBackground, true);
-	long_press_timer_ = new QTimer(this);
-	connect(long_press_timer_, SIGNAL(timeout()), this, SLOT(slot_long_press_timeout()));
-
-	state_set_ |= IconStatus::status_normal;
-	set_icon_path(icon_path_);
+	setStyleSheet(build_style(Qt::white, 18)); 
+	if (icon_path.isEmpty()) {
+		icon_path_.clear();
+	} else {
+		icon_path_[IconStatus::status_normal] = icon_path + "_n.png";
+		icon_path_[IconStatus::status_hover] = icon_path + "_h.png";
+		icon_path_[IconStatus::status_press] = icon_path + "_p.png";
+		icon_path_[IconStatus::status_disable] = icon_path + "_d.png";
+		icon_path_[IconStatus::status_ing] = icon_path + "_ing.png";
+	}	
+	refresh();
 }
 
 IconBtn::~IconBtn()
 {
-
 }
 
-void IconBtn::set_pos(const QPoint & pos)
+void IconBtn::set_icon(IconStatus status, QString icon_path)
 {
-	move(pos);
+	icon_path_[status] = icon_path;
+	refresh();
 }
 
-void IconBtn::set_pos(int x, int y)
+void IconBtn::set_icon(QString icon_path)
 {
-	set_pos(QPoint(x, y));
+	icon_path_[IconStatus::status_normal] = icon_path + "_n.png";
+	icon_path_[IconStatus::status_hover] = icon_path + "_h.png";
+	icon_path_[IconStatus::status_press] = icon_path + "_p.png";
+	icon_path_[IconStatus::status_disable] = icon_path + "_d.png";
+	icon_path_[IconStatus::status_ing] = icon_path + "_ing.png";
+	refresh();
 }
 
-void IconBtn::set_icon_path(const QString & icon_path)
+void IconBtn::set_highlight(bool on)
 {
-	icon_path_ = icon_path;
-	refresh_icon_status();
+	is_highlight_ = on;
+	refresh();
 }
 
-void IconBtn::set_enabled(bool enable)
+void IconBtn::enterEvent(QEvent*)
 {
-	is_enable_ = enable;
-	refresh_icon_status();
-}
-
-void IconBtn::set_ing_status(bool is_ing)
-{
-	is_ing_status_ = is_ing;
-	refresh_icon_status();
-}
-
-void IconBtn::enterEvent(QEvent *)
-{
-	if (!is_enable_) { return; }
-
+	if (!is_enabled_ || !isEnabled() || (parent() && !parentWidget()->isEnabled()))return;
 	setCursor(QCursor(Qt::PointingHandCursor));
-	is_mouse_hover_ = true;
-	refresh_icon_status();
-
+	is_hover_ = true;
+	setFocus();
+	refresh();
+	emit sig_focus_on(tag_, true);
 	emit sig_mouse_enter();
 }
 
-void IconBtn::leaveEvent(QEvent *)
+void IconBtn::leaveEvent(QEvent*)
 {
+	if (!is_enabled_ || !isEnabled() || (parent() && !parentWidget()->isEnabled()))return;
 	setCursor(QCursor(Qt::ArrowCursor));
-	is_mouse_hover_ = false;
-	is_mouse_press_ = false;
-	refresh_icon_status();
-
+	is_hover_ = false;
+	is_press_ = false;
+	refresh();
 	emit sig_mouse_leave();
 }
 
-void IconBtn::mousePressEvent(QMouseEvent *)
+void IconBtn::mousePressEvent(QMouseEvent*)
 {
-	if (!is_enable_) { return; }
-
-	is_mouse_press_ = true;
-	refresh_icon_status();
-
-	if (state_set_ & type_long_press) {
-		if (long_press_timer_->isActive()) {
-			long_press_timer_->stop();
-		}
-
-		long_press_timer_->setSingleShot(true);
-		long_press_timer_->start(450);
-	}
+	if (!is_enabled_ || !isEnabled() || (parent() && !parentWidget()->isEnabled()))return;
+	is_press_ = true;
+	setFocus();
+	refresh();
 }
 
-void IconBtn::mouseReleaseEvent(QMouseEvent * e)
+void IconBtn::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (!is_enable_) { return; }
-
-	if (long_press_timer_->isActive()) {
-		long_press_timer_->stop();
-	}
-
-	bool is_long_press = is_long_press_;
-	is_long_press_ = is_mouse_press_ = false;
-	refresh_icon_status();
+	if (!is_enabled_ || !isEnabled() || (parent() && !parentWidget()->isEnabled()))return;
+	is_press_ = false;
+	refresh();
 
 	if (Qt::LeftButton == e->button()) {
 		if (rect().contains(e->pos())) {
-			is_long_press ? emit long_press_trigger(false) : emit clicked();
+			MYQDEBUG << "IconBtn emit clicked";
+			emit clicked();
+			emit sig_clicked(tag_);
+			emit sig_clicked_with_data(tag_, data_);
 		}
 	}
 }
 
-void IconBtn::refresh_icon_status()
+void IconBtn::refresh()
 {
 	QString icon_path;
-	if (!is_enable_) {
-		if (!(state_set_ & status_disable)) { return; }
-		icon_path = icon_path_ + "_d.png";
-	} else if (is_mouse_press_) {
-		if (!(state_set_ & status_press)) { return; }
-		icon_path = icon_path_ + "_h.png";
-	} else if (is_ing_status_) {
-		if (!(state_set_ & status_ing)) { return; }
-		icon_path = icon_path_ + "_ing.png";
-	} else if (is_mouse_hover_) {
-		if (!(state_set_ & status_hover)) { return; }
-		icon_path = icon_path_ + "_p.png";
-	} else {
-		if (!(state_set_&status_normal)) { return; }
-		icon_path = icon_path_ + "_n.png";
+	if (!is_enabled_ && icon_path_.find(IconStatus::status_disable) != icon_path_.end()) {
+		icon_path = icon_path_[IconStatus::status_disable];
+	} else if (is_press_ && icon_path_.find(IconStatus::status_press) != icon_path_.end()) {
+		icon_path = icon_path_[IconStatus::status_press];
+	} else if ((is_hover_ || is_highlight_) && icon_path_.find(IconStatus::status_hover) != icon_path_.end()) {
+		icon_path = icon_path_[IconStatus::status_hover];
+	} else if (icon_path_.find(IconStatus::status_normal) != icon_path_.end()) {
+		icon_path = icon_path_[IconStatus::status_normal];
 	}
 
-	QPixmap pixmap;
-	if (!LOAD_PIXMAP_EX(icon_path)) {
-		return;
+	if (!icon_path.isEmpty()) {
+		QPixmap pixmap;
+		LOAD_PIXMAP_EX(icon_path);
+		if (sz_.isValid()) {
+			resize(sz_);
+			QSize pixSize = pixmap.size();
+			pixSize.scale(sz_, Qt::IgnoreAspectRatio);
+			auto spixmap = pixmap.scaled(pixSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			setPixmap(spixmap);
+		} else {
+			resize(pixmap.size());
+			setPixmap(pixmap);
+		}
 	}
 
-	setFixedSize(pixmap.size());
-	setPixmap(pixmap);
-
-	if (state_set_ & type_mask) {
-		setMask(pixmap.mask());
-	}
-
-	if (state_set_ & type_opaque_paint) {
-		setAttribute(Qt::WA_OpaquePaintEvent, true);
-	}
-}
-
-void IconBtn::slot_long_press_timeout()
-{
-	is_long_press_ = true;
-	emit long_press_trigger(true);
-}
-
-}
+	update();
 }

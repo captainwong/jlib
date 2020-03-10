@@ -106,22 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h" />
-    <ClInclude Include="qt\ErrorCode.h" />
-    <ClInclude Include="qt\Model\ThreadModel.h" />
-    <ClInclude Include="qt\QtDebug.h" />
-    <ClInclude Include="qt\QtDebugOutput.h" />
-    <ClInclude Include="qt\QtPathHelper.h" />
-    <ClInclude Include="qt\QtStylesheet.h" />
-    <ClInclude Include="qt\QtUtils.h" />
-    <ClInclude Include="qt\signal_slot.h" />
-    <ClInclude Include="qt\View\HttpDlgErrorCode.h" />
-    <QtMoc Include="qt\View\RndButton.h" />
-    <QtMoc Include="qt\View\PageTitle.h" />
-    <QtMoc Include="qt\View\LoadingView.h" />
-    <QtMoc Include="qt\View\IconBtn.h" />
-    <QtMoc Include="qt\View\HttpDlg.h" />
-    <QtMoc Include="qt\View\BgColorBtn.h" />
-    <QtMoc Include="qt\Ctrl\ThreadCtrl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

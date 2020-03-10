@@ -7,8 +7,7 @@
 #include <vector>
 #include <qelapsedtimer.h>
 
-namespace HBVideoPlatform {
-namespace common {
+//JLIBQT_NAMESPACE_BEGIN
 
 class LoadingView : public QDialog
 {
@@ -28,7 +27,7 @@ public:
 
 private slots:
 	void slot_ready(int tag, std::error_code ec);
-	void slot_progress(int tag, HBVideoPlatform::common::ThreadProgress progress);
+	void slot_progress(int tag, ThreadProgress progress);
 
 protected:
 	virtual void timerEvent(QTimerEvent* e) override;
@@ -41,12 +40,11 @@ private:
 	QLabel* progress1_ = {};
 	QLabel* progress2_ = {};
 	QLabel* elapse_ = {};
-	std::vector<HBVideoPlatform::common::ThreadProgress> tp_ = {};
+	std::vector<ThreadProgress> tp_ = {};
 	bool show_progress_ = false;
 	LoadingViewSize sz_ = sz_big;
 
 	QElapsedTimer timer_ = {};
 };
 
-}
-}
+//JLIBQT_NAMESPACE_END

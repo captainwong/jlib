@@ -21,6 +21,11 @@ struct PathHelper
 		return QDateTime::currentDateTime().toString(JLIBQT_FILE_TIME_FORMAT);
 	}
 
+	static inline QString getFolder(const QString& path) {
+		QDir dir(path); dir.cdUp();
+		return dir.absolutePath();
+	}
+
 	virtual ~PathHelper() {}
 
 	virtual QString program()	const { return programPath_; }

@@ -1,12 +1,11 @@
 #include "RndButton.h"
-#include <jlib/qt/QtStylesheet.h>
+#include "../QtStylesheet.h"
 
 using namespace jlib::qt;
 
-namespace HBVideoPlatform {
-namespace common {
 
-RndButton::RndButton(QWidget *parent)
+
+RndButton::RndButton(QWidget* parent)
 	: QWidget(parent)
 {
 	txt_ = new QLabel(this);
@@ -26,7 +25,7 @@ void RndButton::set_attr(QString txt, QSize sz, int font_size)
 	setFixedSize(sz);
 
 	/*QPixmap pixmap;
-	LOAD_PIXMAP_EX(QString::fromLocal8Bit("Skin/应用框1.png"));
+	LOAD_PIXMAP_EX(QString::fromLocal8Bit(":/Skin/应用框1.png"));
 	QSize pixSize = pixmap.size();
 	pixSize.scale(sz, Qt::KeepAspectRatio);
 	pixmap_ = pixmap.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);*/
@@ -47,7 +46,7 @@ void RndButton::set_highlight(bool on)
 	update();
 }
 
-void RndButton::paintEvent(QPaintEvent * e)
+void RndButton::paintEvent(QPaintEvent* e)
 {
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -60,15 +59,19 @@ void RndButton::paintEvent(QPaintEvent * e)
 	painter.drawPath(path);
 }
 
-void RndButton::enterEvent(QEvent * e)
+void RndButton::enterEvent(QEvent* e)
 {
+	if (!isEnabled()) { return; }
 	setCursor(QCursor(Qt::PointingHandCursor));
 	bk_color_ = Qt::darkGray;
 	update();
+
+	emit sig_focus_on();
 }
 
-void RndButton::leaveEvent(QEvent * e)
+void RndButton::leaveEvent(QEvent* e)
 {
+	if (!isEnabled()) { return; }
 	setCursor(QCursor(Qt::ArrowCursor));
 
 	bk_color_ = is_highlighted_ ? Qt::lightGray : def_colors::control_bk;
@@ -77,16 +80,18 @@ void RndButton::leaveEvent(QEvent * e)
 	is_pressed_ = false;
 }
 
-void RndButton::mousePressEvent(QMouseEvent * e)
+void RndButton::mousePressEvent(QMouseEvent* e)
 {
+	if (e->button() != Qt::LeftButton)return;
 	bk_color_ = def_colors::control_bk;
 	update();
 
 	is_pressed_ = true;
 }
 
-void RndButton::mouseReleaseEvent(QMouseEvent * e)
+void RndButton::mouseReleaseEvent(QMouseEvent* e)
 {
+	if (e->button() != Qt::LeftButton)return;
 	bk_color_ = Qt::darkGray;
 	update();
 
@@ -96,5 +101,3 @@ void RndButton::mouseReleaseEvent(QMouseEvent * e)
 	}
 }
 
-}
-}

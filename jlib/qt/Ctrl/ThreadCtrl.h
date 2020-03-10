@@ -1,13 +1,10 @@
 #pragma once
 
 #include "../qt_global.h"
-#include <QThread>
 #include "../Model/ThreadModel.h"
+#include <QThread>
 
-namespace jlib
-{
-namespace qt
-{
+//JLIBQT_NAMESPACE_BEGIN
 
 class ThreadCtrl : public QThread
 {
@@ -44,5 +41,4 @@ private:
 	int tag_ = -1;
 };
 
-}
-}
+//JLIBQT_NAMESPACE_END

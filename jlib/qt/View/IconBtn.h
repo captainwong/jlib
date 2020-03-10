@@ -1,16 +1,14 @@
 ﻿#pragma once
 
 #include <QLabel>
-
-namespace HBVideoPlatform {
-namespace common {
+#include <unordered_map>
 
 class IconBtn : public QLabel
 {
 	Q_OBJECT
 
 public:
-	enum IconStatus : uint32_t {
+	enum class IconStatus : uint32_t {
 		status_normal = 0x00000001,
 		status_hover = 0x00000002,
 		status_press = 0x00000004,
@@ -27,15 +25,28 @@ public:
 		status_default = status_normal | status_hover | status_press,
 	};
 
-	IconBtn(QWidget *parent, QString icon_path, uint32_t state_set = IconStatus::status_default);
+public:
+	IconBtn(QWidget* parent = nullptr, QString iconPath = "", int tag = -1);
 	~IconBtn();
 
-	void set_pos(const QPoint& pos);
-	void set_pos(int x, int y);
-	void set_icon_path(const QString& icon_path);
-	void set_enabled(bool enable);
-	void set_ing_status(bool is_ing);
-	bool is_ing_status() const { return is_ing_status_; }
+	void set_icon(IconStatus status, QString icon_path);
+	void set_icon(QString icon_path);
+
+	void set_tag(int tag) { tag_ = tag; }
+	int tag() const { return tag_; }
+
+	void set_data(int data) { data_ = data; }
+	int data() const { return data_; }
+
+	void set_highlight(bool on = true);
+	void set_size(QSize sz) { sz_ = sz; setFixedSize(sz); refresh(); }
+
+
+	void set_pos(const QPoint& pos){ move(pos); }
+	void set_pos(int x, int y){ move(x, y); }
+	void set_enabled(bool enabled) { is_enabled_ = enabled; refresh(); }
+	void set_ing(bool is_ing) { is_ing_ = is_ing; refresh(); }
+	bool is_ing() const { return is_ing_; }
 
 protected:
 	virtual void enterEvent(QEvent*) override;
@@ -43,28 +54,24 @@ protected:
 	virtual void mousePressEvent(QMouseEvent*) override;
 	virtual void mouseReleaseEvent(QMouseEvent*) override;
 
+	void refresh();
+
 signals:
 	void clicked();
-	void long_press_trigger(bool is_press);
+	void sig_focus_on(int tag, bool on);
+	void sig_clicked(int tag);
+	void sig_clicked_with_data(int tag, int data);
 	void sig_mouse_enter();
 	void sig_mouse_leave();
 
-	private slots:
-	void slot_long_press_timeout();
-
-private:
-	unsigned long state_set_ = 0;
-	QString icon_path_ = {};
-	bool is_enable_ = true;
-	bool is_ing_status_ = false;
-	bool is_mouse_hover_ = false;
-	bool is_mouse_press_ = false;
-	QTimer* long_press_timer_ = {};
-	bool is_long_press_ = false;
-
-	void refresh_icon_status();
-
+protected:
+	std::unordered_map<IconStatus, QString> icon_path_ = {};
+	bool is_enabled_ = true;
+	bool is_hover_ = false;
+	bool is_press_ = false;
+	bool is_ing_ = false;
+	bool is_highlight_ = false;
+	int tag_ = -1;
+	int data_ = 0;
+	QSize sz_ = {};
 };
-
-}
-}

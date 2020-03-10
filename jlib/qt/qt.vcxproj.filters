@@ -33,8 +33,17 @@
     <ClCompile Include="qt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ctrl\ThreadCtrl.cpp">
-      <Filter>Ctrl</Filter>
+    <ClCompile Include="View\RndButton.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\PageTitle.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\IconBtn.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\BgColorBtn.cpp">
+      <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,12 +74,6 @@
     <ClInclude Include="signal_slot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Model\ThreadModel.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="View\HttpDlgErrorCode.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,19 +84,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Ctrl\ThreadCtrl.h">
-      <Filter>Ctrl</Filter>
-    </QtMoc>
     <QtMoc Include="View\BgColorBtn.h">
       <Filter>View</Filter>
     </QtMoc>
-    <QtMoc Include="View\HttpDlg.h">
-      <Filter>View</Filter>
-    </QtMoc>
     <QtMoc Include="View\IconBtn.h">
-      <Filter>View</Filter>
-    </QtMoc>
-    <QtMoc Include="View\LoadingView.h">
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\PageTitle.h">
