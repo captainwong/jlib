@@ -1,4 +1,4 @@
-#include "PageTitle.h"
+#include "TitleBar.h"
 #include <QLayout>
 #include <QPixmap>
 #include <QApplication>
@@ -6,7 +6,7 @@
 
 using namespace jlib::qt;
 
-PageTitle::PageTitle(QWidget* parent, 
+TitleBar::TitleBar(QWidget* parent,
 					 QString minIcon,
 					 QString maxIcon,
 					 QString restoreIcon,
@@ -59,21 +59,21 @@ PageTitle::PageTitle(QWidget* parent,
 	lastTimeClick.start();
 }
 
-PageTitle::~PageTitle()
+TitleBar::~TitleBar()
 {
 }
 
-void PageTitle::set_title(QString title)
+void TitleBar::set_title(QString title)
 {
 	title_->setText(title);
 }
 
-void PageTitle::set_maximize_btn_visible(bool visible)
+void TitleBar::set_maximize_btn_visible(bool visible)
 {
 	visible ? maximize_->show() : maximize_->hide();
 }
 
-void PageTitle::set_maximized(bool isMax)
+void TitleBar::set_maximized(bool isMax)
 {
 	is_maximized_ = isMax;
 	if (isMax) {
@@ -85,14 +85,14 @@ void PageTitle::set_maximized(bool isMax)
 	}
 }
 
-void PageTitle::mousePressEvent(QMouseEvent* e)
+void TitleBar::mousePressEvent(QMouseEvent* e)
 {
 	if (!rect().contains(e->pos()))return;
 	is_mouse_pressed_ = true;
 	mouse_pressed_pos_ = mapToParent(e->pos());
 }
 
-void PageTitle::mouseMoveEvent(QMouseEvent* e)
+void TitleBar::mouseMoveEvent(QMouseEvent* e)
 {
 	if (!is_mouse_pressed_)return;
 	if (is_maximized_) {
@@ -103,7 +103,7 @@ void PageTitle::mouseMoveEvent(QMouseEvent* e)
 	parentWidget()->move(e->globalPos() - mouse_pressed_pos_);
 }
 
-void PageTitle::mouseReleaseEvent(QMouseEvent* e)
+void TitleBar::mouseReleaseEvent(QMouseEvent* e)
 {
 	is_mouse_pressed_ = false;
 
@@ -114,12 +114,12 @@ void PageTitle::mouseReleaseEvent(QMouseEvent* e)
 	lastTimeClick.start();
 }
 
-void PageTitle::slot_minimize()
+void TitleBar::slot_minimize()
 {
 	parentWidget()->showMinimized();
 }
 
-void PageTitle::slot_maximize_or_restore()
+void TitleBar::slot_maximize_or_restore()
 {
 	if (is_maximized_) {
 		maximize_->set_icon(maxIcon_);
@@ -134,7 +134,7 @@ void PageTitle::slot_maximize_or_restore()
 	emit sig_maximized(is_maximized_);
 }
 
-void PageTitle::slot_close()
+void TitleBar::slot_close()
 {
 	emit sig_close();
 }

@@ -36,9 +36,6 @@
     <ClCompile Include="View\RndButton.cpp">
       <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="View\PageTitle.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
     <ClCompile Include="View\IconBtn.cpp">
       <Filter>View</Filter>
     </ClCompile>
@@ -49,6 +46,12 @@
       <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="View\CheckBtn.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\PageView.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\TitleBar.cpp">
       <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,9 +99,6 @@
     <QtMoc Include="View\IconBtn.h">
       <Filter>View</Filter>
     </QtMoc>
-    <QtMoc Include="View\PageTitle.h">
-      <Filter>View</Filter>
-    </QtMoc>
     <QtMoc Include="View\RndButton.h">
       <Filter>View</Filter>
     </QtMoc>
@@ -106,6 +106,12 @@
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\CheckBtn.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\PageView.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\TitleBar.h">
       <Filter>View</Filter>
     </QtMoc>
   </ItemGroup>

@@ -20,19 +20,19 @@
 //{
 
 
-class PageTitle : public QWidget
+class TitleBar : public QWidget
 {
 	Q_OBJECT
 
 public:
-	PageTitle(QWidget* parent = NULL,
+	TitleBar(QWidget* parent = NULL,
 			  QString minIcon = ":/Skin/system/min",
 			  QString maxIcon = ":/Skin/system/max",
 			  QString restoreIcon = ":/Skin/system/restore",
 			  QString closeIcon = ":/Skin/system/close",
 			  QString logoIcon = ":/Skin/favicon.png");
 
-	~PageTitle();
+	~TitleBar();
 
 public:
 	void set_title(QString title);
