@@ -43,8 +43,8 @@ inline std::vector<::RECT> splitRect(::LPCRECT rc, int n, int gap = 50) {
 	double l = sqrt(n);
 	int line = int(l);
 
-	int col_step = (int)(Width(rc) / line);
-	int row_step = (int)(Height(rc) / line);
+	int col_step = (int)(width(rc) / line);
+	int row_step = (int)(height(rc) / line);
 
 	for (int i = 0; i < n; i++) {
 		v[i].left = rc->left + (i % line) * col_step;

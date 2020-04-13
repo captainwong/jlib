@@ -243,12 +243,12 @@ static void test_monitor()
 
 static void setExtendMode() {
 	auto ret = SetDisplayConfig(0, NULL, 0, NULL, SDC_TOPOLOGY_EXTEND | SDC_APPLY);
-	MYQDEBUG << "SetDisplayConfig SDC_TOPOLOGY_EXTEND returns:" << ret;
+	MYQDEBUG << "SetDisplayConfig SDC_TOPOLOGY_EXTEND returns:" << (ret == ERROR_SUCCESS);
 }
 
 static void setCloneMode() {
 	auto ret = SetDisplayConfig(0, NULL, 0, NULL, SDC_TOPOLOGY_CLONE | SDC_APPLY);
-	MYQDEBUG << "SetDisplayConfig SDC_TOPOLOGY_CLONE returns:" << ret;
+	MYQDEBUG << "SetDisplayConfig SDC_TOPOLOGY_CLONE returns:" << (ret == ERROR_SUCCESS);
 }
 
 //void setOnlyDisplayInMainMonitor() {
@@ -263,7 +263,7 @@ static void setCloneMode() {
 
 static void commitChange() {
 	auto ret = ChangeDisplaySettingsExW(NULL, NULL, NULL, 0, NULL);
-	MYQDEBUG << "commitChange ChangeDisplaySettingsExW returns:" << ret;
+	MYQDEBUG << "commitChange ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
 };
 
 static void disableMonitor(const MonitorInfo& m) {
@@ -275,7 +275,7 @@ static void disableMonitor(const MonitorInfo& m) {
 	DWORD dwFlags = CDS_UPDATEREGISTRY | CDS_GLOBAL | CDS_NORESET;
 
 	auto ret = ChangeDisplaySettingsExW(m.deviceName.toStdWString().data(), &dm, nullptr, dwFlags, nullptr);
-	MYQDEBUG << "disableMonitor ChangeDisplaySettingsExW returns:" << ret;
+	MYQDEBUG << "disableMonitor ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
 
 	commitChange();
 }
@@ -290,7 +290,7 @@ static void setMainMonitor(const MonitorInfo& newMain, const MonitorInfo& oldMai
 		DWORD dwFlags = CDS_UPDATEREGISTRY | CDS_GLOBAL | CDS_NORESET;
 
 		auto ret = ChangeDisplaySettingsExW(oldMain.deviceName.toStdWString().data(), &dm, nullptr, dwFlags, nullptr);
-		MYQDEBUG << "moveOld ChangeDisplaySettingsExW returns:" << ret;
+		MYQDEBUG << "moveOld ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
 	};
 
 	auto moveNew = [](const MonitorInfo& newMain) {
@@ -302,7 +302,7 @@ static void setMainMonitor(const MonitorInfo& newMain, const MonitorInfo& oldMai
 		DWORD dwFlags = CDS_UPDATEREGISTRY | CDS_GLOBAL | CDS_NORESET | CDS_SET_PRIMARY;
 
 		auto ret = ChangeDisplaySettingsExW(newMain.deviceName.toStdWString().data(), &dm, nullptr, dwFlags, nullptr);
-		MYQDEBUG << "moveNew ChangeDisplaySettingsExW returns:" << ret;
+		MYQDEBUG << "moveNew ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
 	};
 
 	moveOld(newMain, oldMain);
@@ -320,7 +320,7 @@ static void changeResolution(const MonitorInfo& monitor, const MonitorInfo::Reso
 	DWORD dwFlags = CDS_UPDATEREGISTRY | CDS_GLOBAL;
 
 	auto ret = ChangeDisplaySettingsExW(monitor.deviceName.toStdWString().data(), &dm, nullptr, dwFlags, nullptr);
-	MYQDEBUG << "changeResolution ChangeDisplaySettingsExW returns:" << ret;
+	MYQDEBUG << "changeResolution ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
 
 	commitChange();
 }

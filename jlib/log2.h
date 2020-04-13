@@ -75,7 +75,7 @@ file_name)
 			file_name , 23, 59));
 
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
-		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [tid %t] [%L] %v");
+		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%L] %v");
 		spdlog::register_logger(combined_logger);
 		combined_logger->flush_on(spdlog::level::trace);
 	} catch (const spdlog::spdlog_ex& ex) {

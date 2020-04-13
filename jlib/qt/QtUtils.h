@@ -13,21 +13,43 @@
 #include <QProcess>
 #include "QtDebug.h"
 #include "QtPathHelper.h"
+#include <thread>
+#include <chrono>
 
 
 JLIBQT_NAMESPACE_BEGIN
 
 /**
+* @brief 阻塞等待一段时间
+* @param ms 等待的毫秒数
+*/
+static inline void blocking_wait(int ms, QString log = "") {
+	if (!log.isEmpty()) {
+		MYQDEBUG << log << "in";
+	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+	if (!log.isEmpty()) {
+		MYQDEBUG << log << "out";
+	}
+}
+
+/**
 * @brief 不阻塞UI响应的情况下，等待一段时间
 * @param ms 等待的毫秒数
 */
-static inline void non_blocking_wait_in_ui_thread(int ms) {
+static inline void non_blocking_wait_in_ui_thread(int ms, QString log = "") {
+	if (!log.isEmpty()) {
+		MYQDEBUG << log << "in";
+	}
 	QEventLoop q;
 	QTimer t;
 	t.setSingleShot(true);
 	QObject::connect(&t, &QTimer::timeout, &q, &QEventLoop::quit);
 	t.start(ms);
 	q.exec();
+	if (!log.isEmpty()) {
+		MYQDEBUG << log << "out";
+	}
 }
 
 /**
@@ -43,13 +65,13 @@ static inline void showInGraphicalShell(const QString &pathIn) {
 	QProcess::startDetached(command);
 }
 
-static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path, QString file_line)
+static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path, QString file_line, bool forceUseQss = true)
 {
 	/*if (!QDir().isAbsolutePath(icon_path)) {
 		icon_path = PathHelper::program() + "/" + icon_path;
 	}*/
 
-	if (!icon_path.startsWith(":/")) {
+	if (forceUseQss && !icon_path.startsWith(":/")) {
 		icon_path = ":/" + icon_path;
 	}
 	
@@ -62,6 +84,7 @@ static inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path
 }
 
 #define LOAD_PIXMAP_EX(icon_path) JLIBQT_NAMESPACE warn_if_load_pixmap_failed(pixmap, icon_path, JLIBQT_QDEBUG_FILE_LINE_VALUE)
+#define LOAD_PIXMAP_EX2(icon_path) JLIBQT_NAMESPACE warn_if_load_pixmap_failed(pixmap, icon_path, JLIBQT_QDEBUG_FILE_LINE_VALUE, false)
 
 static QIcon icon_from_path(QString path, QSize icon_sz) {
 	QPixmap pixmap;
