@@ -9,7 +9,8 @@
 
 #ifdef JLIB_WINDOWS
 #	include <windows.h>
-#   include <iomanip> // for std::get_time
+#	include <sstream> // std::istringstream
+#   include <iomanip> // std::get_time
 
 	static inline struct tm* gmtime_r(const time_t* timep, struct tm* result) {
 		gmtime_s(result, timep); return result;
