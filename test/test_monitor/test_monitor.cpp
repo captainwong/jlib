@@ -8,6 +8,6 @@ int main()
 	auto mis = getMonitors();
 	printf("total %zu monitors:\n", mis.size());
 	for (const auto& mi : mis) {
-		wprintf(mi.toString(true).data());
+		wprintf(mi.toString().data());
 	}
 }

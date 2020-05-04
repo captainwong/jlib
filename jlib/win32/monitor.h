@@ -35,6 +35,10 @@ struct MonitorInfo {
 	Resolution curResolution = {};
 	std::vector<Resolution> supportResolutions = {};
 
+	HMONITOR hMonitor = nullptr;
+	HDC hDC = nullptr;
+	RECT rc = {};
+
 	bool isResolutionSupport(int w, int h, int hz) const {
 		for (const auto& r : supportResolutions) {
 			if (r.w == w && r.h == h && r.hz == hz) { return true; }
@@ -59,6 +63,16 @@ struct MonitorInfo {
 		str += L"  name          : " + name + L"\n";
 		str += L"  deviceName    : " + deviceName + L"\n";
 		str += L"  deviceString  : " + deviceString + L"\n";
+		str += L"  hMonitor      : "; str += hMonitor ? L"valid" : L"nullptr"; str += L"\n";
+		str += L"  hDC           : "; str += hDC ? L"valid" : L"nullptr"; str += L"\n";
+
+		str += L"  rect          : "; 
+		str += L"left=" + std::to_wstring(rc.left); 
+		str += L" top=" + std::to_wstring(rc.top); 
+		str += L" right=" + std::to_wstring(rc.right); 
+		str += L" bottom=" + std::to_wstring(rc.bottom);
+		str += L" (" + std::to_wstring(rc.right - rc.left) + L"x" + std::to_wstring(rc.bottom - rc.top) + L")\n";
+
 		str += L"  curResolution : " + curResolution.toString() + L"\n";
 		if (withSupportRes) {
 			str += L"  supportResolutions : {\n";
@@ -99,13 +113,15 @@ static MonitorInfos getMonitors()
 				mi.isMain = true;
 			}
 
+			// get current resolution
 			DEVMODE dm = { 0 };
 			dm.dmSize = sizeof(dm);
-			EnumDisplaySettings(displayDevice.DeviceName, ENUM_CURRENT_SETTINGS, &dm);
+			EnumDisplaySettingsW(displayDevice.DeviceName, ENUM_CURRENT_SETTINGS, &dm);
 			mi.curResolution.w = dm.dmPelsWidth;
 			mi.curResolution.h = dm.dmPelsHeight;
 			mi.curResolution.hz = dm.dmDisplayFrequency;
 
+			// get supported resolutions
 			for (int i = 0; 0 != EnumDisplaySettingsW(displayDevice.DeviceName, i, &dm); i++) {
 				MonitorInfo::Resolution r{ (int)dm.dmPelsWidth, (int)dm.dmPelsHeight, (int)dm.dmDisplayFrequency };
 				if (!mi.isResolutionSupport(r)) {
@@ -113,66 +129,54 @@ static MonitorInfos getMonitors()
 				}
 			}
 
-			// detached device, use first supportted res
 			if (!mi.supportResolutions.empty()) {
+				// detached device, use first supportted res
 				if (!mi.curResolution.valid()) {
 					mi.curResolution = mi.supportResolutions.front();
-				}
-
-				DISPLAY_DEVICE dd;
-				ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
-				dd.cb = sizeof(dd);
-				int iMonitorNum = 0;
-				if (EnumDisplayDevices(displayDevice.DeviceName, iMonitorNum, &dd, 0)) {
-					//MYQDEBUG << "Device #" << iDevNum << "Monitor #" << iMonitorNum;
-					//dumpDISPLAY_DEVICE(dd);
-
-					std::wstring name = dd.DeviceString;
-					if (name != L"Generic PnP Monitor" && name != L"通用即插即用监视器") {
-						mi.name = name;
-					} else {
-						std::wstring deviceId = dd.DeviceID;
-						deviceId = deviceId.substr(8, deviceId.find(L"\\", 9) - 8);
-						mi.name = deviceId;
-					}
-
-					//dumpMoniterInfo(mi);
-
-					mis.push_back(mi);
-
-					ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
-					dd.cb = sizeof(dd);
-					iMonitorNum++;
-				}
+				}				
 			} else {
 #ifdef _DEBUG
 				//MYQDEBUG << "no supported resolutions!";
 #endif
-				DISPLAY_DEVICE dd;
+			}
+
+			// get HMONITOR/HDC/etc.. by EnumDisplayMonitors
+			EnumDisplayMonitors(NULL, NULL,
+				[](HMONITOR hMonitor, HDC hDC, LPRECT rc, LPARAM data) -> BOOL {
+					auto& mi = *reinterpret_cast<MonitorInfo*>(data);
+					MONITORINFOEX info;
+					info.cbSize = sizeof(info);
+					if (GetMonitorInfoW(hMonitor, &info) && mi.deviceName == info.szDevice) {
+						mi.hMonitor = hMonitor;
+						mi.hDC = hDC;
+						mi.rc = *rc;
+						return FALSE;
+					}
+					return TRUE;
+				},
+				reinterpret_cast<LPARAM>(&mi));
+
+			// get human readable name
+			DISPLAY_DEVICE dd;
+			ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
+			dd.cb = sizeof(dd);
+			int iMonitorNum = 0;
+			if (EnumDisplayDevices(displayDevice.DeviceName, iMonitorNum, &dd, 0)) {
+				//MYQDEBUG << "Device #" << iDevNum << "Monitor #" << iMonitorNum;
+				//dumpDISPLAY_DEVICE(dd);
+				std::wstring name = dd.DeviceString;
+				if (name != L"Generic PnP Monitor" && name != L"通用即插即用监视器") {
+					mi.name = name;
+				} else {
+					std::wstring deviceId = dd.DeviceID;
+					deviceId = deviceId.substr(8, deviceId.find(L"\\", 9) - 8);
+					mi.name = deviceId;
+				}
+				//dumpMoniterInfo(mi);
+				mis.push_back(mi);
 				ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
 				dd.cb = sizeof(dd);
-				int iMonitorNum = 0;
-				if (EnumDisplayDevices(displayDevice.DeviceName, iMonitorNum, &dd, 0)) {
-					//MYQDEBUG << "Device #" << iDevNum << "Monitor #" << iMonitorNum;
-					//dumpDISPLAY_DEVICE(dd);
-
-					std::wstring name = dd.DeviceString;
-					if (name != L"Generic PnP Monitor" && name != L"通用即插即用监视器") {
-						mi.name = name;
-					} else {
-						std::wstring deviceId = dd.DeviceID;
-						deviceId = deviceId.substr(8, deviceId.find(L"\\", 9) - 8);
-						mi.name = deviceId;
-					}
-
-					//dumpMoniterInfo(mi);
-
-					mis.push_back(mi);
-
-					ZeroMemory(&dd, sizeof(DISPLAY_DEVICE));
-					dd.cb = sizeof(dd);
-					iMonitorNum++;
-				}
+				iMonitorNum++;
 			}
 		}
 		iDevNum++;
@@ -180,6 +184,9 @@ static MonitorInfos getMonitors()
 
 	return mis;
 }
+
+
+
 
 
 //! 设置显示模式：扩展模式
