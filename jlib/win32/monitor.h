@@ -9,9 +9,7 @@ namespace win32 {
 
 struct MonitorInfo {
 	struct Resolution {
-		int w;
-		int h;
-		int hz;
+		int w = 0, h = 0, hz = 0;
 
 		bool operator==(const Resolution& r) const {
 			return w == r.w && h == r.h && hz == r.hz;
@@ -23,9 +21,7 @@ struct MonitorInfo {
 			return res;
 		}
 
-		bool valid() const {
-			return !(w == 0 || h == 0 || hz == 0);
-		}
+		bool valid() const { return !(w == 0 || h == 0 || hz == 0); }
 	};
 
 	bool isMain = false;
@@ -185,8 +181,15 @@ static MonitorInfos getMonitors()
 	return mis;
 }
 
+//! 获取主显示器信息
+static MonitorInfo getMainMonitor(MonitorInfos mis = {}) {
+	if (mis.empty()) { mis = getMonitors(); }
+	for (const auto& mi : mis) { if (mi.isMain) { return mi; } }
+	return MonitorInfo{};
+}
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 
 //! 设置显示模式：扩展模式
