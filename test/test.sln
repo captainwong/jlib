@@ -56,6 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win32", "win32", "{B5D9E71E
 		..\jlib\win32\deviceuniqueidentifier.h = ..\jlib\win32\deviceuniqueidentifier.h
 		..\jlib\win32\file_op.h = ..\jlib\win32\file_op.h
 		..\jlib\win32\memory_micros.h = ..\jlib\win32\memory_micros.h
+		..\jlib\win32\monitor.h = ..\jlib\win32\monitor.h
 		..\jlib\win32\MyWSAError.h = ..\jlib\win32\MyWSAError.h
 		..\jlib\win32\odbccp32.lib = ..\jlib\win32\odbccp32.lib
 		..\jlib\win32\path_helper.h = ..\jlib\win32\path_helper.h
@@ -290,6 +291,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple7zwrapper", "simple7zwrapper\simple7zwrapper.vcxproj", "{41C26D67-0174-41AC-850E-1F84181138E5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_strutil", "test_strutil\test_strutil.vcxproj", "{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_monitor", "test_monitor\test_monitor.vcxproj", "{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -589,6 +592,14 @@ Global
 		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x64.Build.0 = Release|x64
 		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x86.ActiveCfg = Release|Win32
 		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3}.Release|x86.Build.0 = Release|Win32
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Debug|x64.ActiveCfg = Debug|x64
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Debug|x64.Build.0 = Debug|x64
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Debug|x86.ActiveCfg = Debug|Win32
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Debug|x86.Build.0 = Debug|Win32
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Release|x64.ActiveCfg = Release|x64
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Release|x64.Build.0 = Release|x64
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Release|x86.ActiveCfg = Release|Win32
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -655,6 +666,7 @@ Global
 		{ECF057F3-AB01-4129-8C5C-E59DD4261770} = {5AFB3C82-FDEA-458C-9B56-E28A3F96F113}
 		{41C26D67-0174-41AC-850E-1F84181138E5} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
 		{0C743CE7-E49C-47F8-BC53-13929EA5CDA3} = {ABCB8CF8-5E82-4C47-A0FC-E82DF105DF99}
+		{5EA0AFE3-134D-4573-B8E7-ADEC802722DF} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
