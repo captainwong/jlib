@@ -28,17 +28,19 @@ static constexpr char g_logger_name[] = "jlogger";
     
 inline void init_logger( 
 #ifdef JLIB_WINDOWS
-std::wstring
+std::wstring file_name = L""
 #else
-std::string
+std::string file_name = ""
 #endif
-file_name)
+)
 {
+	if (!file_name.empty()) {
 #ifdef JLIB_WINDOWS
-	file_name += L".log";
+		file_name += L".log";
 #else
-	file_name += ".log";
+		file_name += ".log";
 #endif
+	}
 
     try {
 		std::vector<spdlog::sink_ptr> sinks;
@@ -46,9 +48,9 @@ file_name)
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
-		sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(
-			file_name , 23, 59));
-
+		if (!file_name.empty()) {
+			sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(file_name, 23, 59));
+		}
 		auto combined_logger = std::make_shared<spdlog::logger>(g_logger_name, begin(sinks), end(sinks));
 		combined_logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%t] [%L] %v");
 		spdlog::register_logger(combined_logger);

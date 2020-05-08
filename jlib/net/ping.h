@@ -17,6 +17,7 @@ namespace net {
 
 class pinger
 {
+public:
 	typedef boost::asio::ip::icmp icmp;
 	typedef boost::asio::deadline_timer deadline_timer;
 	typedef std::function<void(const std::string&)> Output;
@@ -75,7 +76,7 @@ private:
 		time_sent_ = boost::posix_time::microsec_clock::universal_time();
 		socket_.send_to(request_buffer.data(), destination_);
 
-		// Wait up to five seconds for a reply.
+		// Wait up to 3 seconds for a reply.
 		num_replies_ = 0;
 		timer_.expires_at(time_sent_ + boost::posix_time::seconds(3));
 		timer_.async_wait(boost::bind(&pinger::handle_timeout, this));
@@ -83,7 +84,7 @@ private:
 
 	void handle_timeout() {
 		if (num_replies_ == 0) {
-			total_time_ += std::chrono::milliseconds(5000);
+			total_time_ += std::chrono::milliseconds(3000);
 			output_("Request timed out");
 		}
 
