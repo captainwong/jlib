@@ -14,7 +14,7 @@ static std::pair<long long, std::string> pingIpGetAverageMs(const std::string& i
 {
 	boost::asio::io_service io_service;
 	JLOG_INFO("ping ip:{}", ip);
-	jlib::net::pinger p(io_service, ip.c_str(), ping_times, output);
+	jlib::net::pinger p(io_service, ip.c_str(), (unsigned short)ping_times, output);
 	io_service.run();
 	auto ms = p.get_average();
 	JLOG_INFO("ip:{} 's average delay is {}ms", ip, ms);
@@ -68,8 +68,12 @@ static std::pair<bool, std::string> get_domain_ip_impl(const std::string& domain
 
 		JLOG_INFO("fastest ip of domain:{} is {}", domain, fastest_ip);
 		return std::pair<bool, std::string>(true, fastest_ip);
+	} catch (boost::system::system_error& e) {
+		return std::pair<bool, std::string>(false, e.what());
 	} catch (std::exception& e) {
 		return std::pair<bool, std::string>(false, e.what());
+	} catch (...) {
+		return std::pair<bool, std::string>(false, "unknown error");
 	}
 }
 
