@@ -14,7 +14,6 @@
 namespace jlib {
 namespace net {
 
-
 class pinger
 {
 public:
