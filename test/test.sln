@@ -301,6 +301,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_resolve_fastest_ip", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_process", "test_process\test_process.vcxproj", "{0F324C6A-D08E-4044-B606-E1F65DB4E68B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_process_qt", "test_process_qt\test_process_qt.vcxproj", "{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -623,6 +625,12 @@ Global
 		{0F324C6A-D08E-4044-B606-E1F65DB4E68B}.Release|x64.Build.0 = Release|x64
 		{0F324C6A-D08E-4044-B606-E1F65DB4E68B}.Release|x86.ActiveCfg = Release|Win32
 		{0F324C6A-D08E-4044-B606-E1F65DB4E68B}.Release|x86.Build.0 = Release|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Debug|x64.ActiveCfg = Debug|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Debug|x86.ActiveCfg = Debug|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Debug|x86.Build.0 = Debug|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Release|x64.ActiveCfg = Release|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Release|x86.ActiveCfg = Release|Win32
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -693,6 +701,7 @@ Global
 		{77DBD16D-112C-448D-BA6A-CE566A9331FC} = {21DC893D-AB0B-48E1-9E23-069A025218D9}
 		{65F9D4DA-BC6C-486D-8966-6ACCE077639D} = {77DBD16D-112C-448D-BA6A-CE566A9331FC}
 		{0F324C6A-D08E-4044-B606-E1F65DB4E68B} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
+		{E287BCBE-0CA5-4E3C-9F44-05F505A5A0AA} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}
