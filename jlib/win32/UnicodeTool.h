@@ -20,7 +20,7 @@ namespace win32
 
 inline std::wstring mbcs_to_utf16(const std::string& mbcs) {
 	std::wstring res = L"";
-	size_t request_size = MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, NULL, 0);
+	int request_size = MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, NULL, 0);
 	if (0 < request_size) {
 		auto buff = new wchar_t[request_size];
 		MultiByteToWideChar(CP_ACP, 0, mbcs.c_str(), -1, buff, request_size);
@@ -32,7 +32,7 @@ inline std::wstring mbcs_to_utf16(const std::string& mbcs) {
 
 inline std::string utf16_to_mbcs(const std::wstring& u16) {
 	std::string res = "";
-	size_t request_size = WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, 0, 0, 0, 0);
+	int request_size = WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, 0, 0, 0, 0);
 	if (0 < request_size) {
 		auto buff = new char[request_size];
 		WideCharToMultiByte(CP_ACP, 0, u16.c_str(), -1, buff, request_size, 0, 0);
@@ -44,7 +44,7 @@ inline std::string utf16_to_mbcs(const std::wstring& u16) {
 
 inline std::string utf16_to_utf8(const std::wstring& u16) {
 	std::string res = "";
-	size_t request_size = WideCharToMultiByte(CP_UTF8, 0, u16.c_str(), -1, 0, 0, 0, 0);
+	int request_size = WideCharToMultiByte(CP_UTF8, 0, u16.c_str(), -1, 0, 0, 0, 0);
 	if (0 < request_size) {
 		auto buff = new char[request_size];
 		WideCharToMultiByte(CP_UTF8, 0, u16.c_str(), -1, buff, request_size, 0, 0);
@@ -60,7 +60,7 @@ inline std::string mbcs_to_utf8(const std::string& mbcs) {
 
 inline std::wstring utf8_to_utf16(const std::string u8) {
 	std::wstring res = L"";
-	size_t request_size = MultiByteToWideChar(CP_UTF8, 0, u8.c_str(), -1, NULL, 0);
+	int request_size = MultiByteToWideChar(CP_UTF8, 0, u8.c_str(), -1, NULL, 0);
 	if (0 < request_size) {
 		auto buff = new wchar_t[request_size];
 		MultiByteToWideChar(CP_UTF8, 0, u8.c_str(), -1, buff, request_size);
