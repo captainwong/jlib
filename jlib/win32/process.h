@@ -122,8 +122,8 @@ struct ProcessInfo {
 	template <typename JsonValue>
 	JsonValue toJson() const {
 		JsonValue v;
-		v["name"] = u16_to_mbcs(name);
-		v["path"] = u16_to_mbcs(path);
+		v["name"] = utf16_to_mbcs(name);
+		v["path"] = utf16_to_mbcs(path);
 		v["pid"] = (size_t)pid;
 		v["ppid"] = (size_t)ppid;
 		v["thread_count"] = (size_t)thread_count;
@@ -133,8 +133,8 @@ struct ProcessInfo {
 		auto& ms = v["modules"];
 		for (const auto& m : modules) {
 			JsonValue jm;
-			jm["name"] = u16_to_mbcs(m.name);
-			jm["path"] = u16_to_mbcs(m.path);
+			jm["name"] = utf16_to_mbcs(m.name);
+			jm["path"] = utf16_to_mbcs(m.path);
 			jm["pid"] = (size_t)m.pid;
 			jm["base_address"] = (size_t)m.base_address;
 			jm["base_size"] = (size_t)m.base_size;
