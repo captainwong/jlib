@@ -124,7 +124,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_reader.cpp" />
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_value.cpp" />
+    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_writer.cpp" />
     <ClCompile Include="test_version.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

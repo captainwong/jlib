@@ -1,4 +1,6 @@
 #include "../../jlib/util/version.h"
+#include "../../jlib/util/curl_wrapper.h"
+#include "../../jlib/3rdparty/json/jsoncpp/json.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -34,6 +36,25 @@ int main()
 	assert(v4 >= v3);
 	assert(!(v4 < v3));
 	assert(!(v4 <= v3));
+
+
+	Curl curl;
+	curl.init();
+	auto url = "https://jcenter.captainwong.cn/api/v1/apps/latest?name=test";
+	curl.get(url);
+	printf("HTTP %ld\n", curl.lastHttpCode());
+	printf("error %d\n", curl.lastError());
+	printf("error msg %s\n", curl.lastErrorMsg().data());
+	printf("%s\n", curl.lastHttpContent().data());
+
+	Json::Value value;	
+	Json::Reader parser;
+	if (parser.parse(curl.lastHttpContent(), value)) {
+		LatestRelease latestRelease;
+		resolveLatestRelease(value, latestRelease);
+		printf("%s\n", latestRelease.toString().data());
+
+	}
 
 	system("pause");
 }

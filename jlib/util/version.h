@@ -156,12 +156,16 @@ struct DownLoadLink {
 struct Release {
 	Branch branch = Branch::InvalidBranch;
 	Version version = {}; 
+	bool force_update = false;
 	//! 版本更新说明
 	std::string change = {};
 	std::vector<DownLoadLink> dllinks = {};
 
 	std::string toString() const {
-		auto s = std::string(branchName(branch)) + " " + version.toString() + "\nchange=" + change + "\ndownload_links=\n";
+		auto s = std::string(branchName(branch)) + " " + version.toString() + 
+			"\nforce_update=" + (force_update ? "true" : "false") + 
+			"\nchange=" + change + 
+			"\ndownload_links=\n";
 		if (!dllinks.empty()) {
 			for (const auto& link : dllinks) { s += link.host + " : link=" + link.link + " md5=" + link.md5 + "\n"; }
 		} else { s += "empty"; }
@@ -196,6 +200,7 @@ struct LatestRelease {
 * {
 * 	"test": {
 * 		"version": "2.2.11.13262",
+*		"force_update": true,
 * 		"release_note": "测试;",
 * 		"download_links": {
 * 			"local": {
@@ -206,6 +211,7 @@ struct LatestRelease {
 * 	},
 * 	"stable": {
 * 		"version": "2.2.12.13282",
+*		"force_update": false,
 * 		"release_note": "测试稳定",
 * 		"download_links": {
 * 			"local": {
@@ -230,6 +236,7 @@ int resolveLatestRelease(const JsonValue& value, LatestRelease& latestRelease) {
 			const auto& detail = value[branchName(branch)];
 			Release release;
 			release.branch = branch;
+			release.force_update = detail.isMember("force_update") ? detail["force_update"].asBool() : false;
 			release.version = detail["version"].asString();
 			release.change = detail["release_note"].asString();
 			if (detail["download_links"].isMember("local")) {
