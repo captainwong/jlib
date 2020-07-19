@@ -8,6 +8,7 @@ using namespace jlib::qt;
 CheckBtn::CheckBtn(QWidget *parent, int tag)
 	: QLabel(parent)
 	, tag_(tag)
+	, font_sz_(12)
 {
 	setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 }
