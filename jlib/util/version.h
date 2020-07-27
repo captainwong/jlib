@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <stdint.h>
 
 namespace jlib
 {
@@ -47,26 +48,28 @@ inline Branch branchFromString(const std::string& name) {
 //! 应用程序版本号
 struct Version {
 	//! 主版本
-	int major = 0;
+	uint16_t major = 0;
 	//! 功能更新
-	int minor = 0;
+	uint16_t minor = 0;
 	//! bug 修复
-	int revision = 0;
+	uint16_t revision = 0;
 	//! 随意，我一般用来表示程序总迭代（编译成功）次数
-	int build = 0;
+	uint16_t build = 0;
 
 	Version() = default;
-	Version(int major, int minor, int revision, int build)
+	Version(uint16_t major, uint16_t minor, uint16_t revision, uint16_t build)
 		: major(major), minor(minor), revision(revision), build(build) {}
 	Version(const std::string& s) { _fromString(s); }
+	Version(uint64_t v) { fromUInt64(v); }
 	Version& fromString(const std::string& s) { _fromString(s); return *this; }
-	Version& operator=(const std::string& s) { _fromString(s); return *this; }
+	Version& operator=(const std::string& s) { _fromString(s); return *this; }	
+	Version& operator=(uint64_t v) { fromUInt64(v); return *this; }
 
 	bool valid() const { return !(major == 0 && minor == 0 && revision == 0 && build == 0); }
 	void reset() { major = minor = revision = build = 0; }
 
 	bool _fromString(const std::string& s) {
-		if (std::sscanf(s.c_str(), "%d.%d.%d.%d", &major, &minor, &revision, &build) != 4) {
+		if (std::sscanf(s.c_str(), "%hu.%hu.%hu.%hu", &major, &minor, &revision, &build) != 4) {
 			reset(); return false;
 		}
 		if (major < 0) major = 0; if (minor < 0) minor = 0;
@@ -80,6 +83,17 @@ struct Version {
 			std::to_string(revision) + "." +
 			std::to_string(build);
 	}
+
+	void fromUInt64(uint64_t v) {
+		major = (v >> 48) & 0xFFFF;
+		minor = (v >> 32) & 0xFFFF;
+		revision = (v >> 16) & 0xFFFF;
+		build = v & 0xFFFF;
+	}
+
+	uint64_t toUInt64() const {
+		return ((uint64_t)major << 48) | ((uint64_t)minor << 32) | ((uint64_t)revision << 16) | (uint64_t)build;
+	}	
 
 	//! require cpp17
 	template <typename T>
@@ -106,42 +120,23 @@ struct Version {
 	}
 
 	bool operator == (const Version& ver) const {
-		return major == ver.major
-			&& minor == ver.minor
-			&& revision == ver.revision
-			&& build == ver.build;
+		return toUInt64() == ver.toUInt64();
 	}
 
 	bool operator < (const Version& ver) const {
-		if (major > ver.major) return false;
-		if (minor > ver.minor) return false;
-		if (revision > ver.revision) return false;
-		if (build > ver.build) return false;
-		if (this->operator==(ver)) return false;
-		return true;
+		return toUInt64() < ver.toUInt64();
 	}
 
 	bool operator > (const Version& ver) const {
-		if (major < ver.major) return false;
-		if (minor < ver.minor) return false;
-		if (revision < ver.revision) return false;
-		if (build < ver.build) return false;
-		if (this->operator==(ver)) return false;
-		return true;
+		return toUInt64() > ver.toUInt64();
 	}
 
 	bool operator <= (const Version& ver) const {
-		return (major <= ver.major) 
-			&& (minor <= ver.minor) 
-			&& (revision <= ver.revision) 
-			&& (build <= ver.build);
+		return toUInt64() <= ver.toUInt64();
 	}
 
 	bool operator >= (const Version& ver) const {
-		return (major >= ver.major)
-			&& (minor >= ver.minor)
-			&& (revision >= ver.revision)
-			&& (build >= ver.build);
+		return toUInt64() >= ver.toUInt64();
 	}
 };
 

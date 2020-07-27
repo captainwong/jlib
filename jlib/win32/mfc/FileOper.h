@@ -74,9 +74,8 @@ public:
 		char cmd[64] = {0};
 
 #if defined(_UNICODE) || defined(UNICODE)
-		char *path = Utf16ToAnsi(folderPath);
-		sprintf_s(cmd, "rd /s /q \"%s\"", path);
-		SAFEDELETEARR(path);
+		auto path = utf16_to_mbcs(folderPath);
+		sprintf_s(cmd, "rd /s /q \"%s\"", path.data());
 #else
 		sprintf_s(cmd, "rd /s /q \"%s\"", folderPath);
 #endif
@@ -90,14 +89,12 @@ public:
 	static long GetFileSize(const CString& path){
 		FILE *p = NULL;
 #if defined(_UNICODE) || defined(UNICODE)
-		char *cpath = Utf16ToAnsi(path);
-		fopen_s(&p, cpath, "r");
+		auto cpath = utf16_to_mbcs((LPCTSTR)path);
+		fopen_s(&p, cpath.data(), "r");
 		if(p == NULL)
 		{
-			SAFEDELETEARR(cpath);
 			return 0;
 		}
-		SAFEDELETEARR(cpath);
 #else
 		fopen_s(&p, path, "r");
 		if(p == NULL)

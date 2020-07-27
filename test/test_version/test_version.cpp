@@ -37,6 +37,18 @@ int main()
 	assert(!(v4 < v3));
 	assert(!(v4 <= v3));
 
+	v3 = "0.9.0.0";
+	v4 = "1.0.0.0";
+	assert(!(v3 == v4));
+	assert(v3 < v4);
+	assert(v3 <= v4);
+	assert(!(v3 > v4));
+	assert(!(v3 >= v4));
+	assert(v4 > v3);
+	assert(v4 >= v3);
+	assert(!(v4 < v3));
+	assert(!(v4 <= v3));
+
 
 	Curl curl;
 	curl.init();
