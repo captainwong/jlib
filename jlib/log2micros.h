@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef JLIB_LOG2_MICROS
+#define JLIB_LOG2_MICROS
+
 #ifndef JLIB_LOG2_ENABLED
 #define init_logger
 #define JLOG_DBUG
@@ -21,5 +24,7 @@ public:
 #define dump_asc
 #define JLOG_HEX
 #define JLOG_ASC
+
+#endif
 
 #endif

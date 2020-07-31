@@ -3,7 +3,7 @@
 #include "base/config.h"
 
 #ifdef JLIB_DISABLE_LOG
-#include "no_log.h"
+#include "log2micros.h"
 #else // JLIB_DISABLE_LOG
 
 #define JLIB_LOG2_ENABLED
