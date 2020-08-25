@@ -8,11 +8,11 @@
 namespace jlib {
 
 /**
- * @brief check if container c contains t
+ * @brief check if Container contains ElementType t
  * @note C must be a container of type T
  */
-template <class C, class T>
-inline bool is_contain(const typename C& c, const typename T& t) {
+template <class Container, class ElementType>
+bool is_contain(const typename Container& c, const typename ElementType& t) {
 	for (const auto& i : c) {
 		if (i == t) { return true; }
 	}
@@ -23,9 +23,9 @@ inline bool is_contain(const typename C& c, const typename T& t) {
  * @brief Sub 是 All 的子集，返回 All 内 Sub 的补集
  * @note All 和 Sub 必须为同样类型的容器（不支持initializer-list）
  */
-template <class C>
-inline typename C get_other(const typename C & All, const typename C& Sub) {
-	C res, tmp;
+template <class Container>
+typename Container get_other(const typename Container& All, const typename Container& Sub) {
+	Container res, tmp;
 	std::copy(Sub.begin(), Sub.end(), std::back_inserter(tmp));
 	for (const auto& i : All) {
 		bool in_Sub = false;
