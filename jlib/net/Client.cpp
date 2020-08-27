@@ -1,8 +1,13 @@
 #include "Client.h"
 
-
+#ifdef _WIN32
 #include <WinSock2.h>
 #pragma comment(lib, "ws2_32.lib")
+#else
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#endif
 
 #include <errno.h>
 #include <stdlib.h>
@@ -26,9 +31,19 @@ namespace net {
 
 struct OneTimeIniter {
 	OneTimeIniter() {
+#ifdef _WIN32
+		WSADATA wsa_data;
+		WSAStartup(0x0201, &wsa_data);
 		if (0 != evthread_use_windows_threads()) {
-			JLOG_CRTC("failed to init libevent with thread by calling evthread_use_windows_threads");
+			fprintf(stderr, "failed to init libevent with thread by calling evthread_use_windows_threads\n");
+			abort();
 		}
+#else 
+		if (0 != evthread_use_pthreads()) {
+			fprintf(stderr, "failed to init libevent with thread by calling evthread_use_pthreads\n");
+			abort();
+		}
+#endif	
 	}
 };
 
