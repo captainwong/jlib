@@ -106,6 +106,8 @@ void IconBtn::refresh()
 		icon_path = icon_path_[IconStatus::status_press];
 	} else if ((is_hover_ || is_highlight_) && icon_path_.find(IconStatus::status_hover) != icon_path_.end()) {
 		icon_path = icon_path_[IconStatus::status_hover];
+	} else if ((is_ing_) && icon_path_.find(IconStatus::status_ing) != icon_path_.end()) {
+		icon_path = icon_path_[IconStatus::status_ing];
 	} else if (icon_path_.find(IconStatus::status_normal) != icon_path_.end()) {
 		icon_path = icon_path_[IconStatus::status_normal];
 	}
