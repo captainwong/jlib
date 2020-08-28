@@ -27,6 +27,7 @@
 
 namespace jlib {
 namespace net {
+namespace client {
 
 
 struct OneTimeIniter {
@@ -298,5 +299,6 @@ void Client::send(const char* data, size_t len)
 	evbuffer_unlock(output);
 }
 
+}
 }
 }

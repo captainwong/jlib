@@ -19,6 +19,7 @@
 
 namespace jlib {
 namespace net {
+namespace client {
 
 
 typedef void(*OnConnectinoCallback)(bool up, const std::string& msg, void* user_data);
@@ -62,5 +63,6 @@ protected:
 };
 
 
+}
 }
 }
