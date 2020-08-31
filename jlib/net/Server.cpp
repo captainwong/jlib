@@ -371,7 +371,8 @@ void Server::stop()
 	if (!impl) { return; }
 
 	if (impl->base) {
-		event_base_loopexit(impl->base, nullptr);
+		timeval tv{ 0, 1000 };
+		event_base_loopexit(impl->base, &tv);
 	}
 
 	if (impl->thread.joinable()) {

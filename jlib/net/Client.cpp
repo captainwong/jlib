@@ -36,12 +36,12 @@ struct OneTimeIniter {
 		WSADATA wsa_data;
 		WSAStartup(0x0201, &wsa_data);
 		if (0 != evthread_use_windows_threads()) {
-			fprintf(stderr, "failed to init libevent with thread by calling evthread_use_windows_threads\n");
+			JLOG_CRTC("failed to init libevent with thread by calling evthread_use_windows_threads");
 			abort();
 		}
 #else 
 		if (0 != evthread_use_pthreads()) {
-			fprintf(stderr, "failed to init libevent with thread by calling evthread_use_pthreads\n");
+			JLOG_CRTC("failed to init libevent with thread by calling evthread_use_pthreads");
 			abort();
 		}
 #endif	
@@ -74,7 +74,7 @@ struct Client::Impl
 	{
 		char buff[4096];
 		auto input = bufferevent_get_input(bev);
-		JLOG_INFO("readcb, readable len {}", evbuffer_get_length(input));
+		JLOG_DBUG("readcb, readable len {}", evbuffer_get_length(input));
 		Client* client = (Client*)user_data;
 		if (client->userData_ && client->onMsg_) {
 			while (1) {
@@ -109,19 +109,24 @@ struct Client::Impl
 	static void eventcb(struct bufferevent* bev, short events, void* user_data)
 	{
 		Client* client = (Client*)user_data;
-		JLOG_INFO("eventcb events={}", eventToString(events));
+		JLOG_DBUG("eventcb events={}", eventToString(events));
 
 		std::string msg;
 		if (events & BEV_EVENT_CONNECTED) {
+			client->connected_ = true;
 			if (client->userData_ && client->onConn_) {
 				client->onConn_(true, "connected", client->userData_);
 			}
 
 			client->lastTimeSendData = std::chrono::steady_clock::now();
 
-			struct timeval tv = { 1, 0 };
-			event_add(event_new(client->impl_->base, bufferevent_getfd(bev), 0, Impl::timercb, client), &tv);
-
+			if (client->strictTimer_) {
+				struct timeval tv = { client->timeout_, 0 };
+				event_add(event_new(client->impl_->base, -1, 0, Impl::timercb, client), &tv);
+			} else {
+				struct timeval tv = { 1, 0 };
+				event_add(event_new(client->impl_->base, -1, 0, Impl::timercb, client), &tv);
+			}
 			return;
 		} else if (events & (BEV_EVENT_EOF)) {
 			msg = ("Connection closed");
@@ -136,6 +141,8 @@ struct Client::Impl
 		}
 
 		client->impl_->bev = nullptr;
+
+		client->connected_ = false;
 		if (client->userData_ && client->onConn_) {
 			client->onConn_(false, msg, client->userData_);
 		}
@@ -147,19 +154,27 @@ struct Client::Impl
 		}
 	}
 
-	static void timercb(evutil_socket_t fd, short, void* user_data)
+	static void timercb(evutil_socket_t, short, void* user_data)
 	{
 		Client* client = (Client*)user_data;
-		auto now = std::chrono::steady_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::seconds>(now - client->lastTimeSendData);
-		if (diff.count() >= client->timeout_) {
+		if (client->strictTimer_) {
 			if (client->userData_ && client->onTimer_) {
 				client->onTimer_(client->userData_);
 			}
-		}
-		struct timeval tv = { 1, 0 };
-		client->impl_->timer = event_new(client->impl_->base, fd, 0, Impl::timercb, client);
-		event_add(client->impl_->timer, &tv);
+			struct timeval tv = { client->timeout_, 0 };
+			event_add(event_new(client->impl_->base, -1, 0, Impl::timercb, client), &tv);
+		} else {
+			auto now = std::chrono::steady_clock::now();
+			auto diff = std::chrono::duration_cast<std::chrono::seconds>(now - client->lastTimeSendData);
+			if (diff.count() >= client->timeout_) {
+				if (client->userData_ && client->onTimer_) {
+					client->onTimer_(client->userData_);
+				}
+			}
+			struct timeval tv = { 1, 0 };
+			client->impl_->timer = event_new(client->impl_->base, -1, 0, Impl::timercb, client);
+			event_add(client->impl_->timer, &tv);
+		}		
 	}
 
 	static void reconn_timercb(evutil_socket_t, short, void* user_data)
@@ -168,9 +183,9 @@ struct Client::Impl
 
 		do {
 			std::string msg = "Reconnecting " + client->impl_->ip + ":" + std::to_string(client->impl_->port);
-			if (client->userData_ && client->onConn_) {
+			/*if (client->userData_ && client->onConn_) {
 				client->onConn_(false, msg, client->userData_);
-			}
+			}*/
 
 			sockaddr_in sin = { 0 };
 			sin.sin_family = AF_INET;
@@ -259,6 +274,11 @@ void Client::stop()
 
 	auto old = autoReconnect_;
 	autoReconnect_ = false;
+
+	if (impl_->timer) {
+		event_del(impl_->timer);
+		impl_->timer = nullptr;
+	}
 
 	if (impl_->bev) {
 		shutdown(bufferevent_getfd(impl_->bev), 1);
