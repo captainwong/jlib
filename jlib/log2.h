@@ -115,7 +115,8 @@ public:
 #define AUTO_LOG_FUNCTION jlib::range_log __log_function_object__(__the_pretty_name_of_this_function__);
 
 
-static const int MAX_OUT_BUFF_LEN = 4096;
+constexpr size_t MAX_OUT_BUFF_LEN = 4096;
+constexpr size_t MAX_INPUT_BUFF_LEN = 672;
 
 inline void dump_hex(const void* buff, size_t buff_len, spdlog::level::level_enum level_enum = spdlog::level::warn)
 {
