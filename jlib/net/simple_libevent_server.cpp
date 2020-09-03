@@ -1,4 +1,4 @@
-#include "Server.h"
+#include "simple_libevent_server.h"
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -14,12 +14,18 @@
 #include <algorithm>
 #include <signal.h>
 #include <inttypes.h>
+#ifdef SIMPLELIBEVENTSERVERLIB
 #include "../log2.h"
+#else
+#include <jlib/log2.h>
+#endif
 
+#ifndef JLIB_LOG2_ENABLED
+#pragma error "jlib::log2 not found!"
+#endif
 
 namespace jlib {
 namespace net {
-namespace server {
 
 
 struct OneTimeIniter {
@@ -63,25 +69,25 @@ struct BaseClientPrivateData {
 };
 
 
-BaseClient::BaseClient(int fd, void* bev)
+simple_libevent_server::BaseClient::BaseClient(int fd, void* bev)
 	: fd(fd)
 	, privateData(new BaseClientPrivateData())
 {
 	((BaseClientPrivateData*)privateData)->bev = bev;
 }
 
-BaseClient::~BaseClient()
+simple_libevent_server::BaseClient::~BaseClient()
 {
 	delete (BaseClientPrivateData*)privateData;
 }
 
-BaseClient* BaseClient::createDefaultClient(int fd, void* bev)
+simple_libevent_server::BaseClient* simple_libevent_server::BaseClient::createDefaultClient(int fd, void* bev)
 {
 	BaseClient* client = new BaseClient(fd, bev);
 	return client;
 }
 
-void BaseClient::send(const void* data, size_t len)
+void simple_libevent_server::BaseClient::send(const void* data, size_t len)
 {
 	if (!((BaseClientPrivateData*)privateData)->bev) {
 		JLOG_CRTC("BaseClient::send bev is nullptr, #{}", fd);
@@ -99,7 +105,7 @@ void BaseClient::send(const void* data, size_t len)
 	evbuffer_unlock(output);
 }
 
-void BaseClient::shutdown(int what)
+void simple_libevent_server::BaseClient::shutdown(int what)
 {
 	if (fd != 0) {
 		::shutdown(fd, what);
@@ -107,12 +113,12 @@ void BaseClient::shutdown(int what)
 	}
 }
 
-void BaseClient::updateLastTimeComm()
+void simple_libevent_server::BaseClient::updateLastTimeComm()
 {
 	((BaseClientPrivateData*)privateData)->lastTimeComm = std::chrono::steady_clock::now();
 }
 
-struct Server::PrivateImpl
+struct simple_libevent_server::PrivateImpl
 {
 	struct WorkerThreadContext {
 		std::string name = {};
@@ -143,7 +149,7 @@ struct Server::PrivateImpl
 		{
 			char buff[4096];
 			auto input = bufferevent_get_input(bev);
-			Server* server = (Server*)user_data;
+			simple_libevent_server* server = (simple_libevent_server*)user_data;
 			if (server->userData_ && server->onMsg_) {
 				int fd = (int)bufferevent_getfd(bev);
 				BaseClient* client = nullptr;
@@ -176,7 +182,7 @@ struct Server::PrivateImpl
 
 		static void eventcb(struct bufferevent* bev, short events, void* user_data)
 		{
-			Server* server = (Server*)user_data;
+			simple_libevent_server* server = (simple_libevent_server*)user_data;
 			//printf("eventcb events=%d %s\n", events, eventToString(events).data());
 
 			std::string msg;
@@ -237,7 +243,7 @@ struct Server::PrivateImpl
 
 	static void timercb(evutil_socket_t fd, short, void* user_data)
 	{
-		auto server = (Server*)user_data;
+		auto server = (simple_libevent_server*)user_data;
 		std::lock_guard<std::mutex> lg(server->mutex);
 		auto iter = server->clients.find((int)fd);
 		if (iter != server->clients.end()) {
@@ -263,7 +269,7 @@ struct Server::PrivateImpl
 		auto sin = (sockaddr_in*)addr;
 		inet_ntop(AF_INET, &sin->sin_addr, str, INET_ADDRSTRLEN);
 
-		Server* server = (Server*)user_data;
+		simple_libevent_server* server = (simple_libevent_server*)user_data;
 		auto ctx = server->impl->workerThreadContexts[server->impl->curWorkerId];
 
 		auto bev = bufferevent_socket_new(ctx->base, fd, BEV_OPT_CLOSE_ON_FREE);
@@ -298,17 +304,17 @@ struct Server::PrivateImpl
 
 };
 
-Server::Server()
+simple_libevent_server::simple_libevent_server()
 {
 	static OneTimeIniter initLibEvent;
 }
 
-Server::~Server()
+simple_libevent_server::~simple_libevent_server()
 {
 	stop();
 }
 
-bool Server::start(uint16_t port, std::string& msg)
+bool simple_libevent_server::start(uint16_t port, std::string& msg)
 {
 	do {
 		stop();
@@ -365,7 +371,7 @@ bool Server::start(uint16_t port, std::string& msg)
 	return false;
 }
 
-void Server::stop()
+void simple_libevent_server::stop()
 {
 	std::lock_guard<std::mutex> lg(mutex);
 	if (!impl) { return; }
@@ -406,6 +412,5 @@ void Server::stop()
 	started_ = false;
 }
 
-}
 }
 }

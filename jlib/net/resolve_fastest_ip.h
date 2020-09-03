@@ -80,7 +80,7 @@ static std::pair<bool, std::string> get_domain_ip_impl(const std::string& domain
 } // end of namespace detail
 
 
-static bool get_domain_ip(const std::string& domain, int ping_times, std::string& result, waiting_cb cb) {
+static bool get_domain_ip(const std::string& domain, int ping_times, std::string& result, waiting_cb cb = nullptr) {
 	auto f = std::async(std::launch::async, detail::get_domain_ip_impl, domain, ping_times);
 	while (true) {
 		auto status = f.wait_for(std::chrono::milliseconds(1));

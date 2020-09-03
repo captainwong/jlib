@@ -19,22 +19,23 @@
 
 namespace jlib {
 namespace net {
-namespace client {
 
 
-typedef void(*OnConnectinoCallback)(bool up, const std::string& msg, void* user_data);
-
-// return > 0 for ate
-// return 0 for stop
-typedef size_t(*OnMessageCallback)(const char* data, size_t len, void* user_data);
-
-typedef void(*OnTimerCallback)(void* user_data);
-
-class Client
+class simple_libevent_client
 {
 public:
-	Client() {}
-	virtual ~Client() { stop(); }
+	typedef void(*OnConnectinoCallback)(bool up, const std::string& msg, void* user_data);
+
+	// return > 0 for ate
+	// return 0 for stop
+	typedef size_t(*OnMessageCallback)(const char* data, size_t len, void* user_data);
+
+	typedef void(*OnTimerCallback)(void* user_data);
+
+
+public:
+	simple_libevent_client() {}
+	virtual ~simple_libevent_client() { stop(); }
 
 	void setUserData(void* d) { userData_ = d; }
 	void setOnConnectionCallback(OnConnectinoCallback cb) { onConn_ = cb; }
@@ -69,6 +70,5 @@ protected:
 };
 
 
-}
 }
 }

@@ -28,39 +28,39 @@
 
 namespace jlib {
 namespace net {
-namespace server {
 
-
-struct BaseClient {
-	explicit BaseClient(int fd, void* bev);
-	virtual ~BaseClient();
-
-	static BaseClient* createDefaultClient(int fd, void* bev);
-
-	void send(const void* data, size_t len);
-	void shutdown(int what = 1);
-	void updateLastTimeComm();
-
-	int fd = 0;	
-	std::string ip = {};
-	uint16_t port = 0;
-	void* privateData = nullptr;	
-};
-
-typedef BaseClient*(*NewClientCallback)(int fd, void* bev);
-
-typedef void(*OnConnectinoCallback)(bool up, const std::string& msg, BaseClient* client, void* user_data);
-
-// return > 0 for ate
-// return 0 for stop
-typedef size_t(*OnMessageCallback)(const char* data, size_t len, BaseClient* client, void* user_data);
-
-
-class Server
+class simple_libevent_server
 {
 public:
-	explicit Server();
-	virtual ~Server();
+	struct BaseClient {
+		explicit BaseClient(int fd, void* bev);
+		virtual ~BaseClient();
+
+		static BaseClient* createDefaultClient(int fd, void* bev);
+
+		void send(const void* data, size_t len);
+		void shutdown(int what = 1);
+		void updateLastTimeComm();
+
+		int fd = 0;
+		std::string ip = {};
+		uint16_t port = 0;
+		void* privateData = nullptr;
+	};
+
+	typedef BaseClient* (*NewClientCallback)(int fd, void* bev);
+
+	typedef void(*OnConnectinoCallback)(bool up, const std::string& msg, BaseClient* client, void* user_data);
+
+	// return > 0 for ate
+	// return 0 for stop
+	typedef size_t(*OnMessageCallback)(const char* data, size_t len, BaseClient* client, void* user_data);
+
+
+public:
+	explicit simple_libevent_server();
+	virtual ~simple_libevent_server();
+
 
 	// these functions wont take effect after start() is called
 	void setName(const std::string& name) { name_ = name; }
@@ -97,6 +97,5 @@ protected:
 	std::unordered_map<int, BaseClient*> clients = {};
 };
 
-}
 }
 }

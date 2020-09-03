@@ -1,4 +1,4 @@
-#include "Client.h"
+#include "simple_libevent_client.h"
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -19,7 +19,11 @@
 #include <event2/thread.h>
 #include <thread>
 #include <mutex>
+#ifdef SIMPLELIBEVENTCLIENTLIB
 #include "../log2.h"
+#else
+#include <jlib/log2.h>
+#endif
 
 #ifndef JLIB_LOG2_ENABLED
 #pragma error "jlib::log2 not found!"
@@ -27,8 +31,6 @@
 
 namespace jlib {
 namespace net {
-namespace client {
-
 
 struct OneTimeIniter {
 	OneTimeIniter() {
@@ -48,7 +50,7 @@ struct OneTimeIniter {
 	}
 };
 
-struct Client::Impl
+struct simple_libevent_client::Impl
 {
 	Impl(void* user_data)
 		: user_data(user_data)
@@ -66,7 +68,7 @@ struct Client::Impl
 
 	static void writecb(struct bufferevent*, void* user_data)
 	{
-		Client* client = (Client*)user_data;
+		simple_libevent_client* client = (simple_libevent_client*)user_data;
 		client->lastTimeSendData = std::chrono::steady_clock::now();
 	}
 
@@ -75,7 +77,7 @@ struct Client::Impl
 		char buff[4096];
 		auto input = bufferevent_get_input(bev);
 		JLOG_DBUG("readcb, readable len {}", evbuffer_get_length(input));
-		Client* client = (Client*)user_data;
+		simple_libevent_client* client = (simple_libevent_client*)user_data;
 		if (client->userData_ && client->onMsg_) {
 			while (1) {
 				int len = evbuffer_copyout(input, buff, std::min(sizeof(buff), evbuffer_get_length(input)));
@@ -108,7 +110,7 @@ struct Client::Impl
 
 	static void eventcb(struct bufferevent* bev, short events, void* user_data)
 	{
-		Client* client = (Client*)user_data;
+		simple_libevent_client* client = (simple_libevent_client*)user_data;
 		JLOG_DBUG("eventcb events={}", eventToString(events));
 
 		std::string msg;
@@ -156,7 +158,7 @@ struct Client::Impl
 
 	static void timercb(evutil_socket_t, short, void* user_data)
 	{
-		Client* client = (Client*)user_data;
+		simple_libevent_client* client = (simple_libevent_client*)user_data;
 		if (client->strictTimer_) {
 			if (client->userData_ && client->onTimer_) {
 				client->onTimer_(client->userData_);
@@ -179,7 +181,7 @@ struct Client::Impl
 
 	static void reconn_timercb(evutil_socket_t, short, void* user_data)
 	{
-		Client* client = (Client*)user_data;
+		simple_libevent_client* client = (simple_libevent_client*)user_data;
 
 		do {
 			std::string msg = "Reconnecting " + client->impl_->ip + ":" + std::to_string(client->impl_->port);
@@ -216,7 +218,7 @@ struct Client::Impl
 	}
 };
 
-bool Client::start(const std::string& ip, uint16_t port, std::string& msg)
+bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::string& msg)
 {
 	do {
 		stop();
@@ -267,7 +269,7 @@ bool Client::start(const std::string& ip, uint16_t port, std::string& msg)
 	return false;
 }
 
-void Client::stop()
+void simple_libevent_client::stop()
 {
 	std::lock_guard<std::mutex> lg(mutex_);
 	if (!impl_) { return; }
@@ -309,7 +311,7 @@ void Client::stop()
 	autoReconnect_ = old;
 }
 
-void Client::send(const char* data, size_t len)
+void simple_libevent_client::send(const char* data, size_t len)
 {
 	std::lock_guard<std::mutex> lg(mutex_);
 	if (!impl_ || !impl_->base || !impl_->bev) { return; }
@@ -319,6 +321,5 @@ void Client::send(const char* data, size_t len)
 	evbuffer_unlock(output);
 }
 
-}
 }
 }
