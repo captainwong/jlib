@@ -159,12 +159,12 @@ struct simple_libevent_client::Impl
 	static void timercb(evutil_socket_t, short, void* user_data)
 	{
 		simple_libevent_client* client = (simple_libevent_client*)user_data;
+		struct timeval tv = { 1, 0 };
 		if (client->strictTimer_) {
 			if (client->userData_ && client->onTimer_) {
 				client->onTimer_(client->userData_);
 			}
-			struct timeval tv = { client->timeout_, 0 };
-			event_add(event_new(client->impl_->base, -1, 0, Impl::timercb, client), &tv);
+			tv.tv_sec = client->timeout_;			
 		} else {
 			auto now = std::chrono::steady_clock::now();
 			auto diff = std::chrono::duration_cast<std::chrono::seconds>(now - client->lastTimeSendData);
@@ -172,15 +172,20 @@ struct simple_libevent_client::Impl
 				if (client->userData_ && client->onTimer_) {
 					client->onTimer_(client->userData_);
 				}
+			} else {
+				return;
 			}
-			struct timeval tv = { 1, 0 };
+		}		
+
+		if (client->connected_) {
 			client->impl_->timer = event_new(client->impl_->base, -1, 0, Impl::timercb, client);
 			event_add(client->impl_->timer, &tv);
-		}		
+		}
 	}
 
 	static void reconn_timercb(evutil_socket_t, short, void* user_data)
 	{
+		AUTO_LOG_FUNCTION;
 		simple_libevent_client* client = (simple_libevent_client*)user_data;
 
 		do {
@@ -220,6 +225,7 @@ struct simple_libevent_client::Impl
 
 bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::string& msg)
 {
+	AUTO_LOG_FUNCTION;
 	do {
 		stop();
 
@@ -271,6 +277,7 @@ bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::st
 
 void simple_libevent_client::stop()
 {
+	AUTO_LOG_FUNCTION;
 	std::lock_guard<std::mutex> lg(mutex_);
 	if (!impl_) { return; }
 

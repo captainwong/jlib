@@ -87,6 +87,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net", "net", "{FEAECF59-4F3
 		..\jlib\net\icmp_header.hpp = ..\jlib\net\icmp_header.hpp
 		..\jlib\net\ipv4_header.hpp = ..\jlib\net\ipv4_header.hpp
 		..\jlib\net\ping.h = ..\jlib\net\ping.h
+		..\jlib\net\resolve_fastest_ip.h = ..\jlib\net\resolve_fastest_ip.h
+		..\jlib\net\simple_libevent_client.cpp = ..\jlib\net\simple_libevent_client.cpp
+		..\jlib\net\simple_libevent_client.h = ..\jlib\net\simple_libevent_client.h
+		..\jlib\net\simple_libevent_server.cpp = ..\jlib\net\simple_libevent_server.cpp
+		..\jlib\net\simple_libevent_server.h = ..\jlib\net\simple_libevent_server.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{E13021FA-C9A3-4627-B7EF-16E97B7E2E14}"
