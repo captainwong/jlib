@@ -2,6 +2,7 @@
 
 #include "../log2auto.h"
 #include "ping.h"
+#include <future>
 
 namespace jlib {
 namespace net {
