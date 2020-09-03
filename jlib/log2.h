@@ -192,8 +192,8 @@ inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space
 	spdlog::get(jlib::g_logger_name)->log(level_enum, output);
 }
 
-#define JLOG_HEX(b, l) jlib::dump_hex(b, l)
-#define JLOG_ASC(b, l) jlib::dump_asc(b, l)
+#define JLOG_HEX(b, l) jlib::dump_hex((b), (l))
+#define JLOG_ASC(b, l) jlib::dump_asc((b), (l))
 
 }
 
