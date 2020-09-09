@@ -172,8 +172,6 @@ struct simple_libevent_client::Impl
 				if (client->userData_ && client->onTimer_) {
 					client->onTimer_(client->userData_);
 				}
-			} else {
-				return;
 			}
 		}		
 
