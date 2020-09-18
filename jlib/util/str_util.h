@@ -122,4 +122,42 @@ inline std::wstring to_lower_copy(std::wstring str) {
 	return str;
 }
 
+
+/**************************** starts_with *************************/
+
+inline bool starts_with(const std::string& str, const std::string& sub) {
+	if (str.size() < sub.size()) { return false; }
+	for (size_t i = 0; i < sub.size(); i++) { if (str[i] != sub[i]) { return false; } }
+	return true;
+}
+
+inline bool starts_with(const std::wstring& str, const std::wstring& sub) {
+	if (str.size() < sub.size()) { return false; }
+	for (size_t i = 0; i < sub.size(); i++) { if (str[i] != sub[i]) { return false; } }
+	return true;
+}
+
+/**************************** ends_with ***************************/
+
+inline bool ends_with(const std::string& str, const std::string& sub) {
+	if (str.size() < sub.size()) { return false; }
+	for (size_t i = 0; i < sub.size(); i++) { 
+		if (str[str.size() - i - 1] != sub[sub.size() - i - 1]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+inline bool ends_with(const std::wstring& str, const std::wstring& sub) {
+	if (str.size() < sub.size()) { return false; }
+	for (size_t i = 0; i < sub.size(); i++) {
+		if (str[str.size() - i - 1] != sub[sub.size() - i - 1]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
 } // namespace jlib

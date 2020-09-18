@@ -231,9 +231,10 @@ struct simple_libevent_server::PrivateImpl
 
 	static void accpet_error_cb(evconnlistener* listener, void* context)
 	{
+		auto server = (simple_libevent_server*)context;
 		auto base = evconnlistener_get_base(listener);
 		int err = EVUTIL_SOCKET_ERROR();
-		JLOG_CRTC("accpet_error_cb:{}:{}", err, evutil_socket_error_to_string(err));
+		JLOG_CRTC("{} accpet_error_cb:{}:{}", server->name_, err, evutil_socket_error_to_string(err));
 		event_base_loopexit(base, nullptr);
 	}
 
@@ -255,7 +256,7 @@ struct simple_libevent_server::PrivateImpl
 				event_add((event*)((BaseClientPrivateData*)client->privateData)->timer, &server->impl->tv);
 			}
 		} else {
-			JLOG_CRTC("timercb cannot find client by fd #{}", (int)fd);
+			JLOG_CRTC("{} timercb cannot find client by fd #{}", server->name_, (int)fd);
 		}
 	}
 
@@ -270,7 +271,7 @@ struct simple_libevent_server::PrivateImpl
 
 		auto bev = bufferevent_socket_new(ctx->base, fd, BEV_OPT_CLOSE_ON_FREE);
 		if (!bev) {
-			JLOG_CRTC("Error constructing bufferevent!");
+			JLOG_CRTC("{} Error constructing bufferevent!", server->name_);
 			exit(-1);
 		}
 

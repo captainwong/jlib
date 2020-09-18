@@ -74,4 +74,34 @@ int main()
 		to_lower(wstr); assert(wstr == L"abc");
 
 	}
+
+	// starts_with
+	{
+		std::string str = "abc123";
+		assert(starts_with(str, "abc123"));
+		assert(starts_with(str, "abc"));
+		assert(!starts_with(str, "abc1234"));
+		assert(!starts_with(str, "bc"));
+
+		std::wstring wstr = L"abc123";
+		assert(starts_with(wstr, L"abc123"));
+		assert(starts_with(wstr, L"abc"));
+		assert(!starts_with(wstr, L"abc1234"));
+		assert(!starts_with(wstr, L"bc"));
+	}
+
+	// ends_with
+	{
+		std::string str = "abc123";
+		assert(ends_with(str, "abc123"));
+		assert(ends_with(str, "123"));
+		assert(!ends_with(str, "0abc123"));
+		assert(!ends_with(str, "abc13"));
+
+		std::wstring wstr = L"abc123";
+		assert(ends_with(wstr, L"abc123"));
+		assert(ends_with(wstr, L"123"));
+		assert(!ends_with(wstr, L"0abc123"));
+		assert(!ends_with(wstr, L"abc13"));
+	}
 }
