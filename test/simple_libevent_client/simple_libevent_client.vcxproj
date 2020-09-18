@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\jlib\net\simple_libevent_client.h" />
+    <ClInclude Include="..\..\jlib\net\simple_libevent_micros.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

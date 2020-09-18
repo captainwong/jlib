@@ -19,43 +19,58 @@
 #include <event2/thread.h>
 #include <thread>
 #include <mutex>
-#ifdef SIMPLELIBEVENTCLIENTLIB
-#include "../log2.h"
-#else
-#include <jlib/log2.h>
+
+#if defined(DISABLE_JLIB_LOG2) && !defined(JLIB_DISABLE_LOG)
+#define JLIB_DISABLE_LOG
 #endif
 
-#ifndef JLIB_LOG2_ENABLED
-#pragma error "jlib::log2 not found!"
-#endif
+#ifndef JLIB_DISABLE_LOG
+# ifdef SIMPLELIBEVENTCLIENTLIB
+#  include "../log2.h"
+# else
+#  include <jlib/log2.h>
+# endif
+#else // JLIB_DISABLE_LOG
+# ifdef SIMPLELIBEVENTCLIENTLIB
+#  include "../log2micros.h"
+# else
+#  define init_logger(...)
+#  define JLOG_DBUG(...)
+#  define JLOG_INFO(...)
+#  define JLOG_WARN(...)
+#  define JLOG_ERRO(...)
+#  define JLOG_CRTC(...)
+#  define JLOG_ALL(...)
+
+class range_log {
+public:
+	range_log() {}
+	range_log(const char*) {}
+};
+
+#  define AUTO_LOG_FUNCTION
+
+#  define dump_hex(...)
+#  define dump_asc(...)
+#  define JLOG_HEX(...)
+#  define JLOG_ASC(...)
+# endif
+#endif // JLIB_DISABLE_LOG
+
+#include "simple_libevent_micros.h"
+
 
 namespace jlib {
 namespace net {
 
-struct OneTimeIniter {
-	OneTimeIniter() {
-#ifdef _WIN32
-		WSADATA wsa_data;
-		WSAStartup(0x0201, &wsa_data);
-		if (0 != evthread_use_windows_threads()) {
-			JLOG_CRTC("failed to init libevent with thread by calling evthread_use_windows_threads");
-			abort();
-		}
-#else 
-		if (0 != evthread_use_pthreads()) {
-			JLOG_CRTC("failed to init libevent with thread by calling evthread_use_pthreads");
-			abort();
-		}
-#endif	
-	}
-};
+
 
 struct simple_libevent_client::Impl
 {
 	Impl(void* user_data)
 		: user_data(user_data)
 	{
-		static OneTimeIniter init;
+		SIMPLE_LIBEVENT_ONE_TIME_INITTER;
 	}
 
 	event_base* base = nullptr;
@@ -93,19 +108,6 @@ struct simple_libevent_client::Impl
 		} else {
 			evbuffer_drain(input, evbuffer_get_length(input));
 		}
-	}
-
-	static std::string eventToString(short evs) {
-		std::string s;
-#define check_event_append_to_s(e) if(evs & e){s += #e " ";}
-		check_event_append_to_s(BEV_EVENT_READING);
-		check_event_append_to_s(BEV_EVENT_WRITING);
-		check_event_append_to_s(BEV_EVENT_EOF);
-		check_event_append_to_s(BEV_EVENT_ERROR);
-		check_event_append_to_s(BEV_EVENT_TIMEOUT);
-		check_event_append_to_s(BEV_EVENT_CONNECTED);
-#undef check_event_append_to_s
-		return s;
 	}
 
 	static void eventcb(struct bufferevent* bev, short events, void* user_data)

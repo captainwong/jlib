@@ -18,6 +18,9 @@
     <ClInclude Include="..\..\jlib\net\simple_libevent_client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\jlib\net\simple_libevent_micros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\jlib\net\simple_libevent_client.cpp">
