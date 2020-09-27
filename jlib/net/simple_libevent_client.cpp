@@ -1,14 +1,5 @@
 #include "simple_libevent_client.h"
 
-#ifdef _WIN32
-#include <WinSock2.h>
-#pragma comment(lib, "ws2_32.lib")
-#else
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#endif
-
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,8 +18,10 @@
 #ifndef JLIB_DISABLE_LOG
 # ifdef SIMPLELIBEVENTCLIENTLIB
 #  include "../log2.h"
+#  include "simple_libevent_micros.h"
 # else
 #  include <jlib/log2.h>
+#  include <jlib/net/simple_libevent_micros.h>
 # endif
 #else // JLIB_DISABLE_LOG
 # ifdef SIMPLELIBEVENTCLIENTLIB
@@ -57,7 +50,6 @@ public:
 # endif
 #endif // JLIB_DISABLE_LOG
 
-#include "simple_libevent_micros.h"
 
 
 namespace jlib {

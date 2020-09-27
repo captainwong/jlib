@@ -9,6 +9,9 @@
 #  ifndef  _CRT_SECURE_NO_WARNINGS
 #    define  _CRT_SECURE_NO_WARNINGS
 #  endif
+#  ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
+#    define _WINSOCK_DEPRECATED_NO_WARNINGS
+#  endif
 #  ifndef NOMINMAX
 #    define NOMINMAX
 #  endif

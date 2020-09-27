@@ -1,14 +1,25 @@
 ﻿#pragma once
 
-# ifndef  _CRT_SECURE_NO_WARNINGS
-#  define  _CRT_SECURE_NO_WARNINGS
-# endif
-# ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
-#  define _WINSOCK_DEPRECATED_NO_WARNINGS
-# endif
-
-#ifndef NOMINMAX
-#define NOMINMAX
+#ifndef _WIN32
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#else
+#  ifndef  _CRT_SECURE_NO_WARNINGS
+#    define  _CRT_SECURE_NO_WARNINGS
+#  endif
+#  ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
+#    define _WINSOCK_DEPRECATED_NO_WARNINGS
+#  endif
+#  ifndef NOMINMAX
+#    define NOMINMAX
+#  endif
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
+#include <WinSock2.h>
+#pragma comment(lib, "ws2_32.lib")
 #endif
 
 #include <string>

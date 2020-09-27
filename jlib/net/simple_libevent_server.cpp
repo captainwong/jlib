@@ -22,8 +22,10 @@
 #ifndef JLIB_DISABLE_LOG
 # ifdef SIMPLELIBEVENTSERVERLIB
 #  include "../log2.h"
+#  include "simple_libevent_micros.h"
 # else
 #  include <jlib/log2.h>
+#  include <jlib/net/simple_libevent_micros.h>
 # endif
 #else // JLIB_DISABLE_LOG
 # ifdef SIMPLELIBEVENTSERVERLIB
@@ -51,8 +53,6 @@ public:
 #  define JLOG_ASC(...)
 # endif
 #endif // JLIB_DISABLE_LOG
-
-#include "simple_libevent_micros.h"
 
 namespace jlib {
 namespace net {
