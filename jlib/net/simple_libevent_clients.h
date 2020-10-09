@@ -70,6 +70,7 @@ public:
 		void updateLastTimeComm();
 		void set_auto_reconnect(bool b);
 		void set_timer(OnTimerCallback cb, void* user_data, int seconds);
+		// set to -1 for live until peer disconnected
 		void set_lifetime(int seconds);
 
 		struct PrivateData;

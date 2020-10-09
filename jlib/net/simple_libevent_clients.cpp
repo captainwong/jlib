@@ -160,6 +160,13 @@ void simple_libevent_clients::BaseClient::set_auto_reconnect(bool b)
 
 struct simple_libevent_clients::PrivateImpl
 {
+	struct WorkerThreadContext;
+
+	struct ReconnectContext {
+		WorkerThreadContext* context = nullptr;
+		BaseClient* client = nullptr;
+	};
+
 	struct WorkerThreadContext {
 		simple_libevent_clients* ctx = nullptr;
 		int thread_id = 0;
@@ -201,6 +208,8 @@ struct simple_libevent_clients::PrivateImpl
 			client->privateData->bev = bev;
 			client->privateData->thread_id = thread_id;
 			client->privateData->client_id = client_id_to_connect++;
+			client->privateData->server_ip = ip;
+			client->privateData->server_port = port;
 
 			bufferevent_setcb(bev, readcb, writecb, eventcb, this);
 			bufferevent_enable(bev, EV_READ | EV_WRITE);
@@ -306,20 +315,80 @@ struct simple_libevent_clients::PrivateImpl
 				if (context->ctx->onConn_) {
 					context->ctx->onConn_(up, msg, client, context->ctx->userData_);
 				}
+
 				if (!up) {
 					if (client->privateData->timer) {
 						event_del(client->privateData->timer);
 						client->privateData->timer = nullptr;
 					}
-					std::lock_guard<std::mutex> lg(context->mutex);
-					context->clients.erase(fd);
-					delete client;
+
+					if (client->privateData->lifetimer) {
+						event_del(client->privateData->lifetimer);
+						client->privateData->lifetimer = nullptr;
+					}
+
+					{
+						std::lock_guard<std::mutex> lg(context->mutex);
+						context->clients.erase(fd);
+					}
+
+					if (client->privateData->auto_reconnect) {
+						struct timeval tv = { 3, 0 };
+						event_add(event_new(context->base, -1, 0, reconn_timercb, new ReconnectContext{ context, client }), &tv);
+					} else {
+						delete client;
+					}					
 				}
 			}
 
 			if (!up) {
 				bufferevent_free(bev);
 			}
+		}
+
+		static void reconn_timercb(evutil_socket_t, short, void* user_data)
+		{
+			ReconnectContext* rctx = (ReconnectContext*)user_data;
+			BaseClient* client = rctx->client;
+			bool ok = false;
+			std::string msg;
+
+			do {
+				msg = "Reconnecting to " + client->server_ip() + ":" + std::to_string(client->server_port());
+				auto bev = bufferevent_socket_new(rctx->context->base, -1, BEV_OPT_CLOSE_ON_FREE);
+				if (!bev) {
+					msg += (" allocate bufferevent failed");
+					break;
+				}
+				client->privateData->bev = bev;
+
+				bufferevent_setcb(bev, readcb, writecb, eventcb, rctx->context);
+				bufferevent_enable(bev, EV_READ | EV_WRITE);
+
+				sockaddr_in addr = { 0 };
+				addr.sin_family = AF_INET;
+				addr.sin_addr.s_addr = inet_addr(client->server_ip().data());
+				addr.sin_port = htons(client->server_port());
+				if (bufferevent_socket_connect(bev, (const sockaddr*)(&addr), sizeof(addr)) < 0) {
+					client->privateData->fd = (int)bufferevent_getfd(bev);
+					int err = evutil_socket_geterror(client->privateData->fd);
+					msg += " error starting connection: " + std::to_string(err) + evutil_socket_error_to_string(err);					
+				} else {
+					ok = true;
+					client->privateData->fd = (int)bufferevent_getfd(bev);
+					std::lock_guard<std::mutex> lg(rctx->context->mutex);
+					rctx->context->clients[client->privateData->fd] = client;
+				}
+			} while (0);
+
+			if (rctx->context->ctx->onConn_) {
+				rctx->context->ctx->onConn_(false, msg, client, rctx->context->ctx->userData_);
+			}
+
+			if (!ok) {				
+				delete client;
+			}
+			delete rctx;
 		}
 	};
 	typedef WorkerThreadContext* WorkerThreadContextPtr;
@@ -432,6 +501,14 @@ void simple_libevent_clients::BaseClient::set_timer(OnTimerCallback cb, void* us
 
 void simple_libevent_clients::BaseClient::set_lifetime(int seconds)
 {
+	if (seconds < 0) {
+		if (privateData->lifetimer) {
+			event_del(privateData->lifetimer);
+			privateData->lifetimer = nullptr;
+		}
+		return;
+	}
+
 	privateData->lifetime = seconds;
 	if (privateData->lifetimer) {
 		event_del(privateData->lifetimer);

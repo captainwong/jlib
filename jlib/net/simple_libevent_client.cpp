@@ -215,13 +215,14 @@ struct simple_libevent_client::Impl
 	}
 };
 
-bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::string& msg)
+bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::string& msg, bool start_in_thread)
 {
 	AUTO_LOG_FUNCTION;
 	do {
 		stop();
 
-		std::lock_guard<std::mutex> lg(mutex_);
+		//std::lock_guard<std::mutex> lg(mutex_);
+		mutex_.lock();
 
 		impl_ = new Impl(this);
 		impl_->ip = ip;
@@ -230,6 +231,7 @@ bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::st
 		impl_->base = event_base_new();
 		if (!impl_->base) {
 			msg = "init libevent failed";
+			mutex_.unlock();
 			break;
 		}
 
@@ -241,6 +243,7 @@ bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::st
 		impl_->bev = bufferevent_socket_new(impl_->base, -1, BEV_OPT_CLOSE_ON_FREE);
 		if (!impl_->bev) {
 			msg = ("allocate bufferevent failed");
+			mutex_.unlock();
 			break;
 		}
 		bufferevent_setcb(impl_->bev, Impl::readcb, Impl::writecb, Impl::eventcb, this);
@@ -248,18 +251,26 @@ bool simple_libevent_client::start(const std::string& ip, uint16_t port, std::st
 
 		if (bufferevent_socket_connect(impl_->bev, (sockaddr*)(&sin), sizeof(sin)) < 0) {
 			msg = ("error starting connection");
+			mutex_.unlock();
 			break;
 		}
 
 		lastTimeSendData = std::chrono::steady_clock::now();
 
-		impl_->thread = std::thread([this]() {
-			JLOG_WARN("libevent thread started");
+		if (start_in_thread) {
+			impl_->thread = std::thread([this]() {
+				JLOG_WARN("libevent thread started");
+				event_base_dispatch(this->impl_->base);
+				JLOG_WARN("libevent thread exited");
+			});
+			started_ = true;
+			mutex_.unlock();
+		} else {
+			started_ = true;
+			mutex_.unlock();
 			event_base_dispatch(this->impl_->base);
-			JLOG_WARN("libevent thread exited");
-		});
+		}
 
-		started_ = true;
 		return true;
 	} while (0);
 

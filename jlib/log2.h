@@ -64,8 +64,7 @@ std::string file_name = ""
 		fprintf(stderr, "Log initialization failed: %s\n", ex.what());
 #endif
 		exit(0);
-	}
-    
+	}    
 }
 
 
