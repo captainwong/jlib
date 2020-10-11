@@ -41,8 +41,8 @@ inline StringType trim_copy(StringType s) { trim(s); return s; }
 /**************************** join ***************************/
 /**
 * @brief join 字符串
-* @note StringType 可以为std::string或std::wstring
-* @note StringContainer 必须为上述StringType的iterable容器类，如vector，list
+* @note StringType 可以为 std::string 或 std::wstring
+* @note StringContainer 必须为上述 StringType的iterable 容器类，如vector，list
 */
 template <typename StringType, typename StringContainer>
 inline StringType join(const StringContainer& container, const StringType& conjunction = StringType())
@@ -57,6 +57,36 @@ inline StringType join(const StringContainer& container, const StringType& conju
 	for (; itBegin != itEnd; itBegin++) {
 		result += conjunction;
 		result += *itBegin;
+	}
+	return result;
+}
+
+
+/**************************** split ***************************/
+/**
+* @brief split 字符串
+* @note StringType 可以为 std::string 或 std::wstring
+* @note StringContainer 必须为上述StringType的iterable容器类，如vector，list
+*/
+template <typename StringType, typename StringContainer = typename std::vector<StringType>>
+inline typename StringContainer split(const StringType& str, const StringType& split_by)
+{
+	StringContainer result;
+	if (str.size() <= split_by.size()) {
+		return result;
+	} else if (split_by.empty()) {
+		if (!str.empty()) {
+			result.push_back(str);
+		}
+		return result;
+	}
+	using size_type = typename StringType::size_type;
+	size_type pos = 0, spos = 0;
+	while (pos < str.size() && (spos = str.find(split_by, pos)) != StringType::npos) {
+		if (spos > pos) {
+			result.push_back(str.substr(pos, spos - pos));
+		}
+		pos = spos + split_by.size();
 	}
 	return result;
 }

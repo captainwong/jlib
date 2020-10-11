@@ -3,6 +3,29 @@
 #include <vector>
 #include <list>
 
+
+//inline std::vector<std::string> mysplit(const std::string& str, const std::string& split_by)
+//{
+//	std::vector<std::string> result;
+//	if (str.size() <= split_by.size()) {
+//		return result;
+//	} else if (split_by.empty()) {
+//		if (!str.empty()) {
+//			result.push_back(str);
+//		}
+//		return result;
+//	}
+//	using size_type = typename std::string::size_type;
+//	size_type pos = 0, spos = 0;
+//	while (pos < str.size() && (spos = str.find(split_by, pos)) != std::string::npos) {
+//		if (spos > pos) {
+//			result.push_back(str.substr(pos, spos - pos));
+//		}
+//		pos = spos + split_by.size();
+//	}
+//	return result;
+//}
+
 using namespace std;
 using namespace jlib;
 
@@ -36,6 +59,59 @@ int main()
 
 		assert(join(wv, wstring(L"-")) == L"a-b-c");
 		assert(join(wl, wstring(L"-")) == L"d-e-f");
+	}
+
+	// split
+	{
+		{
+			auto res = split<string>((" a b c "), (" "));
+			assert(res.size() == 3);
+			assert(res[0] == "a");
+			assert(res[1] == "b");
+			assert(res[2] == "c");
+		}
+
+		{
+			auto res = split<string>("", "");
+			assert(res.empty());
+		}
+
+		{
+			auto res = split<string>(" ", "");
+			assert(res.size() == 1);
+			assert(res[0] == " ");
+		}
+
+		{
+			auto res = split<string>(" ", " ");
+			assert(res.empty());
+		}
+
+
+
+		{
+			auto res = split<wstring>((L" a b c "), (L" "));
+			assert(res.size() == 3);
+			assert(res[0] == L"a");
+			assert(res[1] == L"b");
+			assert(res[2] == L"c");
+		}
+
+		{
+			auto res = split<wstring>(L"", L"");
+			assert(res.empty());
+		}
+
+		{
+			auto res = split<wstring>(L" ", L"");
+			assert(res.size() == 1);
+			assert(res[0] == L" ");
+		}
+
+		{
+			auto res = split<wstring>(L" ", L" ");
+			assert(res.empty());
+		}
 	}
 
 	// remove_all
