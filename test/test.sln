@@ -90,6 +90,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net", "net", "{FEAECF59-4F3
 		..\jlib\net\resolve_fastest_ip.h = ..\jlib\net\resolve_fastest_ip.h
 		..\jlib\net\simple_libevent_client.cpp = ..\jlib\net\simple_libevent_client.cpp
 		..\jlib\net\simple_libevent_client.h = ..\jlib\net\simple_libevent_client.h
+		..\jlib\net\simple_libevent_clients.cpp = ..\jlib\net\simple_libevent_clients.cpp
+		..\jlib\net\simple_libevent_clients.h = ..\jlib\net\simple_libevent_clients.h
+		..\jlib\net\simple_libevent_micros.h = ..\jlib\net\simple_libevent_micros.h
 		..\jlib\net\simple_libevent_server.cpp = ..\jlib\net\simple_libevent_server.cpp
 		..\jlib\net\simple_libevent_server.h = ..\jlib\net\simple_libevent_server.h
 	EndProjectSection

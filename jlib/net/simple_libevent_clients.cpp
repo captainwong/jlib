@@ -480,6 +480,20 @@ void simple_libevent_clients::exit()
 	impl = nullptr;
 }
 
+simple_libevent_clients::BaseClient* simple_libevent_clients::find_client(int fd)
+{
+	std::lock_guard<std::mutex> lg(mutex_);
+	if (!impl) { return nullptr; }
+	for (int i = 0; i < threadNum_; i++) {
+		std::lock_guard<std::mutex> lg2(impl->contexts[i]->mutex);
+		auto iter = impl->contexts[i]->clients.find(fd);
+		if (iter != impl->contexts[i]->clients.end()) {
+			return iter->second;
+		}
+	}
+	return nullptr;
+}
+
 
 void simple_libevent_clients::BaseClient::set_timer(OnTimerCallback cb, void* user_data, int seconds)
 {

@@ -87,7 +87,7 @@ public:
 	bool connect(const std::string& ip, uint16_t port, std::string& msg);
 	void exit();
 
-
+	BaseClient* find_client(int fd);
 	
 
 protected:
