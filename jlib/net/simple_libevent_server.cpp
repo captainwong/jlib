@@ -347,18 +347,32 @@ bool simple_libevent_server::start(uint16_t port, std::string& msg)
 		impl->tv.tv_sec = maxIdleTime_;
 		impl->tv.tv_usec = 0;
 		const struct timeval* tv_out = event_base_init_common_timeout(impl->base, &impl->tv);
-		memcpy(&impl->tv, tv_out, sizeof(struct timeval));
+		memcpy(&impl->tv, tv_out, sizeof(struct timeval));		
+
+		impl->workerThreadContexts = new PrivateImpl::WorkerThreadContextPtr[threadNum_];
+		for (int i = 0; i < threadNum_; i++) {
+			impl->workerThreadContexts[i] = (new PrivateImpl::WorkerThreadContext(name_, i));
+		}
+
+		// fix 
+		// wait till all worker thread's base is created
+		bool all_created = false;
+		while (!all_created) {
+			all_created = true;
+			for (int i = 0; i < threadNum_; i++) {
+				if (!impl->workerThreadContexts[i]->base) {
+					all_created = false;
+					break;
+				}
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
 
 		impl->thread = std::thread([this]() {
 			JLOG_INFO("{} listen thread started", name_.data());
 			event_base_dispatch(this->impl->base);
 			JLOG_INFO("{} listen thread exited", name_.data());
 		});
-
-		impl->workerThreadContexts = new PrivateImpl::WorkerThreadContextPtr[threadNum_];
-		for (int i = 0; i < threadNum_; i++) {
-			impl->workerThreadContexts[i] = (new PrivateImpl::WorkerThreadContext(name_, i));
-		}
 
 		started_ = true;
 		return true;
