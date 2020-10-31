@@ -303,16 +303,19 @@ struct simple_libevent_server::PrivateImpl
 
 simple_libevent_server::simple_libevent_server()
 {
+	AUTO_LOG_FUNCTION;
 	SIMPLE_LIBEVENT_ONE_TIME_INITTER;
 }
 
 simple_libevent_server::~simple_libevent_server()
 {
+	AUTO_LOG_FUNCTION;
 	stop();
 }
 
 bool simple_libevent_server::start(uint16_t port, std::string& msg)
 {
+	AUTO_LOG_FUNCTION;
 	do {
 		stop();
 
@@ -384,11 +387,13 @@ bool simple_libevent_server::start(uint16_t port, std::string& msg)
 
 void simple_libevent_server::stop()
 {
+	AUTO_LOG_FUNCTION;
 	std::lock_guard<std::mutex> lg(mutex);
 	if (!impl) { return; }
 
+	timeval tv{ 0, 1000 };
+
 	if (impl->base) {
-		timeval tv{ 0, 1000 };
 		event_base_loopexit(impl->base, &tv);
 	}
 
@@ -402,7 +407,7 @@ void simple_libevent_server::stop()
 	}
 
 	for (int i = 0; i < threadNum_; i++) {
-		event_base_loopexit(impl->workerThreadContexts[i]->base, nullptr);
+		event_base_loopexit(impl->workerThreadContexts[i]->base, &tv);
 	}
 
 	for (int i = 0; i < threadNum_; i++) {
