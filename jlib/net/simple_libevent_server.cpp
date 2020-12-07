@@ -324,7 +324,8 @@ bool simple_libevent_server::start(uint16_t port, std::string& msg)
 		impl = new PrivateImpl(this);
 		impl->base = event_base_new();
 		if (!impl->base) {
-			msg = "init libevent failed";
+			msg = name_ + " init libevent failed";
+			JLOG_CRTC(msg);
 			break;
 		}
 
@@ -341,8 +342,9 @@ bool simple_libevent_server::start(uint16_t port, std::string& msg)
 												(const sockaddr*)(&sin),
 												sizeof(sin));
 		if (!listener) {
-			JLOG_CRTC("{} create listener failed", name_.data());
-			exit(-1);
+			msg = name_ + " create listener failed";
+			JLOG_CRTC(msg);
+			break;
 		}
 		evconnlistener_set_error_cb(listener, PrivateImpl::accpet_error_cb);
 
@@ -406,17 +408,20 @@ void simple_libevent_server::stop()
 		impl->base = nullptr;
 	}
 
-	for (int i = 0; i < threadNum_; i++) {
-		event_base_loopexit(impl->workerThreadContexts[i]->base, &tv);
+	if (impl->workerThreadContexts) {
+		for (int i = 0; i < threadNum_; i++) {
+			event_base_loopexit(impl->workerThreadContexts[i]->base, &tv);
+		}
+
+		for (int i = 0; i < threadNum_; i++) {
+			impl->workerThreadContexts[i]->thread.join();
+			event_base_free(impl->workerThreadContexts[i]->base);
+			delete impl->workerThreadContexts[i];
+		}
+
+		delete impl->workerThreadContexts;
 	}
 
-	for (int i = 0; i < threadNum_; i++) {
-		impl->workerThreadContexts[i]->thread.join();
-		event_base_free(impl->workerThreadContexts[i]->base);
-		delete impl->workerThreadContexts[i];
-	}
-
-	delete impl->workerThreadContexts;
 	delete impl;
 	impl = nullptr;
 

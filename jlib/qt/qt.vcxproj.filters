@@ -28,6 +28,11 @@
     <Filter Include="View">
       <UniqueIdentifier>{86380508-9436-40fd-8340-01eeed46e0e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="qt.cpp">
@@ -55,6 +60,9 @@
       <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="View\TextMenu.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ProgressDialog.cpp">
       <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,5 +128,13 @@
     <QtMoc Include="View\TextMenu.h">
       <Filter>View</Filter>
     </QtMoc>
+    <QtMoc Include="View\ProgressDialog.h">
+      <Filter>View</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="View\ProgressDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

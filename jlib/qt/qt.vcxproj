@@ -70,6 +70,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <PreprocessorDefinitions>QT_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\View;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -84,6 +85,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <PreprocessorDefinitions>QT_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\View;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,6 +99,7 @@
     <ClCompile Include="View\BgColorBtn.cpp" />
     <ClCompile Include="View\CheckBtn.cpp" />
     <ClCompile Include="View\IconBtn.cpp" />
+    <ClCompile Include="View\ProgressDialog.cpp" />
     <ClCompile Include="View\TextMenu.cpp" />
     <ClCompile Include="View\TitleBar.cpp" />
     <ClCompile Include="View\PageView.cpp" />
@@ -104,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <QtMoc Include="View\ProgressDialog.h" />
     <QtMoc Include="View\TextMenu.h" />
     <QtMoc Include="View\PageView.h" />
     <QtMoc Include="View\CheckBtn.h" />
@@ -122,6 +126,9 @@
     <ClInclude Include="QtUtils.h" />
     <ClInclude Include="qt_global.h" />
     <ClInclude Include="signal_slot.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="View\ProgressDialog.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

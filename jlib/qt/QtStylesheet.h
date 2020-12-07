@@ -83,7 +83,7 @@ static const char* const yahei = "Microsoft YaHei";
 
 inline QString color_value_to_string(int value) {
 	auto s = QString::number(value, 16);
-	if (s.length() == 1) { s += "0"; }
+	if (s.length() == 1) { s.insert(0, '0'); }
 	return s;
 }
 
@@ -117,14 +117,14 @@ inline QString build_border_style(size_t border) {
 }
 
 // font:[font_size]pt;font-family:[font_family];
-inline QString bulid_font_style(size_t font_size, QString font_family = def_font_families::yahei) {
+inline QString build_font_style(size_t font_size, QString font_family = def_font_families::yahei) {
 	return QString("font:") + QString::number(font_size) + QString("pt;")
 		+ QString("font-family:") + font_family + QString(";");
 }
 
 // color:#[color];font:[font_size]pt;font-family:[font_family];
 inline QString build_style(QColor color, size_t font_size, QString font_family = def_font_families::yahei) {
-	return build_color_style(color)	+ bulid_font_style(font_size, font_family);
+	return build_color_style(color)	+ build_font_style(font_size, font_family);
 }
 
 // background-color:#[color];color:#[color];font:[font_size]pt;font-family:[font_family];[border:[border]px;]
