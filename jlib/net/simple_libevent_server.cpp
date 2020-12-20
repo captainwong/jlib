@@ -146,7 +146,7 @@ struct simple_libevent_server::PrivateImpl
 			char buff[4096];
 			auto input = bufferevent_get_input(bev);
 			simple_libevent_server* server = (simple_libevent_server*)user_data;
-			if (server->userData_ && server->onMsg_) {
+			if (/*server->userData_ && */server->onMsg_) {
 				int fd = (int)bufferevent_getfd(bev);
 				BaseClient* client = nullptr;
 				{
@@ -189,7 +189,7 @@ struct simple_libevent_server::PrivateImpl
 				msg += strerror(errno);
 			}
 
-			if (server->userData_ && server->onConn_) {
+			if (/*server->userData_ && */server->onConn_) {
 				int fd = (int)bufferevent_getfd(bev);
 				BaseClient* client = nullptr;
 				{
@@ -292,7 +292,7 @@ struct simple_libevent_server::PrivateImpl
 		bufferevent_setcb(bev, WorkerThreadContext::readcb, nullptr, WorkerThreadContext::eventcb, server);
 		bufferevent_enable(bev, EV_WRITE | EV_READ);
 
-		if (server->userData_ && server->onConn_) {
+		if (/*server->userData_ && */server->onConn_) {
 			server->onConn_(true, "", client, server->userData_);
 		}
 

@@ -42,7 +42,8 @@ public:
 		static BaseClient* createDefaultClient(int fd, void* bev);
 
 		void send(const void* data, size_t len);
-		void shutdown(int what = 1);
+		// 0: recv, 1: send, 2: both
+		void shutdown(int what = 0);
 		void updateLastTimeComm();
 
 		int fd = 0;

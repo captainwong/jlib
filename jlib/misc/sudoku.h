@@ -203,25 +203,6 @@ inline bool search(bool cells[N][9], Helper* helper) {
     return false;
 }
 
-
-//////////////////////////  求数独单解 ///////////////////////////////
-
-// 解数独，找到一个解就停止
-inline bool solve(const std::string& grid, Helper* helper = nullptr) {
-    if (!helper) {
-        static Helper h;
-        helper = &h;
-    }
-    bool cells[N][9];
-    if (!read_grid(grid, cells, helper)) {
-        return false;
-    }
-    return search(cells, helper);
-}
-
-
-//////////////////////////  求数独多解 ///////////////////////////////
-
 inline std::string cells_to_grid(bool cells[N][9]) {
     std::string grid(81, '.');
     for (int i = 0; i < N; i++) {
@@ -232,6 +213,29 @@ inline std::string cells_to_grid(bool cells[N][9]) {
     }
     return grid;
 }
+
+
+//////////////////////////  求数独单解 ///////////////////////////////
+
+// 解数独，找到一个解就停止
+inline bool solve(const std::string& grid, std::string& solved_grid, Helper* helper = nullptr) {
+    if (!helper) {
+        static Helper h;
+        helper = &h;
+    }
+    bool cells[N][9];
+    if (!read_grid(grid, cells, helper)) {
+        return false;
+    }
+    if (search(cells, helper)) {
+        solved_grid = cells_to_grid(cells);
+        return true;
+    }
+    return false;
+}
+
+
+//////////////////////////  求数独多解 ///////////////////////////////
 
 typedef void(*OnSolved)(const std::string& grid);
 
