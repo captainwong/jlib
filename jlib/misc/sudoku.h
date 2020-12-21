@@ -12,15 +12,17 @@ namespace jlib {
 namespace misc {
 namespace sudoku {
 
-constexpr int N = 81;
-constexpr int NEIGHBORS = 20;
-constexpr int GROUPS_OF = 3;
-constexpr int GROUPS = 27;
+constexpr int N = 81; // 81 格
+constexpr int NEIGHBORS = 20; // 每格有20个邻居
+constexpr int GROUPS_OF = 3; // 每格属于3个组
+constexpr int GROUPS = 27; // 27个组 = 9行+9列+9块
 
+// 辅助结构体
+// 内部数据初始化后就不会变化了，批量求多个数独时可以复用同一个 Helper
 struct Helper {
-	int neighbors[N][NEIGHBORS]; // 每格有20个邻居
-	int groups_of[N][GROUPS_OF]; // 每格属于3个组
-	int groups[GROUPS][9]; // 27个组 = 9行+9列+9块
+	int neighbors[N][NEIGHBORS]; 
+	int groups_of[N][GROUPS_OF]; 
+	int groups[GROUPS][9]; 
 
     std::default_random_engine rng = jlib::seeded_random_engine();
 
@@ -173,7 +175,6 @@ inline bool eliminate(bool cells[N][9], int k, int val, Helper* helper) {
 
 inline bool read_grid(const std::string& grid, bool cells[N][9], Helper* helper) {
     if (grid.size() != 81) { return false; }
-    memset(cells, true, sizeof(cells));
     for (int i = 0; i < 81; i++) {
         if ('1' <= grid[i] && grid[i] <= '9') {
             if (!assign(cells, i, grid[i] - '0', helper)) {
@@ -227,6 +228,7 @@ inline bool solve(const std::string& grid, std::string& solved_grid, Helper* hel
         helper = &h;
     }
     bool cells[N][9];
+    memset(cells, true, sizeof(cells));
     if (!read_grid(grid, cells, helper)) {
         return false;
     }
@@ -272,7 +274,8 @@ inline int solve_n(const std::string& grid, OnSolved on_solved, int max_solves =
         static Helper h;
         helper = &h;
     }
-    bool cells[N][9]; 
+    bool cells[N][9];
+    memset(cells, true, sizeof(cells));
     if (!read_grid(grid, cells, helper)) {
         return 0;
     }
@@ -345,11 +348,11 @@ inline std::string random_puzzle(Helper* helper = nullptr) {
     for (auto k : random_N) { // 随机挖洞
         char old = solved_grid[k];
         solved_grid[k] = '.'; // 挖洞
-        if (solve_n(solved_grid.c_str(), nullptr, 2) > 1) { // 有多解则恢复，继续挖
+        if (solve_n(solved_grid, nullptr, 2) > 1) { // 有多解则恢复，继续挖
             solved_grid[k] = old;
         }
     }
-    if (solve_n(solved_grid.c_str(), nullptr, 2) == 1) {
+    if (solve_n(solved_grid, nullptr, 2) == 1) {
         return solved_grid;
     }
     return random_puzzle(helper);
