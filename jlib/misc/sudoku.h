@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 namespace jlib {
 namespace misc {
@@ -20,6 +21,8 @@ struct Helper {
 	int neighbors[N][NEIGHBORS]; // 每格有20个邻居
 	int groups_of[N][GROUPS_OF]; // 每格属于3个组
 	int groups[GROUPS][9]; // 27个组 = 9行+9列+9块
+
+    std::default_random_engine rng{};
 
     // 初始化辅助结构体，用户调用 solve 之前手动调用一次即可
     Helper() {
@@ -280,7 +283,7 @@ inline int solve_n(const std::string& grid, OnSolved on_solved, int max_solves =
 //////////////////////////  生成数独 ///////////////////////////////
 
 // 随机获取可选数量最少的 cell
-inline int random_least_cell_count(bool cells[N][9]) {
+inline int random_least_cell_count(bool cells[N][9], Helper* helper) {
     int ks[N], ki = 0, n = 9; ks[0] = 0;
     for (int i = 0; i < N; i++) {
         int nn = cell_count(cells, i);
@@ -292,13 +295,13 @@ inline int random_least_cell_count(bool cells[N][9]) {
             }
         }
     }
-    std::shuffle(ks, ks + ki, std::default_random_engine());
+    std::shuffle(ks, ks + ki, helper->rng);
     return ks[0];
 }
 
 inline bool random_search(bool cells[N][9], Helper* helper) {
     if (solved(cells)) { return true; }
-    int k = random_least_cell_count(cells);
+    int k = random_least_cell_count(cells, helper);
     for (int val = 1; val <= 9; val++) {
         if (cell_on(cells, k, val)) {
             bool cells1[N][9];
@@ -332,10 +335,10 @@ inline std::string random_puzzle(Helper* helper = nullptr) {
         helper = &h;
     }
     auto solved_grid = random_solved_puzzle(helper);
-    std::vector<int> random_N = []() {
+    std::vector<int> random_N = [&helper]() {
         std::vector<int> n(N, 0);
         for (int i = 0; i < N; i++) { n[i] = i; }
-        std::shuffle(n.begin(), n.end(), std::default_random_engine());
+        std::shuffle(n.begin(), n.end(), helper->rng);
         return n;
     }();
 
