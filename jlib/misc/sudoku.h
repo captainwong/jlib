@@ -310,7 +310,7 @@ inline bool random_search(bool cells[N][9], Helper* helper) {
             bool cells1[N][9];
             memcpy(cells1, cells, sizeof(cells1));
             if (assign(cells1, k, val, helper)) {
-                if (search(cells1, helper)) {
+                if (random_search(cells1, helper)) {
                     memcpy(cells, cells1, sizeof(cells1));
                     return true;
                 }
