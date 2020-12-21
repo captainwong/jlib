@@ -10,7 +10,7 @@ using namespace jlib::misc::sudoku;
 // n     81   2
 
 Helper helper{};
-int puzzles = 1000;
+int puzzles = 100;
 int npuzzle = 0;
 bool done = false;
 
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 		puzzles = atoi(argv[3]);
 	}
 
-	jlib::init_logger(L"sudoku_server");
+	jlib::init_logger(L"sudoku_client");
 
 	simple_libevent_client client;
 	client.setUserData(&client);

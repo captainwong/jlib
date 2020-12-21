@@ -188,31 +188,31 @@ struct simple_libevent_server::PrivateImpl
 				msg = ("Got an error on the connection: ");
 				msg += strerror(errno);
 			}
-
-			if (/*server->userData_ && */server->onConn_) {
-				int fd = (int)bufferevent_getfd(bev);
-				BaseClient* client = nullptr;
-				{
-					std::lock_guard<std::mutex> lg(server->mutex);
-					auto iter = server->clients.find(fd);
-					if (iter != server->clients.end()) {
-						client = iter->second;
-					} else {
-						JLOG_CRTC("eventcb cannot find client by fd #{}", (int)fd);
-					}
-				}
-				if (client) {
-					if (((BaseClientPrivateData*)client->privateData)->timer) {
-						event_del((event*)((BaseClientPrivateData*)client->privateData)->timer);
-					}
-					server->onConn_(false, msg, client, server->userData_);
-					{
-						std::lock_guard<std::mutex> lg(server->mutex);
-						server->clients.erase(fd);
-						delete client;
-					}
+			int fd = (int)bufferevent_getfd(bev);
+			BaseClient* client = nullptr;
+			{
+				std::lock_guard<std::mutex> lg(server->mutex);
+				auto iter = server->clients.find(fd);
+				if (iter != server->clients.end()) {
+					client = iter->second;
+				} else {
+					JLOG_CRTC("eventcb cannot find client by fd #{}", (int)fd);
 				}
 			}
+			if (client) {
+				if (((BaseClientPrivateData*)client->privateData)->timer) {
+					event_del((event*)((BaseClientPrivateData*)client->privateData)->timer);
+				}
+				if (/*server->userData_ && */server->onConn_) {
+					server->onConn_(false, msg, client, server->userData_);
+				}
+				{
+					std::lock_guard<std::mutex> lg(server->mutex);
+					server->clients.erase(fd);
+					delete client;
+				}
+			}
+
 			bufferevent_free(bev);
 		}
 	};
