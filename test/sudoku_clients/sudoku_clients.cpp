@@ -33,7 +33,7 @@ struct Client : simple_libevent_clients::BaseClient {
 		std::lock_guard<std::mutex> lg(mutex);
 		auto client = new Client();
 		client->puzzles = puzzles_to_solve_per_client;
-		client->helper.rng = jlib::seeded_random_engine();
+		//client->helper.rng = jlib::seeded_random_engine();
 		return client;
 	}
 

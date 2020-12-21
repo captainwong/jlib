@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <random>
 #include <chrono>
+#include "../util/rand.h"
 
 namespace jlib {
 namespace misc {
@@ -22,7 +22,7 @@ struct Helper {
 	int groups_of[N][GROUPS_OF]; // 每格属于3个组
 	int groups[GROUPS][9]; // 27个组 = 9行+9列+9块
 
-    std::default_random_engine rng{};
+    std::default_random_engine rng = jlib::seeded_random_engine();
 
     // 初始化辅助结构体，用户调用 solve 之前手动调用一次即可
     Helper() {
