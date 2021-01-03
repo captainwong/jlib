@@ -10,6 +10,7 @@
 #define JLIBQT_QDEBUG_FILE_LINE_VALUE (QString("[") + __FUNCTION__ + " ln" + QString::number(__LINE__) + "]: ")
 
 #define MYQDEBUG qDebug() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO qInfo() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQWARN qWarning() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL qCritical() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 

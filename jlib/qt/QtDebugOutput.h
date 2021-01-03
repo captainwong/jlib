@@ -18,7 +18,7 @@ static inline void JLIBQT_MessageOutputFunc(QtMsgType type, const QMessageLogCon
 	QByteArray localMsg = msg.toLocal8Bit();
 	switch (type) {
 	case QtDebugMsg:
-		JLOG_INFO(localMsg.data());
+		JLOG_DBUG(localMsg.data());
 		break;
 	case QtWarningMsg:
 		if (!msg.contains("libpng")) {
