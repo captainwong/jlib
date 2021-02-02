@@ -167,16 +167,16 @@ inline JsonValue toJson(const ProcessInfos& pinfos) {
 
 typedef std::function<void(const std::wstring&)> ErrorOutputFunc;
 
-static void dummyErrorOutputFunc(const std::wstring& msg) {
+inline void dummyErrorOutputFunc(const std::wstring& msg) {
 	printf("%ls\n", msg.data());
 }
 
-static void outputLastErrorHelper(const std::wstring& msg, ErrorOutputFunc func = nullptr) {
+inline void outputLastErrorHelper(const std::wstring& msg, ErrorOutputFunc func = nullptr) {
 	if (!func) { return; }
 	func(formatLastError(msg));
 }
 
-static std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, ErrorOutputFunc output = dummyErrorOutputFunc)
+inline std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, ErrorOutputFunc output = dummyErrorOutputFunc)
 {
 	std::vector<ProcessInfo::ModuleInfo> modules = {};
 
@@ -217,7 +217,7 @@ static std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, Error
 	return(modules);
 }
 
-static std::vector<ProcessInfo::ThreadInfo> getProcessThreads(DWORD dwOwnerPID, ErrorOutputFunc output = dummyErrorOutputFunc)
+inline std::vector<ProcessInfo::ThreadInfo> getProcessThreads(DWORD dwOwnerPID, ErrorOutputFunc output = dummyErrorOutputFunc)
 {
 	std::vector<ProcessInfo::ThreadInfo> threads = {};
 
@@ -326,7 +326,7 @@ static const wchar_t* PROCESS_FILTER[] = {
 	L"YourPhone.exe",
 };
 
-static ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFunc, bool withModules = false, bool withThreads = false, const wchar_t** filter = PROCESS_FILTER, size_t filter_count = _countof(PROCESS_FILTER))
+inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFunc, bool withModules = false, bool withThreads = false, const wchar_t** filter = PROCESS_FILTER, size_t filter_count = _countof(PROCESS_FILTER))
 {
 	// pre-process filter
 	std::unordered_set<std::wstring> filterset;

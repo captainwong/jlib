@@ -374,9 +374,9 @@ bool simple_libevent_server::start(uint16_t port, std::string& msg)
 		}
 
 		impl->thread = std::thread([this]() {
-			JLOG_INFO("{} listen thread started", name_.data());
+			JLOG_INFO("{} listen thread started", name_);
 			event_base_dispatch(this->impl->base);
-			JLOG_INFO("{} listen thread exited", name_.data());
+			JLOG_INFO("{} listen thread exited", name_);
 		});
 
 		started_ = true;
@@ -393,7 +393,7 @@ void simple_libevent_server::stop()
 	std::lock_guard<std::mutex> lg(mutex);
 	if (!impl) { return; }
 
-	timeval tv{ 0, 1000 };
+	const timeval tv{ 0, 1000 };
 
 	if (impl->base) {
 		event_base_loopexit(impl->base, &tv);
@@ -410,13 +410,17 @@ void simple_libevent_server::stop()
 
 	if (impl->workerThreadContexts) {
 		for (int i = 0; i < threadNum_; i++) {
+			JLOG_DBUG("simple_libevent_server::stop exiting worker #{}", i);
 			event_base_loopexit(impl->workerThreadContexts[i]->base, &tv);
+			JLOG_DBUG("simple_libevent_server::stop exited worker #{}", i);
 		}
 
 		for (int i = 0; i < threadNum_; i++) {
+			JLOG_DBUG("simple_libevent_server::stop joining worker #{}", i);
 			impl->workerThreadContexts[i]->thread.join();
 			event_base_free(impl->workerThreadContexts[i]->base);
 			delete impl->workerThreadContexts[i];
+			JLOG_DBUG("simple_libevent_server::stop joined worker #{}", i);
 		}
 
 		delete impl->workerThreadContexts;

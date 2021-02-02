@@ -6,13 +6,18 @@
 #endif //_WIN32
 
 
-#define JLIBQT_QDEBUG_FILE_LINE_STREAM "[" << __FUNCTION__ << "ln" << __LINE__ << "]: "
-#define JLIBQT_QDEBUG_FILE_LINE_VALUE (QString("[") + __FUNCTION__ + " ln" + QString::number(__LINE__) + "]: ")
+#define JLIBQT_QDEBUG_FILE_LINE_STREAM "[" << __FUNCTION__  << __LINE__ << "]: "
+#define JLIBQT_QDEBUG_FILE_LINE_VALUE (QString("[") + __FUNCTION__ + " " + QString::number(__LINE__) + "]: ")
 
 #define MYQDEBUG qDebug() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQINFO qInfo() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQWARN qWarning() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL qCritical() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+
+#define MYQDEBUG_NOQUOTE qDebug().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO_NOQUOTE qInfo().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQWARN_NOQUOTE qWarning().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQCRITICAL_NOQUOTE qCritical().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
 //! 弹窗报告行号开关
 // #define JLIBQT_SHOW_LINE 0

@@ -6,7 +6,7 @@
 namespace jlib {
 namespace win32 {
 
-std::string formatLastError(const std::string& msg)
+inline std::string formatLastError(const std::string& msg)
 {
     // Get system msg
     char sysMsg[256];
@@ -24,7 +24,7 @@ std::string formatLastError(const std::string& msg)
     return msg + " failed with error " + std::to_string(eNum) + " (" + sysMsg + ")";
 }
 
-std::wstring formatLastError(const std::wstring& msg)
+inline std::wstring formatLastError(const std::wstring& msg)
 {
     // Get system msg
     wchar_t sysMsg[256];
