@@ -8,20 +8,20 @@ JLIBQT_NAMESPACE_BEGIN
 
 namespace def_sizes {
 
-static const int window_width = 646;
-static const int window_height = 424;
+constexpr int window_width = 646;
+constexpr int window_height = 424;
 
-static const int title_height = 54;
+constexpr int title_height = 54;
 
-static const int content_height = window_height - title_height;
-static const int control_height = 24;
+constexpr int content_height = window_height - title_height;
+constexpr int control_height = 24;
 
-static const int big_window_width = 1022;
-static const int big_window_height = 670;
-static const int big_content_height = big_window_height - title_height;
+constexpr int big_window_width = 1022;
+constexpr int big_window_height = 670;
+constexpr int big_content_height = big_window_height - title_height;
 
-static const int device_view_width = 306;
-static const int device_view_height = 236;
+constexpr int device_view_width = 306;
+constexpr int device_view_height = 236;
 
 } // namespace def_sizes
 
@@ -76,7 +76,7 @@ static const auto ptz_back = QColor(0x2d2e31);
 
 namespace def_font_families {
 
-static const char* const yahei = "Microsoft YaHei";
+constexpr auto yahei = "Microsoft YaHei";
 
 } // namespace def_font_families
 
@@ -170,7 +170,7 @@ inline QString unkonwn_trans() {
 	return build_bg_style() + build_style(def_colors::unknown_trans, 18);
 }
 
-static const auto vertical_scroll_bar = R"(
+constexpr auto vertical_scroll_bar = R"(
 QScrollBar:vertical
 {
 	width:8px;
@@ -236,16 +236,17 @@ QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical
 
 )";
 
-static const auto search_bar_edit = R"(
+constexpr auto search_bar_edit = R"(
 border: 0px;
 background: transparent;
 selection-background-color: white;
+selection-color: black;
 color: #a8a9a9;
 font-family: Microsoft Yahei;
 font-size: 14px;
 )";
 
-static const auto progress_bar = R"(
+constexpr auto progress_bar = R"(
 QProgressBar{
 	background-color:#dedede;border-radius:3px;
 }
@@ -254,7 +255,7 @@ QProgressBar::chunk{
 }
 )";
 
-static const auto slider = R"(
+constexpr auto slider = R"(
 QSlider::groove:horizontal
 {
 	border:0px;
@@ -278,7 +279,7 @@ QSlider::handle:horizontal
 }
 )";
 
-static const auto menu = R"(
+constexpr auto menu = R"(
 QMenu::item 
 {
 	font-family: Microsoft Yahei; 
@@ -293,7 +294,7 @@ QMenu::item:hover
 }
 )";
 
-static const auto group_box = R"(
+constexpr auto group_box = R"(
 QGroupBox {
     border: 1px solid gray;
     border-radius: 9px;
@@ -309,7 +310,7 @@ QGroupBox::title {
 }
 )";
 
-static const auto listWidgetStyleSheet = R"(
+constexpr auto listWidgetStyleSheet = R"(
 QListWidget 
 { 
 	font:12pt; 
@@ -332,7 +333,7 @@ QListWidget::item::selected
 )";
 
 
-static const auto check_box = R"(
+constexpr auto check_box = R"(
 QCheckBox
 {
 	font-size: 16px;
@@ -354,7 +355,7 @@ QCheckBox::indicator:unchecked
 )";
 
 
-static const auto check_box_48px = R"(
+constexpr auto check_box_48px = R"(
 QCheckBox
 {
 	font-size: 16px;
