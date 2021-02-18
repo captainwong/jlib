@@ -42,6 +42,9 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool sh
 		} else {
 			return pi.dwProcessId;
 		}
+	} else {
+		auto msg = formatLastError("");
+		msg.length();
 	}
 	return 0xFFFFFFFF;
 }

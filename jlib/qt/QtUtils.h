@@ -109,7 +109,7 @@ inline void set_pos(QWidget * widget, QRect pos)
 	widget->move(pos.left(), pos.top());
 }
 
-inline void set_image_bg(QWidget* widget, QPixmap pixmap)
+inline void set_image_bg(QWidget* widget, const QPixmap& pixmap)
 {
 	if (!widget || pixmap.isNull())return;
 	QPalette palette;
@@ -117,7 +117,7 @@ inline void set_image_bg(QWidget* widget, QPixmap pixmap)
 	widget->setPalette(palette);
 }
 
-inline void set_image_bg(QWidget* widget, QString icon_path)
+inline void set_image_bg(QWidget* widget, const QString& icon_path)
 {
 	QPixmap pixmap;
 	if (!LOAD_PIXMAP_EX(icon_path)) { return; }
