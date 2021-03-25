@@ -79,7 +79,7 @@ public:
 	* @return 成功或失败
 	* @note 例：keys=["captian, key"], provider="Win32_Process", 则result结构应为：[ {caption: value, key:value}, {caption: value, key:value}, ...]
 	*/
-	static bool simpleSelect(const std::vector<std::wstring>& keys, const std::wstring& provider, Result& result) {
+	static bool simpleSelect(const std::vector<std::wstring>& keys, const std::wstring& provider, const std::wstring& where, Result& result) {
 		std::vector<std::wstring> values, errors;
 		auto output = [&values](const std::wstring& key, const std::wstring& value) {
 			values.push_back(value);
@@ -94,11 +94,11 @@ public:
 			return false;
 		}
 
-		if (!wmi.execute(std::wstring(L"select ") + join(keys, std::wstring(L",")) + L" from " + provider) || !errors.empty()) {
+		if (!wmi.execute(std::wstring(L"select ") + join(keys, std::wstring(L",")) + L" from " + provider + L" " + where) || !errors.empty()) {
 			return false;
 		}
 
-		for (size_t i = 0; (i + 1) < values.size(); i += keys.size()) {
+		for (size_t i = 0; (i + keys.size()) <= values.size(); i += keys.size()) {
 			ResultItem item;
 			for (size_t j = 0; j < keys.size(); j++) {
 				item.insert({ keys.at(j % keys.size()), values.at(i + j) });				
