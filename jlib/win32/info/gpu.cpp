@@ -15,7 +15,16 @@ std::vector<Gpu> gpus()
 		for (auto&& item : result) {
 			Gpu gpu;
 			gpu.name = utf16_to_mbcs(item[L"Description"]);
-			gpu.memsz = std::stoull(item[L"AdapterRAM"]);
+			try {
+				gpu.memsz = std::stoull(item[L"AdapterRAM"]);
+			} catch (...) {
+				try {
+					gpu.name = utf16_to_mbcs(item[L"AdapterRAM"]);
+					gpu.memsz = std::stoull(item[L"Description"]);
+				} catch (...) {
+					gpu.memsz = 0;
+				}
+			}
 			gs.push_back(gpu);
 		}
 	}

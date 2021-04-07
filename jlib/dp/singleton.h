@@ -1,13 +1,13 @@
 #pragma once
 #include <memory>
 #include <mutex>
-#include <boost/noncopyable.hpp>
+#include "../base/noncopyable.h"
 
 namespace jlib {
 namespace dp {
 
 template <class T>
-class singleton : public boost::noncopyable
+class singleton : public noncopyable
 {
 protected:
 	static std::shared_ptr<T> instance_;

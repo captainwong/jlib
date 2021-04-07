@@ -42,8 +42,12 @@ std::vector<LogicalDrive> logical_drives()
 			LogicalDrive drive;
 			drive.device_id = utf16_to_mbcs(item[L"DeviceID"]);
 			drive.drive_type = parseDriveType(item[L"DriveType"]);
-			drive.free_space = std::stoull(item[L"FreeSpace"]);
-			drive.size = std::stoull(item[L"Size"]);
+			try {
+				drive.free_space = std::stoull(item[L"FreeSpace"]);
+				drive.size = std::stoull(item[L"Size"]);
+			} catch (...) {
+
+			}
 			drive.volume_name = utf16_to_mbcs(item[L"VolumeName"]);
 			drives.push_back(drive);
 		}

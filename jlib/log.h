@@ -18,9 +18,8 @@
 #include <cstdint>
 #include <cstdarg>
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 #include "utf8.h"
-#include "chrono_wrapper.h"
+#include "util/chrono_wrapper.h"
 #include "dp/singleton.h"
 
 namespace jlib
@@ -171,7 +170,7 @@ public:
 				*p = '\0';
 
 #if defined(WIN32)
-				auto msg = instance->format_msg(utf8::u16_to_mbcs(buf));
+				auto msg = instance->format_msg(win32::utf16_to_mbcs(buf));
 #else
 				auto msg = instance->format_msg(utf8::w2a(buf));
 #endif
@@ -208,7 +207,7 @@ public:
 	}
 
 	std::string format_msg(const std::string& msg) {
-		return line_prefix_ + " " + now_to_string(true) + " ---- " + msg;
+		return line_prefix_ + " " + nowToString(true) + " ---- " + msg;
 	}
 
 
@@ -229,7 +228,7 @@ protected:
 	}
 
 	void create_file_name() {
-		auto s = now_to_string();
+		auto s = nowToString();
 		std::replace(s.begin(), s.end(), ' ', '_');
 		std::replace(s.begin(), s.end(), ':', '-');
 		log_file_path_ = log_file_foler_ + log_file_prefix_ + "." + s + ".log";

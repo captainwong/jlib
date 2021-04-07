@@ -3,7 +3,7 @@
 #include <memory>
 #include <list>
 #include <mutex>
-#include <boost/noncopyable.hpp>
+#include "../base/noncopyable.h"
 
 namespace jlib {
 namespace dp {
@@ -17,7 +17,7 @@ public:
 
 
 template <typename target>
-class observable : public boost::noncopyable
+class observable : public noncopyable
 {
 public:
 	typedef observer<target> observer_type;
