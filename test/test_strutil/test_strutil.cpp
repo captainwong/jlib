@@ -72,6 +72,29 @@ int main()
 		}
 
 		{
+			auto res = split<string>((" a b c"), (" "));
+			assert(res.size() == 3);
+			assert(res[0] == "a");
+			assert(res[1] == "b");
+			assert(res[2] == "c");
+
+
+		}
+
+		{
+			auto res = split<string>((" a          b   c "), (" "));
+			assert(res.size() == 3);
+			assert(res[0] == "a");
+			assert(res[1] == "b");
+			assert(res[2] == "c");
+		}
+
+		{
+			auto res = split<string>("-rw-r--r--   1 root  wheel   175346 Feb 27 05:32 bbpc-00000065-D33118295100A2B179E1BB05", " ");
+			res.size();
+		}
+
+		{
 			auto res = split<string>("", "");
 			assert(res.empty());
 		}
@@ -87,10 +110,56 @@ int main()
 			assert(res.empty());
 		}
 
+		{
+			auto res = split<string>("  ", " ");
+			assert(res.empty());
+		}
+
+		{
+			auto res = split<string>("   abc", " ");
+			assert(res.size() == 1);
+			assert(res[0] == "abc");
+		}
+
+		{
+			auto res = split<string>("   abc ", " ");
+			assert(res.size() == 1);
+			assert(res[0] == "abc");
+		}
+
+		{
+			auto res = split<string>("   a b  c    ", " ");
+			assert(res.size() == 3);
+			assert(res[0] == "a");
+			assert(res[1] == "b");
+			assert(res[2] == "c");
+		}
+
+		{
+			auto res = split<string>("   a b  c    d ", " ");
+			assert(res.size() == 4);
+			assert(res[0] == "a");
+			assert(res[1] == "b");
+			assert(res[2] == "c");
+			assert(res[3] == "d");
+		}
+
+
+
+
+
 
 
 		{
 			auto res = split<wstring>((L" a b c "), (L" "));
+			assert(res.size() == 3);
+			assert(res[0] == L"a");
+			assert(res[1] == L"b");
+			assert(res[2] == L"c");
+		}
+
+		{
+			auto res = split<wstring>((L" a          b   c "), (L" "));
 			assert(res.size() == 3);
 			assert(res[0] == L"a");
 			assert(res[1] == L"b");
@@ -179,5 +248,24 @@ int main()
 		assert(ends_with(wstr, L"123"));
 		assert(!ends_with(wstr, L"0abc123"));
 		assert(!ends_with(wstr, L"abc13"));
+	}
+
+	// justify
+	{
+		std::string str = "abc";
+		auto res = ljust(str, 5);
+		assert(res == "abc  ");
+
+		res = rjust(str, 5);
+		assert(res == "  abc");
+
+		res = center(str, 5);
+		assert(res == " abc ");
+
+		str = "abcd";
+		res = center(str, 5);
+		assert(res == " abcd");
+
+
 	}
 }

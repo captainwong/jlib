@@ -4,6 +4,8 @@
 #include <algorithm> 
 #include <cctype>
 #include <locale>
+#include <vector>
+
 
 namespace jlib
 {
@@ -82,11 +84,17 @@ inline StringContainer split(const StringType& str, const StringType& split_by)
 	}
 	using size_type = typename StringType::size_type;
 	size_type pos = 0, spos = 0;
-	while (pos < str.size() && (spos = str.find(split_by, pos)) != StringType::npos) {
-		if (spos > pos) {
-			result.push_back(str.substr(pos, spos - pos));
+	while (pos < str.size()) {
+		spos = str.find(split_by, pos);
+		if (spos != StringType::npos) {
+			if (spos > pos) {
+				result.push_back(str.substr(pos, spos - pos));
+			}
+			pos = spos + split_by.size();
+		} else if (pos < str.size()) {
+			result.push_back(str.substr(pos, str.size() - pos));
+			break;
 		}
-		pos = spos + split_by.size();
 	}
 	return result;
 }
@@ -188,6 +196,60 @@ inline bool ends_with(const std::wstring& str, const std::wstring& sub) {
 	}
 	return true;
 }
+
+
+/**************************** justify ***************************/
+/*
+These functions respectively left-justify, right-justify and center a string in a field of given width. 
+They return a string that is at least width characters wide, created by padding the string s with the 
+	character fillchar (default is a space) until the given width on the right, left or both sides. 
+The string is never truncated.
+*/
+
+inline std::string ljust(const std::string& str, size_t width, char fillchar = ' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.push_back(fillchar); }
+	return s;
+}
+
+inline std::string rjust(const std::string& str, size_t width, char fillchar = ' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.insert(s.begin(), fillchar); }
+	return s;
+}
+
+inline std::string center(const std::string& str, size_t width, char fillchar = ' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.insert(s.begin(), fillchar); s.push_back(fillchar); }
+	if (s.size() > width) { s.pop_back(); }
+	return s;
+}
+
+inline std::wstring ljust(const std::wstring& str, size_t width, wchar_t fillchar = L' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.push_back(fillchar); }
+	return s;
+}
+
+inline std::wstring rjust(const std::wstring& str, size_t width, wchar_t fillchar = L' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.insert(s.begin(), fillchar); }
+	return s;
+}
+
+inline std::wstring center(const std::wstring& str, size_t width, wchar_t fillchar = L' ') {
+	if (str.size() >= width) { return str; }
+	auto s = str;
+	while (s.size() < width) { s.insert(s.begin(), fillchar); s.push_back(fillchar); }
+	if (s.size() > width) { s.pop_back(); }
+	return s;
+}
+
 
 
 } // namespace jlib
