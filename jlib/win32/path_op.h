@@ -61,6 +61,9 @@ inline std::string getAppDataPathA() { return getSpecialFolderA(CSIDL_APPDATA); 
 inline std::wstring getTempPath() { wchar_t path[MAX_PATH] = { 0 }; ::GetTempPathW(MAX_PATH, path); return path; }
 inline std::string getTempPathA() { char path[MAX_PATH] = { 0 }; ::GetTempPathA(MAX_PATH, path); return path; }
 
+inline std::wstring getMyDocumentsPath() { return getSpecialFolder(CSIDL_MYDOCUMENTS); }
+inline std::string getMyDocumentsPathA() { return getSpecialFolderA(CSIDL_MYDOCUMENTS); }
+
 inline std::wstring getTempFileName(const std::wstring& folder, const std::wstring& pre) {
 	wchar_t path[MAX_PATH] = { 0 };
 	UINT ret = ::GetTempFileNameW(folder.c_str(), pre.c_str(), 0, path);

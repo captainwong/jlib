@@ -22,6 +22,7 @@ struct DiskDrive {
 JINFO_API std::vector<DiskDrive> disk_drives();
 
 JINFO_API std::string bootable_disk_serial();
+JINFO_API std::string bootable_disk_serial_old();
 
 }
 }

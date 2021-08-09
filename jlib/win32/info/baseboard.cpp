@@ -41,7 +41,7 @@ std::string serial()
         auto serial = result[0][L"SerialNumber"];
         return utf16_to_mbcs(serial);
     }
-    return std::string();
+    return std::string("System Serial Number");
 }
 
 std::string bios_serial()
@@ -50,7 +50,7 @@ std::string bios_serial()
     if (wmi::WmiBase::simpleSelect({ L"SerialNumber" }, L"Win32_BIOS", L"", result) && result.size() == 1) {
         auto serial = result[0][L"SerialNumber"];
     }
-    return std::string();
+    return std::string("System Serial Number");
 }
 
 

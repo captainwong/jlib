@@ -51,6 +51,44 @@ std::string bootable_disk_serial()
 	return {};
 }
 
+std::string bootable_disk_serial_old()
+{
+	std::vector<std::wstring> values, errors;
+	auto output = [&values](const std::wstring& key, const std::wstring& value) {
+		values.push_back(value);
+	};
+
+	auto error = [&errors](HRESULT hr, const std::wstring& msg) {
+		errors.push_back(msg);
+	};
+
+	wmi::WmiBase wmi(L"ROOT\\CIMV2", output, error);
+	if (!wmi.prepare()) {
+		return {};
+	}
+
+	auto sz = values.size();
+
+	// possible value:
+	// Microsoft Windows 10 Pro|C:\WINDOWS|\Device\Harddisk4\Partition4
+	if (wmi.execute(L"Select Name from Win32_OperatingSystem") && values.size() == sz + 1) {
+		auto index = values.back(); values.pop_back();
+		auto pos = index.find(L"Harddisk");
+		if (pos != index.npos) {
+			auto rpos = index.find(L"\\Partition", pos);
+			if (rpos != index.npos && rpos - pos > strlen("Harddisk")) {
+				auto n = index.substr(pos + strlen("Harddisk"), rpos - pos - strlen("Harddisk"));
+				if (wmi.execute(L"SELECT SerialNumber FROM Win32_DiskDrive WHERE Index = " + n) && !values.empty()) {
+					//results[queryType] = values.back(); values.pop_back();
+					//continue;
+					return utf16_to_mbcs(values.back());
+				}
+			}
+		}
+	}
+
+	return {};
+}
 }
 }
 }

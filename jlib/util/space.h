@@ -25,7 +25,7 @@ static inline std::string human_readable_byte_count(uintmax_t bytes, PositionalN
     auto pre = std::string("KMGTPEZYBND").at(exp - 1) + std::string(po == PositionalNotation::Binary ? "i" : "");
     auto var = bytes / std::pow(unit, exp);
 	char buf[64] = { 0 };
-	snprintf(buf, sizeof(buf), "%g%sB", var, pre.data());
+	snprintf(buf, sizeof(buf), "%.2f%sB", var, pre.data());
     return buf;
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QDebug>
+#include <QDateTime>
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif //_WIN32
@@ -18,6 +20,16 @@
 #define MYQINFO_NOQUOTE qInfo().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQWARN_NOQUOTE qWarning().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL_NOQUOTE qCritical().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
+
+#define MYQDEBUG2 qDebug() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO2 qInfo() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQWARN2 qWarning() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQCRITICAL2 qCritical() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+
+#define MYQDEBUG2_NOQUOTE qDebug().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO2_NOQUOTE qInfo().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQWARN2_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQCRITICAL2_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
 //! 弹窗报告行号开关
 // #define JLIBQT_SHOW_LINE 0

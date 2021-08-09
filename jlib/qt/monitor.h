@@ -280,6 +280,27 @@ static void disableMonitor(const MonitorInfo& m) {
 	commitChange();
 }
 
+static void enableMonitor(const wchar_t* deviceName, int w, int h)
+{
+	DEVMODEW dm = { 0 };
+	dm.dmSize = sizeof(dm);
+	dm.dmFields = DM_POSITION | DM_PELSWIDTH | DM_PELSHEIGHT;
+	dm.dmPelsWidth = w;
+	dm.dmPelsHeight = h;
+
+	DWORD dwFlags = CDS_UPDATEREGISTRY | CDS_GLOBAL | CDS_NORESET;
+
+	auto ret = ChangeDisplaySettingsExW(deviceName, &dm, nullptr, dwFlags, nullptr);
+	MYQDEBUG << "enableMonitor ChangeDisplaySettingsExW returns:" << (ret == ERROR_SUCCESS);
+
+	commitChange();
+}
+
+static void enableMonitor(const MonitorInfo& m, const MonitorInfo::Resolution& res)
+{
+	enableMonitor(m.deviceName.toStdWString().data(), res.w, res.h);
+}
+
 static void setMainMonitor(const MonitorInfo& newMain, const MonitorInfo& oldMain) {
 	auto moveOld = [](const MonitorInfo& newMain, const MonitorInfo& oldMain) {
 		DEVMODEW dm = { 0 };
