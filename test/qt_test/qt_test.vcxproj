@@ -67,12 +67,14 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <AdditionalIncludeDirectories>$(DEVLIBS)\jlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)\jlib;$(DEVLIBS)\json\jsoncpp-1.9.4-install\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>jlibqt.lib;$(DEVLIBS)\json\jsoncpp-1.9.4-install\bin\Debug\jsoncpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,9 +91,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_reader.cpp" />
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_value.cpp" />
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_writer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qt_test.cpp" />
   </ItemGroup>
@@ -103,9 +102,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="qt_test.qrc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

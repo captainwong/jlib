@@ -23,9 +23,6 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
-    <Filter Include="jsoncpp">
-      <UniqueIdentifier>{0ea00850-28a6-45f9-af68-6c656c3572f1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,15 +30,6 @@
     </ClCompile>
     <ClCompile Include="qt_test.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_reader.cpp">
-      <Filter>jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_value.cpp">
-      <Filter>jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\jlib\3rdparty\json\jsoncpp\json_writer.cpp">
-      <Filter>jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,10 +46,5 @@
     <QtRcc Include="qt_test.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\jlib\3rdparty\json\jsoncpp\json.h">
-      <Filter>jsoncpp</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

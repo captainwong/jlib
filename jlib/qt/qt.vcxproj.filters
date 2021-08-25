@@ -115,9 +115,6 @@
     <ClInclude Include="Util\QRunGuard.h">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="resource1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model\HttpDlgErrorCode.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -165,12 +162,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="qt.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="qt.qrc">
+    <QtRcc Include="jlibqt.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>

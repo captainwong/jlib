@@ -20,11 +20,12 @@ class HttpDlg : public QDialog
 
 public:
 	enum class HttpDlgGif {
-		Spinner1s_200px,
+		Spinner1s_200px_gray,
+		Spinner1s_200px_blue,
 
 	};
 
-	HttpDlg(QWidget *parent = nullptr, HttpDlgGif gif = HttpDlgGif::Spinner1s_200px, int timeOut = 10);
+	HttpDlg(QWidget *parent = nullptr, int timeOut = 10, HttpDlgGif gif = HttpDlgGif::Spinner1s_200px_gray);
 	~HttpDlg();
 
 	void get(const QUrl& url);
@@ -32,6 +33,11 @@ public:
 	void post(const QUrl& url);
 	void post(const QNetworkRequest& request);
 	void post(const QNetworkRequest& request, const QByteArray& data);
+	void put(const QNetworkRequest& request, const QByteArray& data = {});
+	void patch(const QNetworkRequest& request, const QByteArray& data = {});
+	void deleteResource(const QNetworkRequest& request);
+
+
 	std::error_code get_result() const { return result_; }
 
 	Json::Value getRoot() const { return root_; }
@@ -100,7 +106,7 @@ private:
 
 	QLabel* label_ = {};
 	QLabel* elapse_ = {};
-	HttpDlgGif gif_ = HttpDlgGif::Spinner1s_200px;
+	HttpDlgGif gif_ = HttpDlgGif::Spinner1s_200px_gray;
 	QElapsedTimer timer_ = {};
 
 };

@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>5.9.8</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -76,6 +76,9 @@
       <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -112,7 +115,6 @@
   <ItemGroup>
     <ClInclude Include="Model\HttpDlgErrorCode.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Util\QRunGuard.h" />
     <QtMoc Include="View\HttpDlg.h" />
     <QtMoc Include="View\ProgressDialog.h" />
@@ -139,10 +141,7 @@
     <QtUic Include="View\ProgressDialog.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="qt.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="qt.qrc" />
+    <QtRcc Include="jlibqt.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

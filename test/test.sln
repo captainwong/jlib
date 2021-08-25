@@ -373,6 +373,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjinfo", "libjinfo\libjin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjinfomt", "libjinfomt\libjinfomt.vcxproj", "{E8551DB0-274F-493A-88AF-7383E47F49FA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{BCF77277-B4F8-49CF-B213-D8086F3BCEFD}"
+	ProjectSection(SolutionItems) = preProject
+		..\jlib\misc\sudoku.h = ..\jlib\misc\sudoku.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -1218,6 +1223,7 @@ Global
 		{0E83FBE2-4696-41AD-9A5F-55B1401AB77C} = {0E6598D3-602D-4552-97F7-DC5AB458D553}
 		{441E6793-7CDA-4D51-81BD-7A38520F1C1D} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
 		{E8551DB0-274F-493A-88AF-7383E47F49FA} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
+		{BCF77277-B4F8-49CF-B213-D8086F3BCEFD} = {42703978-A988-403D-9723-E35527FA8A07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

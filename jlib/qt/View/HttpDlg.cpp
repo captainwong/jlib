@@ -11,22 +11,24 @@ using namespace jlib::qt;
 //namespace HBVideoPlatform {
 //namespace common {
 
-HttpDlg::HttpDlg(QWidget *parent, HttpDlgGif gif, int timeout)
+HttpDlg::HttpDlg(QWidget *parent, int timeout, HttpDlgGif gif)
 	: QDialog(parent)
-	, gif_(gif)
 	, time_out_sec_(timeout)
+	, gif_(gif)
 {
 	setWindowModality(Qt::WindowModal);
-	setWindowFlags(Qt::FramelessWindowHint); 
+	setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
 	if (!parent) {
 		setAttribute(Qt::WA_TranslucentBackground);
 	}
 
-	if (gif == HttpDlgGif::Spinner1s_200px) {
+	/*if (gif == HttpDlgGif::Spinner1s_200px_gray) {
 		setFixedSize(200, 200);
 	} else {
 		setFixedSize(630, 637);
-	}
+	}*/
+
+	setFixedSize(200, 200);
 
 	label_ = new QLabel(this);
 	label_->resize(width(), height());
@@ -92,13 +94,41 @@ void HttpDlg::post(const QNetworkRequest & request, const QByteArray & data)
 	run();
 }
 
+void HttpDlg::put(const QNetworkRequest& request, const QByteArray& data)
+{
+	if (connection_) {
+		disconnect(connection_);
+	}
+	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	reply_ = mgr->put(request, data);
+	run();
+}
+
+void HttpDlg::patch(const QNetworkRequest& request, const QByteArray& data)
+{
+	if (connection_) {
+		disconnect(connection_);
+	}
+	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	reply_ = mgr->sendCustomRequest(request, "PATCH", data);
+	run();
+}
+
+void HttpDlg::deleteResource(const QNetworkRequest& request)
+{
+	if (connection_) {
+		disconnect(connection_);
+	}
+	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	reply_ = mgr->deleteResource(request);
+	run();
+}
+
 QString HttpDlg::getGifPath()
 {
 	switch (gif_) {
-	case HttpDlg::HttpDlgGif::Spinner1s_200px: return ":/jlibqt/Resources/Spinner-1s-200px.gif";
-		break;
-	default:
-		break;
+	case HttpDlg::HttpDlgGif::Spinner1s_200px_gray: return ":/jlibqt/Resources/Spinner-1s-200px_gray.gif";
+	case HttpDlg::HttpDlgGif::Spinner1s_200px_blue: return ":/jlibqt/Resources/Spinner-1s-200px.gif";
 	}
 	return QString();
 }
