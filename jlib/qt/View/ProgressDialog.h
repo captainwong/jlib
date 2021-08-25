@@ -16,6 +16,9 @@ public:
 	ProgressDialog(QWidget *parent = Q_NULLPTR, bool enable_close = true);
 	~ProgressDialog();
 
+	// default 1000
+	void setMaximum(int val);
+
 	// caller call this to update progress or close dialog
 signals:
 	void sig_progress(int pos);

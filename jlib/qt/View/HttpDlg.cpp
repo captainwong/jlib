@@ -2,19 +2,18 @@
 #include <qmovie.h>
 #include <qnetworkaccessmanager.h>
 #include <qnetworkreply.h>
-#include <jlib/qt/QtPathHelper.h>
-#include <jlib/qt/QtUtils.h>
-#include <jlib/qt/QtStylesheet.h>
+#include "../../QtUtils.h"
+#include "../../QtStylesheet.h"
 #include "../Model/HttpDlgErrorCode.h"
 
 using namespace jlib::qt;
+//
+//namespace HBVideoPlatform {
+//namespace common {
 
-namespace HBVideoPlatform {
-namespace common {
-
-HttpDlg::HttpDlg(QWidget *parent, HttpDlgViewSize sz, int timeout)
+HttpDlg::HttpDlg(QWidget *parent, HttpDlgGif gif, int timeout)
 	: QDialog(parent)
-	, sz_(sz)
+	, gif_(gif)
 	, time_out_sec_(timeout)
 {
 	setWindowModality(Qt::WindowModal);
@@ -23,7 +22,7 @@ HttpDlg::HttpDlg(QWidget *parent, HttpDlgViewSize sz, int timeout)
 		setAttribute(Qt::WA_TranslucentBackground);
 	}
 
-	if (sz == sz_small) {
+	if (gif == HttpDlgGif::Spinner1s_200px) {
 		setFixedSize(200, 200);
 	} else {
 		setFixedSize(630, 637);
@@ -34,9 +33,9 @@ HttpDlg::HttpDlg(QWidget *parent, HttpDlgViewSize sz, int timeout)
 	label_->move(0, 0);
 
 	elapse_ = new QLabel(this);
-	elapse_->resize(180, 80);
+	elapse_->resize(64, 64);
 	elapse_->move((width() - elapse_->width()) / 2, (height() - elapse_->height()) / 2);
-	elapse_->setStyleSheet(build_style(Qt::darkYellow, 64));
+	elapse_->setStyleSheet(build_style(Qt::darkYellow, 12));
 	elapse_->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 	//elapse_->hide();
 
@@ -51,23 +50,33 @@ HttpDlg::~HttpDlg()
 
 void HttpDlg::get(const QUrl& url)
 {
+	get(QNetworkRequest(url));
+}
+
+void HttpDlg::get(const QNetworkRequest& request)
+{
 	if (connection_) {
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
-	reply_ = mgr->get(QNetworkRequest(url));
+	reply_ = mgr->get(request);
 
 	run();
 }
 
 void HttpDlg::post(const QUrl & url)
 {
+	QNetworkRequest request(url);
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded"); 
+	post(request, QByteArray());
+}
+
+void HttpDlg::post(const QNetworkRequest& request)
+{
 	if (connection_) {
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
-	QNetworkRequest request(url);
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 	reply_ = mgr->post(request, QByteArray());
 
 	run();
@@ -83,23 +92,34 @@ void HttpDlg::post(const QNetworkRequest & request, const QByteArray & data)
 	run();
 }
 
+QString HttpDlg::getGifPath()
+{
+	switch (gif_) {
+	case HttpDlg::HttpDlgGif::Spinner1s_200px: return ":/jlibqt/Resources/Spinner-1s-200px.gif";
+		break;
+	default:
+		break;
+	}
+	return QString();
+}
+
 void HttpDlg::run()
 {
-	auto path = PathHelper::program();
-	path += sz_ == sz_small ? "/Skin/gif/ajax-loader-small.gif" : "/Skin/gif/preloader.gif";
-	auto movie = new QMovie(path);
-	label_->setMovie(movie);
-	movie->start();
-
-	timer_.start();
-
 	auto p = parentWidget();
 	if (p) {
 		p->setEnabled(false);
 	}
 
-	startTimer(1000);
+	auto path = getGifPath();
+	auto movie = new QMovie(path);
+	label_->setMovie(movie);
+	movie->start();
+
+	timer_.start();
+	timer_id_ = startTimer(1000);
+
 	QDialog::exec();
+
 	if (p) {
 		p->setEnabled(true);
 	}
@@ -115,7 +135,8 @@ void HttpDlg::timerEvent(QTimerEvent * e)
 	} else {
 		MYQCRITICAL << "timeout";
 		disconnect(connection_);
-		result_ = HttpDlgErrorCode::NetworkError;
+		killTimer(timer_id_);
+		result_ = HttpDlgErrorCode::Timeout;
 		QDialog::reject();
 	}
 }
@@ -125,48 +146,50 @@ void HttpDlg::onFinished(QNetworkReply * reply)
 	do {
 		if (!reply) {
 			MYQCRITICAL << "no reply";
-			result_ = HttpDlgErrorCode::NetworkError;
+			result_ = HttpDlgErrorCode::Timeout;
 			break;
 		}
 
 		if (QNetworkReply::NoError != reply->error()) {
 			httpReason_ = reply->errorString();
 			MYQCRITICAL << httpReason_;
-			result_ = HttpDlgErrorCode::NetworkError;
-			break;
+			result_ = HttpDlgErrorCode::Unknown;
+			//break;
 		}
 
 		QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 		if (!statusCode.isValid()) {
 			MYQDEBUG << "statusCode is not valid";
+			result_ = HttpDlgErrorCode::HttpStatusNeq200;
 			break;
 		}
 
 		httpStatusCode_ = statusCode.toInt();
 
 		if (httpStatusCode_ != 200) {
-			result_ = HttpDlgErrorCode::NetworkError;
+			result_ = HttpDlgErrorCode::HttpStatusNeq200;
 			httpReason_ = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
 			MYQCRITICAL << httpStatusCode_ << httpReason_;
-			break;
+			//break;
 		}
 
 		auto res = reply->readAll();
 		Json::Reader reader;
 		root_.clear();
 		if (!reader.parse(res.constData(), root_)) {
-			//result_ = HttpDlgErrorCode::ParseJsonError;
-			//break;
+			result_ = HttpDlgErrorCode::ParseJsonError;
+			break;
 		}
 
-		MYQDEBUG << reply->url() << "reply:\n" << root_.toStyledString().data();
+		MYQDEBUG << reply->url() << "reply:\n" << httpStatusCode_ << root_.toStyledString().data();
 
 	} while (false);
 
+	killTimer(timer_id_);
 	QDialog::accept();
 
 	reply->deleteLater();
 }
-
-}
-}
+//
+//}
+//}

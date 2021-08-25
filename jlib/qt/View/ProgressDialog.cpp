@@ -25,6 +25,11 @@ ProgressDialog::~ProgressDialog()
 	delete ui;
 }
 
+void ProgressDialog::setMaximum(int val)
+{
+	ui->progressBar->setMaximum(val);
+}
+
 void ProgressDialog::timerEvent(QTimerEvent* e)
 {
 	auto secs = timer.elapsed() / 1000;

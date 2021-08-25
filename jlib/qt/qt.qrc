@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/jlibqt">
+        <file>Resources/Spinner-1s-200px.gif</file>
+    </qresource>
+</RCC>

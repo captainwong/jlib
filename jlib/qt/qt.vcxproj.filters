@@ -71,6 +71,15 @@
     <ClCompile Include="Util\QRunGuard.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="View\HttpDlg.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\HttpDlgErrorCode.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorCode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt.h">
@@ -106,6 +115,12 @@
     <ClInclude Include="Util\QRunGuard.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\HttpDlgErrorCode.h">
+      <Filter>Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt_global.h">
@@ -140,10 +155,23 @@
     <QtMoc Include="View\ProgressDialog.h">
       <Filter>View</Filter>
     </QtMoc>
+    <QtMoc Include="View\HttpDlg.h">
+      <Filter>View</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="View\ProgressDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="qt.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="qt.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

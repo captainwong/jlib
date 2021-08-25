@@ -6,7 +6,7 @@
 #include <QUrl>
 #include <QNetworkRequest>
 #include <QByteArray>
-#include "../../Util/jsoncpp/json.h"
+#include <json/json.h>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -19,16 +19,18 @@ class HttpDlg : public QDialog
 	Q_OBJECT
 
 public:
-	enum HttpDlgViewSize {
-		sz_big,
-		sz_small,
+	enum class HttpDlgGif {
+		Spinner1s_200px,
+
 	};
 
-	HttpDlg(QWidget *parent = nullptr, HttpDlgViewSize sz = sz_small, int timeOut = 10);
+	HttpDlg(QWidget *parent = nullptr, HttpDlgGif gif = HttpDlgGif::Spinner1s_200px, int timeOut = 10);
 	~HttpDlg();
 
 	void get(const QUrl& url);
+	void get(const QNetworkRequest& request);
 	void post(const QUrl& url);
+	void post(const QNetworkRequest& request);
 	void post(const QNetworkRequest& request, const QByteArray& data);
 	std::error_code get_result() const { return result_; }
 
@@ -78,6 +80,7 @@ if (!JsoncppHelper::safelyGetStringValue(json, #name, name)) { \
 }
 
 protected:
+	QString getGifPath();
 	void run();
 	virtual void timerEvent(QTimerEvent * e) override;
 
@@ -90,13 +93,14 @@ private:
 	QString httpReason_ = {};
 	Json::Value root_ = {};
 	int time_out_sec_ = 10;
+	int timer_id_ = 0;
 	QNetworkAccessManager* mgr = {};
 	QNetworkReply* reply_ = {};
 	QMetaObject::Connection connection_ = {};
 
 	QLabel* label_ = {};
 	QLabel* elapse_ = {};
-	HttpDlgViewSize sz_ = sz_big;
+	HttpDlgGif gif_ = HttpDlgGif::Spinner1s_200px;
 	QElapsedTimer timer_ = {};
 
 };
