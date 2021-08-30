@@ -211,7 +211,8 @@ void HttpDlg::onFinished(QNetworkReply * reply)
 			break;
 		}
 
-		MYQDEBUG << reply->url() << "reply:\n" << httpStatusCode_ << root_.toStyledString().data();
+		auto out = QString::fromUtf8(root_.toStyledString().data());
+		MYQDEBUG << reply->url() << "reply:\n" << httpStatusCode_ << out;
 
 	} while (false);
 

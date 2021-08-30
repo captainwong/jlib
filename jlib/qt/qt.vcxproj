@@ -100,6 +100,9 @@
     <ClCompile Include="ErrorCode.cpp" />
     <ClCompile Include="Model\HttpDlgErrorCode.cpp" />
     <ClCompile Include="qt.cpp" />
+    <ClCompile Include="Util\qrcode\BitBuffer.cpp" />
+    <ClCompile Include="Util\qrcode\QrCode.cpp" />
+    <ClCompile Include="Util\qrcode\QrSegment.cpp" />
     <ClCompile Include="Util\QRunGuard.cpp" />
     <ClCompile Include="View\BaseScrollView.cpp" />
     <ClCompile Include="View\BgColorBtn.cpp" />
@@ -107,6 +110,7 @@
     <ClCompile Include="View\HttpDlg.cpp" />
     <ClCompile Include="View\IconBtn.cpp" />
     <ClCompile Include="View\ProgressDialog.cpp" />
+    <ClCompile Include="View\QrCodeView.cpp" />
     <ClCompile Include="View\TextMenu.cpp" />
     <ClCompile Include="View\TitleBar.cpp" />
     <ClCompile Include="View\PageView.cpp" />
@@ -115,7 +119,11 @@
   <ItemGroup>
     <ClInclude Include="Model\HttpDlgErrorCode.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Util\qrcode\BitBuffer.hpp" />
+    <ClInclude Include="Util\qrcode\QrCode.hpp" />
+    <ClInclude Include="Util\qrcode\QrSegment.hpp" />
     <ClInclude Include="Util\QRunGuard.h" />
+    <QtMoc Include="View\QrCodeView.h" />
     <QtMoc Include="View\HttpDlg.h" />
     <QtMoc Include="View\ProgressDialog.h" />
     <QtMoc Include="View\TextMenu.h" />

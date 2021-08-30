@@ -36,6 +36,9 @@
     <Filter Include="Util">
       <UniqueIdentifier>{80767180-97c3-403d-8d10-8e7069736c61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util\qrcode">
+      <UniqueIdentifier>{c05272cc-e848-4d62-91ca-ee3967256e0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="qt.cpp">
@@ -80,6 +83,18 @@
     <ClCompile Include="ErrorCode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="View\QrCodeView.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\qrcode\BitBuffer.cpp">
+      <Filter>Util\qrcode</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\qrcode\QrCode.cpp">
+      <Filter>Util\qrcode</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\qrcode\QrSegment.cpp">
+      <Filter>Util\qrcode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt.h">
@@ -118,6 +133,15 @@
     <ClInclude Include="Model\HttpDlgErrorCode.h">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="Util\qrcode\BitBuffer.hpp">
+      <Filter>Util\qrcode</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\qrcode\QrCode.hpp">
+      <Filter>Util\qrcode</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\qrcode\QrSegment.hpp">
+      <Filter>Util\qrcode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt_global.h">
@@ -153,6 +177,9 @@
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\HttpDlg.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\QrCodeView.h">
       <Filter>View</Filter>
     </QtMoc>
   </ItemGroup>
