@@ -25,7 +25,15 @@ public:
 
 	};
 
-	HttpDlg(QWidget *parent = nullptr, int timeOut = 10, HttpDlgGif gif = HttpDlgGif::Spinner1s_200px_gray);
+	enum class Method {
+		Get,
+		Post,
+		Put,
+		Patch,
+		Delete,
+	};
+
+	HttpDlg(QWidget *parent = nullptr, int timeOut = 10, int retries = 0, HttpDlgGif gif = HttpDlgGif::Spinner1s_200px_gray);
 	~HttpDlg();
 
 	void get(const QUrl& url);
@@ -98,10 +106,16 @@ private:
 	int httpStatusCode_ = 0;
 	QString httpReason_ = {};
 	Json::Value root_ = {};
+	const int timeout;
 	int time_out_sec_ = 10;
 	int timer_id_ = 0;
-	QNetworkAccessManager* mgr = {};
-	QNetworkReply* reply_ = {};
+	const int retrys;
+	int retry_counter = 0;
+	QNetworkAccessManager* mgr{};
+	QNetworkRequest lastRequest_{};
+	Method lastMethod_ = Method::Post;
+	QByteArray lastData_{};
+	QNetworkReply* reply_{};
 	QMetaObject::Connection connection_ = {};
 
 	QLabel* label_ = {};

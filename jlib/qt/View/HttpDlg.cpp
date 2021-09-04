@@ -11,9 +11,11 @@ using namespace jlib::qt;
 //namespace HBVideoPlatform {
 //namespace common {
 
-HttpDlg::HttpDlg(QWidget *parent, int timeout, HttpDlgGif gif)
+HttpDlg::HttpDlg(QWidget *parent, int timeout, int retries, HttpDlgGif gif)
 	: QDialog(parent)
+	, timeout(timeout)
 	, time_out_sec_(timeout)
+	, retrys(retrys)
 	, gif_(gif)
 {
 	setWindowModality(Qt::WindowModal);
@@ -52,7 +54,10 @@ HttpDlg::~HttpDlg()
 
 void HttpDlg::get(const QUrl& url)
 {
-	get(QNetworkRequest(url));
+	lastRequest_ = QNetworkRequest(url);
+	lastMethod_ = Method::Get;
+	lastData_.clear();
+	get(lastRequest_);
 }
 
 void HttpDlg::get(const QNetworkRequest& request)
@@ -61,6 +66,9 @@ void HttpDlg::get(const QNetworkRequest& request)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Get;
+	lastData_.clear();
 	reply_ = mgr->get(request);
 
 	run();
@@ -69,7 +77,10 @@ void HttpDlg::get(const QNetworkRequest& request)
 void HttpDlg::post(const QUrl & url)
 {
 	QNetworkRequest request(url);
-	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded"); 
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+	lastRequest_ = request;
+	lastMethod_ = Method::Post;
+	lastData_.clear();
 	post(request, QByteArray());
 }
 
@@ -79,6 +90,9 @@ void HttpDlg::post(const QNetworkRequest& request)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Post;
+	lastData_.clear();
 	reply_ = mgr->post(request, QByteArray());
 
 	run();
@@ -90,6 +104,9 @@ void HttpDlg::post(const QNetworkRequest & request, const QByteArray & data)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Post;
+	lastData_ = data;
 	reply_ = mgr->post(request, data);
 	run();
 }
@@ -100,6 +117,9 @@ void HttpDlg::put(const QNetworkRequest& request, const QByteArray& data)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Put;
+	lastData_ = data;
 	reply_ = mgr->put(request, data);
 	run();
 }
@@ -110,6 +130,9 @@ void HttpDlg::patch(const QNetworkRequest& request, const QByteArray& data)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Patch;
+	lastData_ = data;
 	reply_ = mgr->sendCustomRequest(request, "PATCH", data);
 	run();
 }
@@ -120,6 +143,9 @@ void HttpDlg::deleteResource(const QNetworkRequest& request)
 		disconnect(connection_);
 	}
 	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+	lastRequest_ = request;
+	lastMethod_ = Method::Delete;
+	lastData_.clear();
 	reply_ = mgr->deleteResource(request);
 	run();
 }
@@ -145,6 +171,8 @@ void HttpDlg::run()
 	label_->setMovie(movie);
 	movie->start();
 
+	time_out_sec_ = timeout;
+	retry_counter = retrys;
 	timer_.start();
 	timer_id_ = startTimer(1000);
 
@@ -166,8 +194,40 @@ void HttpDlg::timerEvent(QTimerEvent * e)
 		MYQCRITICAL << "timeout";
 		disconnect(connection_);
 		killTimer(timer_id_);
-		result_ = HttpDlgErrorCode::Timeout;
-		QDialog::reject();
+		if (reply_) {
+			reply_->deleteLater();
+		}
+
+		if (retry_counter <= 0) {
+			result_ = HttpDlgErrorCode::Timeout;
+			QDialog::reject();
+		} else {
+			retry_counter--;
+			MYQDEBUG << "retry_counter =" << retry_counter;
+			connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
+			switch (lastMethod_) {
+			case HttpDlg::Method::Get:
+				reply_ = mgr->get(lastRequest_);
+				break;
+			case HttpDlg::Method::Post:
+				reply_ = mgr->post(lastRequest_, lastData_);
+				break;
+			case HttpDlg::Method::Put:
+				reply_ = mgr->put(lastRequest_, lastData_);
+				break;
+			case HttpDlg::Method::Patch:
+				reply_ = mgr->sendCustomRequest(lastRequest_, "PATCH", lastData_);
+				break;
+			case HttpDlg::Method::Delete:
+				reply_ = mgr->deleteResource(lastRequest_);
+				break;
+			}
+
+			time_out_sec_ = timeout;
+			retry_counter = retrys;
+			timer_.start();
+			timer_id_ = startTimer(1000);
+		}
 	}
 }
 
@@ -207,7 +267,9 @@ void HttpDlg::onFinished(QNetworkReply * reply)
 		Json::Reader reader;
 		root_.clear();
 		if (!reader.parse(res.constData(), root_)) {
-			result_ = HttpDlgErrorCode::ParseJsonError;
+			if (result_ != HttpDlgErrorCode::HttpStatusNeq200) {
+				result_ = HttpDlgErrorCode::ParseJsonError;
+			}
 			break;
 		}
 
