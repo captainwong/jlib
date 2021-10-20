@@ -55,6 +55,7 @@ int main()
 			jlib::human_readable_byte_count(disk.size, jlib::PositionalNotation::Decimal) << endl;
 	}
 	cout << "bootable_disk_serial:\t" << diskdrive::bootable_disk_serial() << endl;
+	cout << "bootable_disk_serial_old:\t" << diskdrive::bootable_disk_serial_old() << endl;
 
 	cout << "\nlogicaldrive\ndevice_id\tdrive_type\tfree_space\tsize\tpercent\tvolume_name\n";
 	for (auto&& drive : logicaldrive::logical_drives()) {

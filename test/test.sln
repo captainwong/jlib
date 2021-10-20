@@ -352,9 +352,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dynamiclib", "dynamiclib", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "info", "info", "{D2FBAC12-7C05-4632-9A99-3E86147322CB}"
 	ProjectSection(SolutionItems) = preProject
+		..\jlib\win32\info\baseboard.cpp = ..\jlib\win32\info\baseboard.cpp
+		..\jlib\win32\info\baseboard.h = ..\jlib\win32\info\baseboard.h
 		..\jlib\win32\info\cpu.cpp = ..\jlib\win32\info\cpu.cpp
 		..\jlib\win32\info\cpu.h = ..\jlib\win32\info\cpu.h
 		..\jlib\win32\info\def.h = ..\jlib\win32\info\def.h
+		..\jlib\win32\info\diskdrive.cpp = ..\jlib\win32\info\diskdrive.cpp
+		..\jlib\win32\info\diskdrive.h = ..\jlib\win32\info\diskdrive.h
 		..\jlib\win32\info\gpu.cpp = ..\jlib\win32\info\gpu.cpp
 		..\jlib\win32\info\gpu.h = ..\jlib\win32\info\gpu.h
 		..\jlib\win32\info\logicaldrive.cpp = ..\jlib\win32\info\logicaldrive.cpp

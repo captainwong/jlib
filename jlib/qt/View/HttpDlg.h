@@ -44,6 +44,7 @@ public:
 	void put(const QNetworkRequest& request, const QByteArray& data = {});
 	void patch(const QNetworkRequest& request, const QByteArray& data = {});
 	void deleteResource(const QNetworkRequest& request);
+	void get_img(const QUrl& url);
 
 
 	std::error_code get_result() const { return result_; }
@@ -78,6 +79,7 @@ public:
 
 	int getHttpStatusCode() const { return httpStatusCode_; }
 	QString getHttpReason() const { return httpReason_; }
+	QPixmap getPixmap() const { return pixReply_; }
 	
 #define break_if_parse_int_value_failed(json, name, default_value) \
 int name = default_value; \
@@ -100,6 +102,7 @@ protected:
 
 private slots:
 	void onFinished(QNetworkReply* reply);
+	void onImgFinished(QNetworkReply* reply);
 
 private:
 	std::error_code result_ = {};
@@ -115,6 +118,8 @@ private:
 	QNetworkRequest lastRequest_{};
 	Method lastMethod_ = Method::Post;
 	QByteArray lastData_{};
+	QPixmap pixReply_{};
+
 	QNetworkReply* reply_{};
 	QMetaObject::Connection connection_ = {};
 

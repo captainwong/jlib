@@ -11,6 +11,24 @@ using namespace jlib::qt;
 //namespace HBVideoPlatform {
 //namespace common {
 
+static QString methodToString(HttpDlg::Method method)
+{
+	switch (method) {
+	case HttpDlg::Method::Get: return "GET";
+		break;
+	case HttpDlg::Method::Post:return "POST";
+		break;
+	case HttpDlg::Method::Put:return "PUT";
+		break;
+	case HttpDlg::Method::Patch:return "PATCH";
+		break;
+	case HttpDlg::Method::Delete:return "DELETE";
+		break;
+	default:return "";
+		break;
+	}
+}
+
 HttpDlg::HttpDlg(QWidget *parent, int timeout, int retries, HttpDlgGif gif)
 	: QDialog(parent)
 	, timeout(timeout)
@@ -150,6 +168,39 @@ void HttpDlg::deleteResource(const QNetworkRequest& request)
 	run();
 }
 
+void HttpDlg::get_img(const QUrl& url)
+{
+	if (connection_) {
+		disconnect(connection_);
+	}
+	connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onImgFinished);
+	QNetworkRequest request(url);
+	reply_ = mgr->get(request);
+
+	auto p = parentWidget();
+	if (p) {
+		p->setEnabled(false);
+	}
+
+	auto path = getGifPath();
+	auto movie = new QMovie(path);
+	label_->setMovie(movie);
+	movie->start();
+
+	time_out_sec_ = timeout;
+	retry_counter = 0;
+	timer_.start();
+	timer_id_ = startTimer(1000);
+
+	QDialog::exec();
+
+	if (p) {
+		p->setEnabled(true);
+	}
+
+	movie->deleteLater();
+}
+
 QString HttpDlg::getGifPath()
 {
 	switch (gif_) {
@@ -198,12 +249,13 @@ void HttpDlg::timerEvent(QTimerEvent * e)
 			reply_->deleteLater();
 		}
 
+		MYQDEBUG << "retry_counter =" << retry_counter;
+
 		if (retry_counter <= 0) {
 			result_ = HttpDlgErrorCode::Timeout;
 			QDialog::reject();
 		} else {
 			retry_counter--;
-			MYQDEBUG << "retry_counter =" << retry_counter;
 			connection_ = connect(mgr, &QNetworkAccessManager::finished, this, &HttpDlg::onFinished);
 			switch (lastMethod_) {
 			case HttpDlg::Method::Get:
@@ -229,6 +281,49 @@ void HttpDlg::timerEvent(QTimerEvent * e)
 			timer_id_ = startTimer(1000);
 		}
 	}
+}
+
+void HttpDlg::onImgFinished(QNetworkReply* reply)
+{
+	do {
+		if (!reply) {
+			MYQCRITICAL << "no reply";
+			result_ = HttpDlgErrorCode::Timeout;
+			break;
+		}
+
+		if (QNetworkReply::NoError != reply->error()) {
+			httpReason_ = reply->errorString();
+			MYQCRITICAL << httpReason_;
+			result_ = HttpDlgErrorCode::Unknown;
+			//break;
+		}
+
+		QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+		if (!statusCode.isValid()) {
+			MYQDEBUG << "statusCode is not valid";
+			result_ = HttpDlgErrorCode::HttpStatusNeq200;
+			break;
+		}
+
+		httpStatusCode_ = statusCode.toInt();
+
+		if (httpStatusCode_ != 200) {
+			result_ = HttpDlgErrorCode::HttpStatusNeq200;
+			httpReason_ = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+			MYQCRITICAL << httpStatusCode_ << httpReason_;
+			//break;
+		}
+		MYQDEBUG << reply->url() << "reply " << httpStatusCode_;
+		pixReply_.loadFromData(reply->readAll());
+		
+
+	} while (false);
+
+	killTimer(timer_id_);
+	QDialog::accept();
+
+	reply->deleteLater();
 }
 
 void HttpDlg::onFinished(QNetworkReply * reply)
@@ -274,7 +369,7 @@ void HttpDlg::onFinished(QNetworkReply * reply)
 		}
 
 		auto out = QString::fromUtf8(root_.toStyledString().data());
-		MYQDEBUG << reply->url() << "reply:\n" << httpStatusCode_ << out;
+		MYQDEBUG << methodToString(lastMethod_) << reply->url() << "reply " << httpStatusCode_ << "\n" << out;
 
 	} while (false);
 
