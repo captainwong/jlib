@@ -32,12 +32,12 @@ struct PathHelper
 
 	virtual std::string program()	const { return programPath_; }
 	virtual std::string exe()		const { return exePath_; }
-	virtual std::string bin()		const { return program() + "/bin"; }
-	virtual std::string data()		const { return program() + "/data"; }
-	virtual std::string log()		const { return program() + "/log"; }
-	virtual std::string dumps()		const { return program() + "/dumps"; }
-	virtual std::string config()	const { return data() + "/config"; }
-	virtual std::string db()		const { return data() + "/db"; }
+	virtual std::string bin()		const { return program() + "\\bin"; }
+	virtual std::string data()		const { return program() + "\\data"; }
+	virtual std::string log()		const { return program() + "\\log"; }
+	virtual std::string dumps()		const { return program() + "\\dumps"; }
+	virtual std::string config()	const { return data() + "\\config"; }
+	virtual std::string db()		const { return data() + "\\db"; }
 
 protected:
 	// disable constructor
@@ -126,13 +126,13 @@ struct PathHelperDataSeperated : PathHelperLocal
 	{}
 
 	virtual std::string data()		const override {
-		auto path = getAppDataPathA() + "/" + appName; 
+		auto path = getAppDataPathA() + "\\" + appName; 
 		mkpath(path); return path;		
 	}
-	virtual std::string log()		const override { return useTmpAsLogFolder ? getTempPathA() : (data() + "/log"); }
-	virtual std::string dumps()		const override { return data() + "/dumps"; }
-	virtual std::string config()	const override { return data() + "/config"; }
-	virtual std::string db()		const override { return data() + "/db"; }
+	virtual std::string log()		const override { return useTmpAsLogFolder ? getTempPathA() : (data() + "\\log"); }
+	virtual std::string dumps()		const override { return data() + "\\dumps"; }
+	virtual std::string config()	const override { return data() + "\\config"; }
+	virtual std::string db()		const override { return data() + "\\db"; }
 
 protected:
 	std::string appName = {};
@@ -160,13 +160,13 @@ struct PathHelperDataSeperatedWithoutBin : PathHelperLocalWithoutBin
 	{}
 
 	virtual std::string data()		const override {
-		auto path = getAppDataPathA() + "/" + appName;
+		auto path = getAppDataPathA() + "\\" + appName;
 		mkpath(path); return path;
 	}
-	virtual std::string log()		const override { return useTmpAsLogFolder ? getTempPathA() : (data() + "/log"); }
-	virtual std::string dumps()		const override { return data() + "/dumps"; }
-	virtual std::string config()	const override { return data() + "/config"; }
-	virtual std::string db()		const override { return data() + "/db"; }
+	virtual std::string log()		const override { return useTmpAsLogFolder ? getTempPathA() : (data() + "\\log"); }
+	virtual std::string dumps()		const override { return data() + "\\dumps"; }
+	virtual std::string config()	const override { return data() + "\\config"; }
+	virtual std::string db()		const override { return data() + "\\db"; }
 
 protected:
 	std::string appName = {};
