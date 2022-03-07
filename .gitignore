@@ -54,11 +54,11 @@ ReleaseD/
 
 # graph
 #*.bmp
-*.jpg
+#*.jpg
 *.jpeg
 *.jpe
 *.jifi
-*.gif
+#*.gif
 #*.ico
 #*.png
 *.dib
