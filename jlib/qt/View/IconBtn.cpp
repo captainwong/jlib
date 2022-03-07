@@ -55,7 +55,7 @@ void IconBtn::set_highlight(bool on)
 void IconBtn::enterEvent(QEvent*)
 {
 	if (!is_enabled_ || !isEnabled() || (parent() && !parentWidget()->isEnabled()))return;
-	setCursor(QCursor(Qt::PointingHandCursor));
+	setCursor(is_busy_ ? Qt::WaitCursor : Qt::PointingHandCursor);
 	is_hover_ = true;
 	setFocus();
 	refresh();

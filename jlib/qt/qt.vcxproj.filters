@@ -95,6 +95,9 @@
     <ClCompile Include="Util\qrcode\QrSegment.cpp">
       <Filter>Util\qrcode</Filter>
     </ClCompile>
+    <ClCompile Include="View\ImageTxtBtn.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt.h">
@@ -142,6 +145,9 @@
     <ClInclude Include="Util\qrcode\QrSegment.hpp">
       <Filter>Util\qrcode</Filter>
     </ClInclude>
+    <ClInclude Include="SqlHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="qt_global.h">
@@ -180,6 +186,9 @@
       <Filter>View</Filter>
     </QtMoc>
     <QtMoc Include="View\QrCodeView.h">
+      <Filter>View</Filter>
+    </QtMoc>
+    <QtMoc Include="View\ImageTxtBtn.h">
       <Filter>View</Filter>
     </QtMoc>
   </ItemGroup>

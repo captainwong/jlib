@@ -109,6 +109,7 @@
     <ClCompile Include="View\CheckBtn.cpp" />
     <ClCompile Include="View\HttpDlg.cpp" />
     <ClCompile Include="View\IconBtn.cpp" />
+    <ClCompile Include="View\ImageTxtBtn.cpp" />
     <ClCompile Include="View\ProgressDialog.cpp" />
     <ClCompile Include="View\QrCodeView.cpp" />
     <ClCompile Include="View\TextMenu.cpp" />
@@ -119,10 +120,12 @@
   <ItemGroup>
     <ClInclude Include="Model\HttpDlgErrorCode.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SqlHelper.h" />
     <ClInclude Include="Util\qrcode\BitBuffer.hpp" />
     <ClInclude Include="Util\qrcode\QrCode.hpp" />
     <ClInclude Include="Util\qrcode\QrSegment.hpp" />
     <ClInclude Include="Util\QRunGuard.h" />
+    <QtMoc Include="View\ImageTxtBtn.h" />
     <QtMoc Include="View\QrCodeView.h" />
     <QtMoc Include="View\HttpDlg.h" />
     <QtMoc Include="View\ProgressDialog.h" />

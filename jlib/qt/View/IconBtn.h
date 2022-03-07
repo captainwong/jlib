@@ -47,6 +47,7 @@ public:
 	void set_enabled(bool enabled) { is_enabled_ = enabled; refresh(); }
 	void set_ing(bool is_ing) { is_ing_ = is_ing; refresh(); }
 	bool is_ing() const { return is_ing_; }
+	void set_busy(bool busy) { is_busy_ = busy; refresh(); }
 
 protected:
 	virtual void enterEvent(QEvent*) override;
@@ -71,6 +72,7 @@ protected:
 	bool is_press_ = false;
 	bool is_ing_ = false;
 	bool is_highlight_ = false;
+	bool is_busy_ = false;
 	int tag_ = -1;
 	int data_ = 0;
 	QSize sz_ = {};

@@ -17,6 +17,7 @@
 #include "../../jlib/qt/View/LoadingView.h"
 #include "../../jlib/qt/View/TitleBar.h"
 #include "../../jlib/qt/View/RndButton.h"
+#include "../../jlib/qt/View/ImageTxtBtn.h"
 
 using namespace jlib::qt;
 
@@ -32,4 +33,19 @@ qt_test::qt_test(QWidget *parent)
 	bgColorBtn->setText(QString::fromLocal8Bit("BgColorBtn°´Å¥"));
 	bgColorBtn->set_btn_attr(def_colors::control_bk, def_colors::control_bk_suspend, def_colors::control_text_font, 12);
 	hbox->addWidget(bgColorBtn);
+
+	auto rndBtn = new RndButton();
+	rndBtn->set_attr(QString::fromLocal8Bit("RndButton°´Å¥"), QSize(160, 30));
+	hbox->addWidget(rndBtn);
+
+	auto imgTxtBtn = new ImageTxtBtn();
+	QPixmap pix;
+	pix.load(":/test_qt/image.png");
+	imgTxtBtn->setPixNormal(pix);
+	imgTxtBtn->setFixedSize(pix.size());
+	imgTxtBtn->setText(QString::fromLocal8Bit("ImageTxtBtn°´Å¥"));
+	imgTxtBtn->setTextColor(Qt::white);
+	imgTxtBtn->setTextBold(true);
+	hbox->addWidget(imgTxtBtn);
+
 }

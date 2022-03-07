@@ -213,6 +213,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "qt", "qt", "{F118E1C9-F461-
 		..\jlib\qt\QtStylesheet.h = ..\jlib\qt\QtStylesheet.h
 		..\jlib\qt\QtUtils.h = ..\jlib\qt\QtUtils.h
 		..\jlib\qt\signal_slot.h = ..\jlib\qt\signal_slot.h
+		..\jlib\qt\SqlHelper.h = ..\jlib\qt\SqlHelper.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ctrl", "Ctrl", "{0E82BB61-0D27-42B4-8F11-98DB2A21C168}"
@@ -255,6 +256,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_version", "test_version\test_version.vcxproj", "{704FF7EB-D633-4D0A-957B-01D908478D6D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qt_test", "qt_test\qt_test.vcxproj", "{EAAE08F7-6CD8-4708-9FD4-ADD856CC6658}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B12702AD-ABFB-343A-A199-8E24837244A3} = {B12702AD-ABFB-343A-A199-8E24837244A3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_ping", "test_ping\test_ping.vcxproj", "{26D2B628-713F-419A-B2E2-32BDFA803E3C}"
 EndProject
@@ -381,6 +385,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{BCF77277-B
 	ProjectSection(SolutionItems) = preProject
 		..\jlib\misc\sudoku.h = ..\jlib\misc\sudoku.h
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testSqlHelperQt", "testSqlHelperQt\testSqlHelperQt.vcxproj", "{DADB235B-D5CF-4D42-A208-01E0535DDA35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1134,6 +1140,16 @@ Global
 		{E8551DB0-274F-493A-88AF-7383E47F49FA}.Release|x64.Build.0 = Release|x64
 		{E8551DB0-274F-493A-88AF-7383E47F49FA}.Release|x86.ActiveCfg = Release|Win32
 		{E8551DB0-274F-493A-88AF-7383E47F49FA}.Release|x86.Build.0 = Release|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Debug|ARM.ActiveCfg = Debug|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Debug|x64.ActiveCfg = Debug|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Debug|x86.ActiveCfg = Debug|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Debug|x86.Build.0 = Debug|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Release|ARM.ActiveCfg = Release|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Release|ARM64.ActiveCfg = Release|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Release|x64.ActiveCfg = Release|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Release|x86.ActiveCfg = Release|Win32
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1228,6 +1244,7 @@ Global
 		{441E6793-7CDA-4D51-81BD-7A38520F1C1D} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
 		{E8551DB0-274F-493A-88AF-7383E47F49FA} = {729A65CE-3F07-4C2E-ACDC-F9EEC6477F2A}
 		{BCF77277-B4F8-49CF-B213-D8086F3BCEFD} = {42703978-A988-403D-9723-E35527FA8A07}
+		{DADB235B-D5CF-4D42-A208-01E0535DDA35} = {5AFB3C82-FDEA-458C-9B56-E28A3F96F113}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8EBEA58-739C-4DED-99C0-239779F57D5D}

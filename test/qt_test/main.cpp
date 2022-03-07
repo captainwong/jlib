@@ -14,15 +14,16 @@ int main(int argc, char *argv[])
 	//jlib::init_logger(L"qt_test");
 	//jlib::qt::test_monitor();
 
-	//qt_test w;
-	//w.show();
-
 	Q_INIT_RESOURCE(jlibqt);
 
-	HttpDlg dlg(nullptr, 10);
+	qt_test w;
+	w.show();
 
-	QString url = "https://local.hb3344.com/api/test/version";
-	dlg.get(url);
+
+	//HttpDlg dlg(nullptr, 10);
+
+	//QString url = "https://local.hb3344.com/api/test/version";
+	//dlg.get(url);
 
 	return a.exec();
 }
