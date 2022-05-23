@@ -174,7 +174,7 @@ inline void dump_asc(const void* buff, size_t buff_len, bool seperate_with_space
 	}
 
 	for (size_t i = 0; i < buff_len; i++) {
-		if (std::isprint(reinterpret_cast<const char*>(buff)[i])) {
+		if (reinterpret_cast<const unsigned char*>(buff)[i] < 128 && std::isprint(reinterpret_cast<const char*>(buff)[i])) {
 			std::sprintf(c, "%c", reinterpret_cast<const char*>(buff)[i]);
 		} else {
 			std::sprintf(c, "$");
