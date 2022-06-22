@@ -45,7 +45,7 @@ std::vector<LogicalDrive> logical_drives()
 			try {
 				drive.free_space = std::stoull(item[L"FreeSpace"]);
 				drive.size = std::stoull(item[L"Size"]);
-			} catch (...) {
+			} catch (std::invalid_argument& e) {
 
 			}
 			drive.volume_name = utf16_to_mbcs(item[L"VolumeName"]);
