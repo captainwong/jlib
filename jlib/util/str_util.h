@@ -251,5 +251,64 @@ inline std::wstring center(const std::wstring& str, size_t width, wchar_t fillch
 }
 
 
+/**
+* @brief 将范围为0~15的十进制数字字节转换为16进制字节
+* @param d 要计算的10进制数字，范围0~15
+* @return 十六进制字节，大写
+* @note 示例: 数字10 返回字节 'A'
+*/
+inline char Dec2Hex(char d)
+{
+	if (0 <= d && d <= 9) {
+		return static_cast<char>((unsigned char)d + (unsigned char)'0');
+	} else if (0x0A <= d && d <= 0x0F) {
+		return char(d - 0x0A + (char)'A');
+	} else {
+		return '0';
+	}
+}
+
+
+enum class ToStringOption
+{
+	//! 所有字节按照16进制表示，如 '0' 表示为 "\x30"
+	ALL_CHAR_AS_HEX,
+	//! 如果字节是可打印的直接输出，否则输出16进制格式
+	TRY_IS_PRINT_FIRST,
+};
+
+/**
+* @brief 常规数组转字符串
+* @param data 数据
+* @param len 数据长度
+* @param option 选项
+* @param show_x_for_hex 为 hex 显示 \x
+* @param show_space_between_hex 在 hex 之间插入空格
+* @return std::string
+*/
+inline std::string toString(const char* data, size_t len, // 数据
+							ToStringOption option = ToStringOption::TRY_IS_PRINT_FIRST, // 选项
+							bool show_x_for_hex = true,	// 为 hex 显示 \x
+							bool show_space_between_hex = false) // 在 hex 之间插入空格
+{
+	std::string str;
+	for (size_t i = 0; i < len; i++) {
+		auto c = data[i];
+		if (option == ToStringOption::TRY_IS_PRINT_FIRST && std::isprint(static_cast<unsigned char>(c))) {
+			str.push_back(c);
+		} else {
+			if (show_x_for_hex) { str += "\\x"; }
+			str.push_back(Dec2Hex((c >> 4) & 0x0F));
+			str.push_back(Dec2Hex(c & 0x0F));
+			if (show_space_between_hex) { str.push_back(' '); }
+		}
+	}
+	return str;
+}
+
+inline std::string toString(const unsigned char* data, size_t len, ToStringOption option = ToStringOption::TRY_IS_PRINT_FIRST, bool show_x_for_hex = true, bool show_space_between_hex = false)
+{
+	return toString((const char*)data, len, option, show_x_for_hex, show_space_between_hex);
+}
 
 } // namespace jlib
