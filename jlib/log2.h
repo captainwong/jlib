@@ -14,10 +14,13 @@
 #endif // JLIB_WINDOWS
 
 #include <stdio.h>
-#include "3rdparty/spdlog/spdlog.h"
+
+#define SPDLOG_HEADER_ONLY
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/daily_file_sink.h>
 
 #ifdef JLIB_WINDOWS
-#include "3rdparty/spdlog/sinks/msvc_sink.h"
+#include <spdlog/sinks/msvc_sink.h>
 #endif // JLIB_WINDOWS
 
 namespace jlib {
@@ -41,11 +44,11 @@ std::string file_name = ""
 	}
 
     try {
-		std::vector<spdlog::sink_ptr> sinks;
+		std::vector<std::shared_ptr<spdlog::sinks::sink>> sinks;
 #ifdef JLIB_WINDOWS
 		sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
-		sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
+		sinks.push_back(std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>());
 		if (!file_name.empty()) {
 			sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>(file_name, 23, 59));
 		}
