@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../utf8.h"
+#include <WinSock2.h>
 
 namespace jlib
 {

@@ -20,8 +20,6 @@
 #include "3rdparty/spdlog/sinks/msvc_sink.h"
 #endif // JLIB_WINDOWS
 
-#include "utf8.h"
-
 namespace jlib {
     
 static constexpr char g_logger_name[] = "jlogger";
@@ -88,12 +86,6 @@ private:
 
 public:
 	range_log(const std::string& msg) : msg_(msg) {
-		JLOG_DBUG(msg_ + " in");
-		begin_ = std::chrono::steady_clock::now();
-	}
-
-	range_log(const std::wstring& msg) : msg_() {
-		msg_ = utf8::w2a(msg);
 		JLOG_DBUG(msg_ + " in");
 		begin_ = std::chrono::steady_clock::now();
 	}

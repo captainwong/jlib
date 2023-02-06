@@ -22,7 +22,7 @@ int main()
 	}*/
 
 	Result result;
-	WmiBase::simpleSelect({ L"AdapterRAM", L"Description" }, L"Win32_VideoController", result);
+	WmiBase::simpleSelect({ L"AdapterRAM", L"Description" }, L"Win32_VideoController", L"", result);
 	for (const auto& i : result) {
 		for (const auto& j : i) {
 			printf("%ls %ls\n", j.first.data(), j.second.data());

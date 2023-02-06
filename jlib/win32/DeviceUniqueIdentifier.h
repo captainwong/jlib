@@ -6,7 +6,6 @@
 #include <strsafe.h> // StringCch
 #include <unordered_map>
 #include <algorithm>
-#include "../utf8.h"
 
 namespace jlib {
 namespace win32 {
@@ -291,7 +290,7 @@ static std::wstring getMachineGUID()
 		RegCloseKey(hKey);
 
 	} catch (std::runtime_error& e) {
-		res = utf8::a2w(e.what());
+		//res = utf8::a2w(e.what());
 	}
 	return res;
 }

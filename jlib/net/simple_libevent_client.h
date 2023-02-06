@@ -67,6 +67,8 @@ public:
 	void send(const char* data, size_t len);
 	bool isStarted() const { return started_; }
 	bool isConnected() const { return connected_; }
+	// must called after connected
+	bool setRecvBuffSize(int sz);
 
 protected:
 	bool started_ = false;

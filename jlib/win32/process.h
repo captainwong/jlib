@@ -8,7 +8,6 @@
 #include <unordered_set>
 #include "lasterror.h"
 #include "UnicodeTool.h"
-#include "../utf8.h"
 
 namespace jlib
 {
@@ -44,7 +43,7 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool sh
 		}
 	} else {
 		auto msg = formatLastError("");
-		msg.length();
+		(void)msg.length();
 	}
 	return 0xFFFFFFFF;
 }
@@ -57,7 +56,7 @@ inline DWORD daemon(const std::wstring& path, bool wait_app_exit = true, bool sh
 * @return 启动程序失败返回0xFFFFFFFF；当 wait_app_exit 为真，返回程序的进程返回值；否则返回程序进程ID；
 */
 inline DWORD daemon(const std::string& path, bool wait_app_exit = true, bool show = true) {
-	return daemon(utf8::a2w(path), wait_app_exit, show);
+	return daemon(win32::mbcs_to_utf16(path), wait_app_exit, show);
 }
 
 /**

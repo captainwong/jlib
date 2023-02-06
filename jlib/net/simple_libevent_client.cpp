@@ -331,5 +331,21 @@ void simple_libevent_client::send(const char* data, size_t len)
 	evbuffer_unlock(output);
 }
 
+bool simple_libevent_client::setRecvBuffSize(int sz)
+{
+	std::lock_guard<std::mutex> lg(mutex_);
+	if (!started_ || !impl_ || !impl_->base || !impl_->bev) { return false; }
+	auto fd = bufferevent_getfd(impl_->bev);
+	int n = sz;
+	if (n < 512) {
+		n = 512;
+	}
+	if (n > 1048576) {
+		n = 1048576;
+	}
+	int ret = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&n, sizeof(n));
+	return ret == 0;
+}
+
 }
 }

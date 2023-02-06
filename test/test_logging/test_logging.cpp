@@ -1,12 +1,12 @@
-#include "../../jlib/base/logging.h"
-#include "../../jlib/base/threadpool.h"
-#include "../../jlib/base/timezone.h"
+//#include "../../jlib/base/logging.h"
+//#include "../../jlib/base/threadpool.h"
+//#include "../../jlib/base/timezone.h"
 
-using namespace jlib;
+//using namespace jlib;
 
 int main()
 {
-	Logger::setLogLevel(Logger::LOGLEVEL_TRACE);
+	/*Logger::setLogLevel(Logger::LOGLEVEL_TRACE);
 
 	LOG_TRACE << "trace";
 	LOG_DEBUG << "debug";
@@ -16,5 +16,5 @@ int main()
 	LOG_INFO << sizeof(Logger);
 	LOG_INFO << sizeof(LogStream);
 	LOG_INFO << sizeof(Format);
-	LOG_INFO << sizeof(LogStream::Buffer);
+	LOG_INFO << sizeof(LogStream::Buffer);*/
 }

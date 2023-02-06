@@ -125,38 +125,38 @@ inline std::wstring erase_all_copy(std::wstring str, wchar_t c) {
 /**************************** case-conv ***************************/
 
 inline void to_upper(std::string& str) {
-	std::for_each(str.begin(), str.end(), [](char& c) { c = ::toupper(c); });
+	std::for_each(str.begin(), str.end(), [](char& c) { c = (char)::toupper(c); });
 }
 
 inline void to_upper(std::wstring& str) {
-	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::toupper(c); });
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = (char)::toupper(c); });
 }
 
 inline std::string to_upper_copy(std::string str) {
-	std::for_each(str.begin(), str.end(), [](char& c) { c = ::toupper(c); });
+	std::for_each(str.begin(), str.end(), [](char& c) { c = (char)::toupper(c); });
 	return str;
 }
 
 inline std::wstring to_upper_copy(std::wstring str) {
-	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::toupper(c); });
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = (char)::toupper(c); });
 	return str;
 }
 
 inline void to_lower(std::string& str) {
-	std::for_each(str.begin(), str.end(), [](char& c) { c = ::tolower(c); });
+	std::for_each(str.begin(), str.end(), [](char& c) { c = (char)::tolower(c); });
 }
 
 inline void to_lower(std::wstring& str) {
-	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::tolower(c); });
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = (char)::tolower(c); });
 }
 
 inline std::string to_lower_copy(std::string str) {
-	std::for_each(str.begin(), str.end(), [](char& c) { c = ::tolower(c); });
+	std::for_each(str.begin(), str.end(), [](char& c) { c = (char)::tolower(c); });
 	return str;
 }
 
 inline std::wstring to_lower_copy(std::wstring str) {
-	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = ::tolower(c); });
+	std::for_each(str.begin(), str.end(), [](wchar_t& c) { c = (char)::tolower(c); });
 	return str;
 }
 
