@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "base/noncopyable.h"
-#include "utf8.h"
 #include "win32/MyWSAError.h"
 #include "win32/path_op.h"
 #if _WIN32_WINNT > _WIN32_WINNT_WINXP
