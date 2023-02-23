@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../utf8.h"
 #include <WinSock2.h>
+#include "UnicodeTool.h"
 
 namespace jlib
 {
@@ -68,7 +68,7 @@ inline const wchar_t* FormatWSAError(int errornumber)
 
 inline const char* FormatWSAErrorA(int errornumber)
 {
-	return utf8::w2a(FormatWSAError(errornumber)).c_str();
+	return utf16_to_mbcs(FormatWSAError(errornumber)).c_str();
 }
 
 }

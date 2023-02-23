@@ -40,9 +40,14 @@ std::vector<DiskDrive> disk_drives()
 std::string bootable_disk_serial()
 {
 	wmi::Result result;
-	if (wmi::WmiBase::simpleSelect({ L"SerialNumber", }, L"Win32_DiskDrive", L"Where Index=0", result) && result.size() == 1) {
-		return utf16_to_mbcs(result[0][L"SerialNumber"]);
+	if (wmi::WmiBase::simpleSelect({ L"DiskIndex", }, L"Win32_DiskPartition", L"Where BootPartition=True", result) && result.size() == 1) {
+		auto index = result[0][L"DiskIndex"];
+		result.clear();
+		if (wmi::WmiBase::simpleSelect({ L"SerialNumber", }, L"Win32_DiskDrive", L"Where Index=" + index, result) && result.size() == 1) {
+			return utf16_to_mbcs(result[0][L"SerialNumber"]);
+		}
 	}
+	
 
 	auto drives = disk_drives();
 	if (!drives.empty()) {

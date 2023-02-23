@@ -40,7 +40,7 @@ int main()
     "ver": "1.0"
 })";
 
-	auto url = "192.168.1.168:10086";
+	auto url = "127.0.0.1:8000";
 	curl.postJson(url, json);
 	printf("HTTP %ld\n", curl.lastHttpCode());
 	printf("error %d\n", curl.lastError());

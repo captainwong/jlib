@@ -8,7 +8,7 @@
 */
 
 
-#include <curl.h>
+#include <curl/curl.h>
 #include <string>
 #include <initializer_list>
 #include <memory>

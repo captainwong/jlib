@@ -376,6 +376,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_jinfo", "test_jinfo\test_jinfo.vcxproj", "{0E83FBE2-4696-41AD-9A5F-55B1401AB77C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjinfo", "libjinfo\libjinfo.vcxproj", "{441E6793-7CDA-4D51-81BD-7A38520F1C1D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7B505B49-5584-4CF7-A2BB-65CC84303B33} = {7B505B49-5584-4CF7-A2BB-65CC84303B33}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjinfomt", "libjinfomt\libjinfomt.vcxproj", "{E8551DB0-274F-493A-88AF-7383E47F49FA}"
 EndProject
