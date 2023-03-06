@@ -18,6 +18,7 @@
 #define SPDLOG_HEADER_ONLY
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/daily_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #ifdef JLIB_WINDOWS
 #include <spdlog/sinks/msvc_sink.h>
