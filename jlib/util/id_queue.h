@@ -6,6 +6,9 @@
 #include <queue>
 #include <mutex>
 
+#ifdef max
+#undef max
+#endif
 
 namespace jlib {
 

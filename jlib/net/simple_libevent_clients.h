@@ -100,7 +100,7 @@ protected:
 	OnWriteCompleteCallback onWrite_ = nullptr;
 	NewClientCallback newClient_ = BaseClient::createDefaultClient;
 
-	//! 工作线程数量
+	//! number of worker threads
 	int threadNum_ = 1;
 	int curThreadId_ = -1;
 	std::mutex mutex_{};
