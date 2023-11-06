@@ -7,12 +7,12 @@
 
 JLIBQT_NAMESPACE_BEGIN
 
-//! »ñÈ¡´íÎóÂëÎÄ×ÖÃèÊö
+//! è·å–é”™è¯¯ç æ–‡å­—æè¿°
 inline QString ecString(const std::error_code& ec) {
 	return QString::fromLocal8Bit(ec.message().data());
 }
 
-//! »ñÈ¡´íÎóÂëÎÄ×ÖÃèÊö£¨´øÓĞ´íÎóÄ¿Â¼£©
+//! è·å–é”™è¯¯ç æ–‡å­—æè¿°ï¼ˆå¸¦æœ‰é”™è¯¯ç›®å½•ï¼‰
 inline QString ecStringWithCategory(const std::error_code& ec) {
 	return QString::fromLocal8Bit(ec.category().name()) + ": " + QString::fromLocal8Bit(ec.message().data());
 }

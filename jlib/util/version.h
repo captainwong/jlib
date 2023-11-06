@@ -13,6 +13,8 @@ namespace jlib
 
 //! 应用程序版本分支
 enum class Branch : int {
+	// 开发版，开发人员自测
+	Dev,
 	//! 测试版，一般仅用于测试人员测试
 	Test,
 	//! 体验版，可以投放给少量用户进行灰度测试
@@ -25,12 +27,14 @@ enum class Branch : int {
 	InvalidBranch = 0x0FFFFFFF,
 };
 
+static constexpr auto BranchNameDev          = "dev";
 static constexpr auto BranchNameTest		 = "test";
 static constexpr auto BranchNameExperimental = "experimental";
 static constexpr auto BranchNameStable		 = "stable";
 
 inline const char* branchName(Branch branch) {
 	switch (branch) {
+	case jlib::Branch::Dev:				return BranchNameDev;
 	case jlib::Branch::Test:			return BranchNameTest;
 	case jlib::Branch::Experimental:	return BranchNameExperimental;
 	case jlib::Branch::Stable:			return BranchNameStable;
@@ -39,7 +43,8 @@ inline const char* branchName(Branch branch) {
 }
 
 inline Branch branchFromString(const std::string& name) {
-	if (name == BranchNameTest) { return Branch::Test; }
+	if (name == BranchNameDev) { return Branch::Dev; }
+	else if (name == BranchNameTest) { return Branch::Test; }
 	else if (name == BranchNameExperimental) { return Branch::Experimental; }
 	else if (name == BranchNameStable) { return Branch::Stable; }
 	else { return Branch::InvalidBranch; }

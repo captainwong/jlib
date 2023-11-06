@@ -31,9 +31,9 @@
 #define MYQWARN2_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL2_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
-//! µ¯´°±¨¸æÐÐºÅ¿ª¹Ø
+//! å¼¹çª—æŠ¥å‘Šè¡Œå·å¼€å…³
 // #define JLIBQT_SHOW_LINE 0
-//! µ±ÐÐºÅ´óÓÚÏÂ·½¶¨ÒåµÄÖµÊ±£¬µ¯´°±¨¸æÐÐºÅ£¬·ñÔòºöÂÔ¡£¿ÉÔÚ¶à¸öcppÎÄ¼þ·Ö±ð¶¨Òå²»Í¬µÄÖµ¡£
+//! å½“è¡Œå·å¤§äºŽä¸‹æ–¹å®šä¹‰çš„å€¼æ—¶ï¼Œå¼¹çª—æŠ¥å‘Šè¡Œå·ï¼Œå¦åˆ™å¿½ç•¥ã€‚å¯åœ¨å¤šä¸ªcppæ–‡ä»¶åˆ†åˆ«å®šä¹‰ä¸åŒçš„å€¼ã€‚
 // #define JLIBQT_SHOW_MSGBOX_AFTER_LINE 1
 
 #if JLIBQT_SHOW_LINE

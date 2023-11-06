@@ -40,9 +40,9 @@ struct PathHelper
 protected:
 	// disable constructor
 	explicit PathHelper() {}
-	//! Ó¦ÓÃ³ÌĞò°²×°Ä¿Â¼
+	//! åº”ç”¨ç¨‹åºå®‰è£…ç›®å½•
 	QString programPath_ = {};
-	//! Ó¦ÓÃ³ÌĞòÂ·¾¶
+	//! åº”ç”¨ç¨‹åºè·¯å¾„
 	QString exePath_ = {};
 };
 
@@ -59,8 +59,8 @@ struct AutoSwithToBin {
 };
 
 /*
-* @brief Â·¾¶¸¨ÖúÀà£¬Êı¾İ±£´æÔÚ°²×°Ä¿Â¼£¬³ÌĞòºÍdllÔÚbinÎÄ¼ş¼Ğ
-* @note ´óÖÂ½á¹¹Ê÷Îª£º
+* @brief è·¯å¾„è¾…åŠ©ç±»ï¼Œæ•°æ®ä¿å­˜åœ¨å®‰è£…ç›®å½•ï¼Œç¨‹åºå’Œdllåœ¨binæ–‡ä»¶å¤¹
+* @note å¤§è‡´ç»“æ„æ ‘ä¸ºï¼š
 * @note |-- program-install-dir
 * @note |   |-- bin
 * @note |   |    |-- program.exe
@@ -82,8 +82,8 @@ struct PathHelperLocal : PathHelper
 
 
 /*
-* @brief Â·¾¶¸¨ÖúÀà£¬Êı¾İ±£´æÔÚ°²×°Ä¿Â¼£¬³ÌĞòºÍdllÒ²ÔÚ°²×°Ä¿Â¼
-* @note ´óÖÂ½á¹¹Ê÷Îª£º
+* @brief è·¯å¾„è¾…åŠ©ç±»ï¼Œæ•°æ®ä¿å­˜åœ¨å®‰è£…ç›®å½•ï¼Œç¨‹åºå’Œdllä¹Ÿåœ¨å®‰è£…ç›®å½•
+* @note å¤§è‡´ç»“æ„æ ‘ä¸ºï¼š
 * @note |-- program-install-dir
 * @note |   |-- dumps
 * @note |   |-- log
@@ -105,11 +105,11 @@ struct PathHelperLocalWithoutBin : PathHelper
 };
 
 /*
-* @brief Â·¾¶¸¨ÖúÀà£¬Êı¾İ±£´æÔÚÆäËû¿ÉĞ´Ä¿Â¼£¬Èç C:/Users/[USER]/AppData/Roaming
-* @note program-name ÎŞĞèÉèÖÃ£¬Qt»á×Ô¶¯ÉèÖÃ
-* @note Èç¹ûÔÚµ÷ÓÃ´ËÀàÖ®Ç°ÏÈµ÷ÓÃÁË QCoreApplication::setOrganizationName("your-organization-name");
-* @note ÄÇÃ´program-nameÔÚyour-organization-nameÏÂ
-* @note ´óÖÂ½á¹¹Ê÷Îª£º
+* @brief è·¯å¾„è¾…åŠ©ç±»ï¼Œæ•°æ®ä¿å­˜åœ¨å…¶ä»–å¯å†™ç›®å½•ï¼Œå¦‚ C:/Users/[USER]/AppData/Roaming
+* @note program-name æ— éœ€è®¾ç½®ï¼ŒQtä¼šè‡ªåŠ¨è®¾ç½®
+* @note å¦‚æœåœ¨è°ƒç”¨æ­¤ç±»ä¹‹å‰å…ˆè°ƒç”¨äº† QCoreApplication::setOrganizationName("your-organization-name");
+* @note é‚£ä¹ˆprogram-nameåœ¨your-organization-nameä¸‹
+* @note å¤§è‡´ç»“æ„æ ‘ä¸ºï¼š
 * @note |-- program-install-dir
 * @note |   |-- bin
 * @note |   |    |-- program.exe
@@ -142,11 +142,11 @@ protected:
 };
 
 /*
-* @brief Â·¾¶¸¨ÖúÀà£¬Êı¾İ±£´æÔÚÆäËû¿ÉĞ´Ä¿Â¼£¬Èç C:/Users/[USER]/AppData/Roaming
-* @note program-name ÎŞĞèÉèÖÃ£¬Qt»á×Ô¶¯ÉèÖÃ
-* @note Èç¹ûÔÚµ÷ÓÃ´ËÀàÖ®Ç°ÏÈµ÷ÓÃÁË QCoreApplication::setOrganizationName("your-organization-name");
-* @note ÄÇÃ´program-nameÔÚyour-organization-nameÏÂ
-* @note ´óÖÂ½á¹¹Ê÷Îª£º
+* @brief è·¯å¾„è¾…åŠ©ç±»ï¼Œæ•°æ®ä¿å­˜åœ¨å…¶ä»–å¯å†™ç›®å½•ï¼Œå¦‚ C:/Users/[USER]/AppData/Roaming
+* @note program-name æ— éœ€è®¾ç½®ï¼ŒQtä¼šè‡ªåŠ¨è®¾ç½®
+* @note å¦‚æœåœ¨è°ƒç”¨æ­¤ç±»ä¹‹å‰å…ˆè°ƒç”¨äº† QCoreApplication::setOrganizationName("your-organization-name");
+* @note é‚£ä¹ˆprogram-nameåœ¨your-organization-nameä¸‹
+* @note å¤§è‡´ç»“æ„æ ‘ä¸ºï¼š
 * @note |-- program-install-dir
 * @note |   |-- program.exe
 * @note |   |-- *.dlls
