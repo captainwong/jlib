@@ -1,6 +1,11 @@
 ﻿#pragma once
 
 #include "../base/config.h"
+
+#ifdef __GNUG__
+#include <string.h> // memcpy
+#endif
+
 #include <chrono>
 #include <string>
 #include <ctime>
@@ -10,6 +15,7 @@
 namespace jlib {
 
 #ifdef __GNUG__
+#include <string.h> // memcpy
 inline void localtime_s(struct tm* tmtm, const time_t* t) {
 	memcpy(tmtm, localtime(t), sizeof(tm));
 }
