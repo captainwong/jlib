@@ -6,7 +6,9 @@
 #include <QColor>
 #include <QPixmap>
 #include <QApplication>
+#ifdef Q_OS_WIN
 #include <QDesktopwidget>
+#endif
 #include <QIcon>
 #include <QTimer>
 #include <QDir>
@@ -52,6 +54,7 @@ inline void non_blocking_wait_in_ui_thread(int ms, QString log = "") {
 	}
 }
 
+#ifdef Q_OS_WIN
 /**
 * @brief 在文件夹中显示
 * @param pathIn 若为文件路径则在文件夹中显示，若为文件夹路径则打开改文件夹
@@ -64,6 +67,7 @@ inline void showInGraphicalShell(const QString &pathIn) {
 	QString command = "explorer.exe " + param;
 	QProcess::startDetached(command);
 }
+#endif
 
 inline bool warn_if_load_pixmap_failed(QPixmap& pixmap, QString icon_path, QString file_line, bool forceUseQss = true)
 {
