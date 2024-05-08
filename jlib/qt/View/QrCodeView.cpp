@@ -2,9 +2,10 @@
 #include <QLabel>
 #include <QPainter>
 #include "../Util/qrcode/QrCode.hpp"
+#include "../QtDebug.h"
+#include "../QtUtils.h"
 
-static void paintQR(QPainter& painter, const QSize sz, const QString& data, QColor fg) 
-{
+static void paintQR(QPainter& painter, const QSize sz, const QString& data, QColor fg) {
 	// NOTE: At this point you will use the API to get the encoding and format you want, instead of my hardcoded stuff:
 	qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(data.toUtf8().constData(), qrcodegen::QrCode::Ecc::LOW);
 	const int s = qr.getSize() > 0 ? qr.getSize() : 1;
@@ -29,8 +30,7 @@ static void paintQR(QPainter& painter, const QSize sz, const QString& data, QCol
 	}
 }
 
-static QPixmap genQR(const QString& content, const QSize& size)
-{
+static QPixmap genQR(const QString& content, const QSize& size) {
 	QPixmap pixmap(size);
 	pixmap.fill(Qt::white);
 	QPainter painter(&pixmap);
@@ -38,22 +38,20 @@ static QPixmap genQR(const QString& content, const QSize& size)
 	return pixmap;
 }
 
-QrCodeView::QrCodeView(QWidget* parent, const QString& title, const QString& content, const QSize size)
-	: QDialog(parent)
-{
-	create(title, size);
+QrCodeView::QrCodeView(QWidget* parent, const QString& title, const QString& content, const QSize size, float scale)
+	: QDialog(parent) {
+	jlib::qt::fill_bg_with_color(this, Qt::white);
+	create(title, size, scale);
 	setContent(content);
 }
 
-QrCodeView::QrCodeView(QWidget* parent, const QString& title, const QPixmap& pixmap, const QSize size)
-	: QDialog(parent)
-{
-	create(title, size);
+QrCodeView::QrCodeView(QWidget* parent, const QString& title, const QPixmap& pixmap, const QSize size, float scale)
+	: QDialog(parent) {
+	create(title, size, scale);
 	setPixmap(pixmap);
 }
 
-void QrCodeView::create(const QString& title, QSize size)
-{
+void QrCodeView::create(const QString& title, QSize size, float scale) {
 	setWindowTitle(title);
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	if (!size.isValid()) {
@@ -61,19 +59,28 @@ void QrCodeView::create(const QString& title, QSize size)
 	}
 	setFixedSize(size);
 
+	if (scale < 0.1f) {
+		scale = 0.1f;
+	}
+	if (scale >= 0.99) {
+		scale = 1.0f;
+	}
+
+	QSize lbl_size = size * scale;
+	MYQDEBUG << "size" << size << "lbl_size" << lbl_size;
+
 	label = new QLabel(this);
-	label->resize(size);
-	label->move(0, 0);
+	label->setFixedSize(lbl_size);
+	label->move((size.width() - lbl_size.width()) / 2, (size.height() - lbl_size.height()) / 2);
 }
 
-void QrCodeView::setContent(const QString& content)
-{
-	setPixmap(genQR(content, size()));
+void QrCodeView::setContent(const QString& content) {
+	setPixmap(genQR(content, label->size()));
 }
 
-void QrCodeView::setPixmap(const QPixmap& pixmap)
-{
-	auto pix = pixmap.scaled(size());
+void QrCodeView::setPixmap(const QPixmap& pixmap) {
+	auto pix = pixmap.scaled(label->size());
+	MYQDEBUG << "label->size" << label->size() << "pix size" << pix.size();
 	label->setPixmap(pix);
 	update();
 }
