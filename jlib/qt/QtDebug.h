@@ -31,6 +31,8 @@
 #define MYQWARN2_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL2_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss") << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
+#define MYQDEBUG3 qDebug().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
+
 //! 弹窗报告行号开关
 // #define JLIBQT_SHOW_LINE 0
 //! 当行号大于下方定义的值时，弹窗报告行号，否则忽略。可在多个cpp文件分别定义不同的值。
