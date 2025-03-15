@@ -103,7 +103,7 @@ inline std::wstring timePointToWString(const std::chrono::system_clock::time_poi
 
 inline std::chrono::system_clock::time_point timePointFromString(const std::string& s)
 {
-	std::tm tm = { 0 };
+	std::tm tm = {};
 	std::istringstream ss(s);
 	ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
@@ -111,7 +111,7 @@ inline std::chrono::system_clock::time_point timePointFromString(const std::stri
 
 inline std::chrono::system_clock::time_point timePointFromWString(const std::wstring& s)
 {
-	std::tm tm = { 0 };
+	std::tm tm = {};
 	std::wistringstream ss(s);
 	ss >> std::get_time(&tm, L"%Y-%m-%d %H:%M:%S");
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
