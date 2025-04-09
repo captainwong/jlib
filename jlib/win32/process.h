@@ -213,7 +213,7 @@ inline std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, Error
 		info.base_address = (DWORD)me32.modBaseAddr;
 		info.base_size = me32.modBaseSize;
 		modules.emplace_back(info);
-	} while (Module32Next(hModuleSnap, &me32));
+	} while (Module32NextW(hModuleSnap, &me32));
 
 	CloseHandle(hModuleSnap);
 	return(modules);
@@ -423,7 +423,7 @@ inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFu
 		pinfos.emplace_back(pinfo);
 
 		if(hProcess){ CloseHandle(hProcess); }
-	} while (Process32Next(hProcessSnap, &pe32));
+	} while (Process32NextW(hProcessSnap, &pe32));
 
 	CloseHandle(hProcessSnap);
 	return(pinfos);
