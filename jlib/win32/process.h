@@ -183,7 +183,7 @@ inline std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, Error
 	std::vector<ProcessInfo::ModuleInfo> modules = {};
 
 	HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
-	MODULEENTRY32 me32;
+	MODULEENTRY32W me32;
 
 	// Take a snapshot of all modules in the specified process.
 	hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwPID);
@@ -193,11 +193,11 @@ inline std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, Error
 	}
 
 	// Set the size of the structure before using it.
-	me32.dwSize = sizeof(MODULEENTRY32);
+	me32.dwSize = sizeof(me32);
 
 	// Retrieve information about the first module,
 	// and exit if unsuccessful
-	if (!Module32First(hModuleSnap, &me32)) {
+	if (!Module32FirstW(hModuleSnap, &me32)) {
 		outputLastErrorHelper((L"Module32First"), output);  // show cause of failure
 		CloseHandle(hModuleSnap);           // clean the snapshot object
 		return(modules);
@@ -207,8 +207,8 @@ inline std::vector<ProcessInfo::ModuleInfo> getProcessModules(DWORD dwPID, Error
 	// and display information about each module
 	do {
 		ProcessInfo::ModuleInfo info;
-		info.name = me32.szModule;
-		info.path = me32.szExePath;
+		info.name = (me32.szModule);
+		info.path = (me32.szExePath);
 		info.pid = me32.th32ProcessID;
 		info.base_address = (DWORD)me32.modBaseAddr;
 		info.base_size = me32.modBaseSize;
@@ -338,7 +338,7 @@ inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFu
 
 	HANDLE hProcessSnap;
 	HANDLE hProcess;
-	PROCESSENTRY32 pe32;
+	PROCESSENTRY32W pe32;
 	DWORD dwPriorityClass;
 
 	ProcessInfos pinfos = {};
@@ -351,11 +351,11 @@ inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFu
 	}
 
 	// Set the size of the structure before using it.
-	pe32.dwSize = sizeof(PROCESSENTRY32);
+	pe32.dwSize = sizeof(pe32);
 
 	// Retrieve information about the first process,
 	// and exit if unsuccessful
-	if (!Process32First(hProcessSnap, &pe32)) {
+	if (!Process32FirstW(hProcessSnap, &pe32)) {
 		outputLastErrorHelper((L"Process32First"), output); // show cause of failure
 		CloseHandle(hProcessSnap);          // clean the snapshot object
 		return(pinfos);
@@ -364,10 +364,10 @@ inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFu
 	// Now walk the snapshot of processes, and
 	// display information about each process in turn
 	do {
-		if (filterset.find(pe32.szExeFile) != filterset.end()) { continue; }
+		if (filterset.find((pe32.szExeFile)) != filterset.end()) { continue; }
 
 		ProcessInfo pinfo = {};
-		pinfo.name = pe32.szExeFile;
+		pinfo.name = (pe32.szExeFile);
 
 		// Retrieve the priority class.
 		dwPriorityClass = 0;
