@@ -90,7 +90,7 @@ inline DWORD getppid()
 	return ppid;
 }
 
-
+#ifdef JLIB_ENABLE_PROCESS_INFO
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // https://docs.microsoft.com/zh-cn/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes
 
@@ -428,7 +428,7 @@ inline ProcessInfos getProcessesInfo(ErrorOutputFunc output = dummyErrorOutputFu
 	CloseHandle(hProcessSnap);
 	return(pinfos);
 }
-
+#endif /* JLIB_ENABLE_PROCESS_INFO */
 
 } // namespace win32
 
