@@ -2,7 +2,12 @@
 
 set -e
 
-DST_HOST="192.168.50.107"
+if [ $# -ne 1 ]; then
+    DST_HOST='192.168.50.107'
+else
+    DST_HOST=$1
+fi
+
 IGNORES="qt/Debug qt/Release"
 
 rm -f jlib.zip
