@@ -114,7 +114,7 @@ void IconBtn::refresh()
 
 	if (!icon_path.isEmpty()) {
 		QPixmap pixmap;
-		LOAD_PIXMAP_EX(icon_path);
+		LOAD_PIXMAP_EX2(icon_path);
 		if (sz_.isValid()) {
 			resize(sz_);
 			QSize pixSize = pixmap.size();

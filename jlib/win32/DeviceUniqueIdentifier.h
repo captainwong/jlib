@@ -289,7 +289,7 @@ static std::wstring getMachineGUID()
 		res = value;
 		RegCloseKey(hKey);
 
-	} catch (std::runtime_error& e) {
+	} catch (std::runtime_error&) {
 		//res = utf8::a2w(e.what());
 	}
 	return res;
