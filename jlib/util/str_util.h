@@ -70,7 +70,7 @@ inline StringType join(const StringContainer& container, const StringType& conju
 * @note StringType 可以为 std::string 或 std::wstring
 * @note StringContainer 必须为上述StringType的iterable容器类，如vector，list
 */
-template <typename StringType, typename StringContainer = typename std::vector<StringType>>
+template <typename StringType = std::string, typename StringContainer = typename std::vector<StringType>>
 inline StringContainer split(const StringType& str, const StringType& split_by)
 {
 	StringContainer result;
