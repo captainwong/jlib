@@ -12,6 +12,7 @@
 #include <QIcon>
 #include <QTimer>
 #include <QDir>
+#include <QSet>
 #include <QProcess>
 #include "QtDebug.h"
 #include "QtPathHelper.h"
@@ -151,5 +152,17 @@ inline void center_to_desktop(QWidget* widget, int new_width, int new_height)
 	widget->adjustSize();
 }
 
+inline QString remove_duplicate_chars(const QString& input) {
+    QString result;
+    QSet<QChar> seenChars;
+
+    for (const QChar& ch : input) {
+        if (!seenChars.contains(ch)) {
+            seenChars.insert(ch);
+            result.append(ch);
+        }
+    }
+    return result;
+}
 
 JLIBQT_NAMESPACE_END
