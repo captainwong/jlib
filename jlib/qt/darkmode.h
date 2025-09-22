@@ -58,7 +58,7 @@ QComboBox QAbstractItemView {
 /* 下拉菜单项的样式 */
 QComboBox QAbstractItemView::item {
     height: 28px;                 /* 统一行高 */
-    padding: 0 8px;               /* 文字缩进 */
+    padding: 2 8px;               /* 文字缩进 */
 }
 
 /* 原有基础样式增强 */
@@ -67,6 +67,7 @@ QComboBox {
     color: white;
     border: 1px solid #555555;
     border-radius: 3px;
+    min-width: 30px;
 }
 
 /* 滚动条样式（保持整体风格统一） */

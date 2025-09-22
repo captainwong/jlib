@@ -4,6 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
+#include <type_traits> // std::void_t
 
 namespace jlib {
 
@@ -17,6 +18,26 @@ inline bool is_contain(const Container& c, const ElementType& t) {
 		if (i == t) { return true; }
 	}
 	return false;
+}
+
+// 利用SFINAE检测容器是否有.find()成员函数
+template <class Container, class Key, class = void>
+struct has_find_member : std::false_type {};
+
+template <class Container, class Key>
+struct has_find_member<Container, Key,
+	std::void_t<decltype(std::declval<Container>().find(std::declval<Key>()))>>
+	: std::true_type {};
+
+// 主模板函数 require c++17
+template <class Container, class Key>
+bool has_key(const Container& cont, const Key& key) {
+	// 如果容器有 .find() 成员函数，优先使用
+	if constexpr (has_find_member<Container, Key>::value) {
+		return cont.find(key) != cont.end();
+	} else { // 否则，尝试使用 .count() 成员函数
+		return cont.count(key) > 0;
+	}
 }
 
 /**
