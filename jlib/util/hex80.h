@@ -183,7 +183,7 @@ inline uint8_t calc_hex80_record_sum(const hex80_record_t& rec) {
 }
 
 // validate and convert line (:llaaaatt[dd...]cc) to hex80 record
-inline bool line2hex80record(std::string line, uint16_t address, hex80_record_t& record) {
+inline bool line2hex80record(std::string line, uint32_t address, hex80_record_t& record) {
     size_t len = line.size();
     if (len == 0 || line[0] != ':') {
         return false;
@@ -210,6 +210,7 @@ inline bool line2hex80record(std::string line, uint16_t address, hex80_record_t&
     if (!read_hex(p, len, addr16)) {
         return false;
     }
+    record.st.addr = addr16;
     p += 4;
     len -= 4;
 
@@ -242,19 +243,18 @@ inline bool line2hex80record(std::string line, uint16_t address, hex80_record_t&
         return false;
     }
 
-    record.st.addr = address + addr16;
+    record.st.addr += address;
     return true;
 }
 
 // convert intel hex-80 format to vector of hex80_record_t
 // return 0 for success
 inline int hex80_to_records(const std::string& hex80_content, std::vector<hex80_record_t>& records) {
-    uint16_t address = 0;
+    uint32_t address = 0;
     auto lines = jlib::split<std::string>(hex80_content, "\n");
     for (auto& line : lines) {
         hex80_record_t record{0};
-        if (line2hex80record(line, address, record)) {
-            records.push_back(record);
+        if (line2hex80record(line, address, record)) {            
             if (record.st.type == HEX80_RECORD_TYPE_EXTENDED_LINEAR_ADDRESS && record.st.len == 2) {
                 address = (record.st.dat[0] << 8) | record.st.dat[1];
                 address <<= 16;
@@ -263,6 +263,8 @@ inline int hex80_to_records(const std::string& hex80_content, std::vector<hex80_
                 address <<= 8;
             } else if (record.st.type == HEX80_RECORD_TYPE_START_LINEAR_ADDRESS && record.st.len == 4) {
                 // we can ignore this type for now
+            } else if (record.st.type == HEX80_RECORD_TYPE_DATA && record.st.len > 0) {
+                records.push_back(record);
             } else if (record.st.type == HEX80_RECORD_TYPE_EOF) {
                 break;
             }
