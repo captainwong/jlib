@@ -134,6 +134,60 @@ QHexView::ascii {
     background-color: #444444;
     color: #CCCCCC;
 }
+QScrollArea {
+    background-color: #333333;
+    border: none;
+}
+QScrollBar:vertical {
+    background: #333333;
+    width: 12px;
+    border: none;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background: #666666;
+    min-height: 20px;
+    border-radius: 6px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #777777;
+}
+QScrollBar::handle:vertical:pressed {
+    background: #888888;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+    height: 0px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+QScrollBar:horizontal {
+    background: #333333;
+    height: 12px;
+    border: none;
+    margin: 0px;
+}
+QScrollBar::handle:horizontal {
+    background: #666666;
+    min-width: 20px;
+    border-radius: 6px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: #777777;
+}
+QScrollBar::handle:horizontal:pressed {
+    background: #888888;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    border: none;
+    background: none;
+    width: 0px;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
 )";
 
 }  // namespace qt

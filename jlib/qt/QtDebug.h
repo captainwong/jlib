@@ -21,25 +21,28 @@
 #define MYQWARN_NOQUOTE qWarning().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 #define MYQCRITICAL_NOQUOTE qCritical().noquote() << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
-#define MYQDEBUG2 qDebug() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQINFO2 qInfo() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQWARN2 qWarning() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQCRITICAL2 qCritical() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE "yyyy-MM-dd_hh-mm-ss.zzz"
+#define JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE "yyyy-MM-dd hh:mm:ss.zzz"
 
-#define MYQDEBUG2_NOQUOTE qDebug().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQINFO2_NOQUOTE qInfo().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQWARN2_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
-#define MYQCRITICAL2_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz") << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQDEBUG2 qDebug() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO2 qInfo() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQWARN2 qWarning() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQCRITICAL2 qCritical() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
-#define MYQDEBUG3 qDebug().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQINFO3 qInfo().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQWARN3 qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQCRITICAL3 qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
+#define MYQDEBUG2_NOQUOTE qDebug().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQINFO2_NOQUOTE qInfo().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQWARN2_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
+#define MYQCRITICAL2_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_FILE) << JLIBQT_QDEBUG_FILE_LINE_STREAM
 
-#define MYQDEBUG3_NOQUOTE qDebug().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQINFO3_NOQUOTE qInfo().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQWARN3_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
-#define MYQCRITICAL3_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss.zzz")
+#define MYQDEBUG3 qDebug().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQINFO3 qInfo().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQWARN3 qWarning().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQCRITICAL3 qCritical().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+
+#define MYQDEBUG3_NOQUOTE qDebug().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQINFO3_NOQUOTE qInfo().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQWARN3_NOQUOTE qWarning().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
+#define MYQCRITICAL3_NOQUOTE qCritical().noquote() << QDateTime::currentDateTime().toString(JLIBQT_QDEBUG_DATE_TIME_FORMAT_CONSOLE)
 
 //! 弹窗报告行号开关
 // #define JLIBQT_SHOW_LINE 0
