@@ -248,7 +248,7 @@ inline QString hex2string(uint32_t hex, bool with0x = false) {
     return QString(tmp);
 }
 
-inline QString hex2string(uint8_t* buf, size_t len, const char* sep = "") {
+inline QString hex2string(const uint8_t* buf, size_t len, const char* sep = "") {
     char tmp[8];
     QStringList sl;
     for (size_t i = 0; i < len; i++) {
