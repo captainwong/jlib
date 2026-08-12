@@ -188,6 +188,62 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
+
+/* QTabWidget 整体 */
+QTabWidget {
+    background-color: #2b2b2b;
+    border: none;
+}
+
+QTabWidget::pane {
+    border: none;
+    background-color: #2b2b2b;
+}
+
+/* 标签栏（选项卡区域） */
+QTabBar {
+    background-color: #3c3c3c;
+    padding: 0px;
+    border-bottom: 1px solid #555555;
+}
+
+/* 单个标签页（未选中） */
+QTabBar::tab {
+    background-color: #3c3c3c;
+    color: #cccccc;
+    padding: 8px 20px;
+    margin-right: 2px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: 1px solid #555555;
+    border-bottom: none;
+    min-width: 60px;
+}
+
+/* 标签页悬停 */
+QTabBar::tab:hover {
+    background-color: #505050;
+    color: #ffffff;
+}
+
+/* 标签页选中 */
+QTabBar::tab:selected {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border-bottom: 1px solid #2b2b2b; /* 与内容区无缝连接 */
+}
+
+/* 标签页禁用 */
+QTabBar::tab:disabled {
+    color: #666666;
+}
+
+/* 内容页面区域（QWidget 或 QScrollArea 等） */
+QWidget#qt_tabwidget_stackedwidget {
+    background-color: #2b2b2b;
+    border: 1px solid #555555;
+    border-top: none;
+}
 )";
 
 // same as dark_mode_stylesheet but with white text for better contrast
