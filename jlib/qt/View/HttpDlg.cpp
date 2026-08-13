@@ -76,7 +76,7 @@ void HttpDlg::get(const QUrl& url) {
     lastRequest_ = QNetworkRequest(url);
     lastMethod_ = Method::Get;
     lastData_.clear();
-	MYQDEBUG << "GET" << url;
+	MYQDEBUG3_NOQUOTE << "GET" << url;
     get(lastRequest_);
 }
 
@@ -123,7 +123,7 @@ void HttpDlg::post(const QNetworkRequest& request, const QByteArray& data) {
     lastRequest_ = request;
     lastMethod_ = Method::Post;
     lastData_ = data;
-	MYQDEBUG << "POST" << request.url() << "data" << data;
+	MYQDEBUG3_NOQUOTE << "POST" << request.url() << "data" << data;
     reply_ = mgr->post(request, data);
     run();
 }
@@ -136,7 +136,7 @@ void HttpDlg::put(const QNetworkRequest& request, const QByteArray& data) {
     lastRequest_ = request;
     lastMethod_ = Method::Put;
     lastData_ = data;
-	MYQDEBUG << "PUT" << request.url() << "data" << data;
+	MYQDEBUG3_NOQUOTE << "PUT" << request.url() << "data" << data;
     reply_ = mgr->put(request, data);
     run();
 }
@@ -149,7 +149,7 @@ void HttpDlg::patch(const QNetworkRequest& request, const QByteArray& data) {
     lastRequest_ = request;
     lastMethod_ = Method::Patch;
     lastData_ = data;
-	MYQDEBUG << "PATCH" << request.url() << "data" << data;
+	MYQDEBUG3_NOQUOTE << "PATCH" << request.url() << "data" << data;
     reply_ = mgr->sendCustomRequest(request, "PATCH", data);
     run();
 }
@@ -162,7 +162,7 @@ void HttpDlg::deleteResource(const QNetworkRequest& request) {
     lastRequest_ = request;
     lastMethod_ = Method::Delete;
     lastData_.clear();
-	MYQDEBUG << "DELETE" << request.url();
+	MYQDEBUG3_NOQUOTE << "DELETE" << request.url();
     reply_ = mgr->deleteResource(request);
     run();
 }
@@ -235,7 +235,7 @@ void HttpDlg::run() {
 }
 
 void HttpDlg::timerEvent(QTimerEvent* e) {
-    MYQDEBUG << time_out_sec_;
+    MYQDEBUG3_NOQUOTE << time_out_sec_;
     if (--time_out_sec_ > 0) {
         elapse_->setText(QString::number(time_out_sec_));
     } else {
@@ -246,7 +246,7 @@ void HttpDlg::timerEvent(QTimerEvent* e) {
             reply_->deleteLater();
         }
 
-        MYQDEBUG << "retry_counter =" << retry_counter;
+        MYQDEBUG3_NOQUOTE << "retry_counter =" << retry_counter;
 
         if (retry_counter <= 0) {
             result_ = HttpDlgErrorCode::Timeout;
@@ -297,7 +297,7 @@ void HttpDlg::onImgFinished(QNetworkReply* reply) {
 
         QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
         if (!statusCode.isValid()) {
-            MYQDEBUG << "statusCode is not valid";
+            MYQDEBUG3_NOQUOTE << "statusCode is not valid";
             result_ = HttpDlgErrorCode::HttpStatusNeq200;
             break;
         }
@@ -310,7 +310,7 @@ void HttpDlg::onImgFinished(QNetworkReply* reply) {
             MYQCRITICAL << httpStatusCode_ << httpReason_;
             // break;
         }
-        MYQDEBUG << reply->url() << "reply " << httpStatusCode_;
+        MYQDEBUG3_NOQUOTE << reply->url() << "reply " << httpStatusCode_;
         pixReply_.loadFromData(reply->readAll());
 
     } while (false);
@@ -338,7 +338,7 @@ void HttpDlg::onFinished(QNetworkReply* reply) {
 
         QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
         if (!statusCode.isValid()) {
-            MYQDEBUG << "statusCode is not valid";
+            MYQDEBUG3_NOQUOTE << "statusCode is not valid";
             result_ = HttpDlgErrorCode::HttpStatusNeq200;
             break;
         }
@@ -363,7 +363,7 @@ void HttpDlg::onFinished(QNetworkReply* reply) {
         }
 
         auto out = QString::fromUtf8(root_.toStyledString().data());
-        MYQDEBUG << methodToString(lastMethod_) << reply->url() << "reply " << httpStatusCode_ << "\n"
+        MYQDEBUG3_NOQUOTE << methodToString(lastMethod_) << reply->url() << "reply " << httpStatusCode_ << "\n"
                  << out;
 
     } while (false);
