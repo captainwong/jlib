@@ -13,6 +13,9 @@ namespace qt {
  * and more, ensuring a consistent dark theme throughout the application.
  */
 static const char* dark_mode_stylesheet = R"(
+QWidget {
+    background-color: #333333;
+}
 QDialog {
     background-color: #333333;
     font-family: 'SimHei', 'Microsoft YaHei', 'Arial', sans-serif;
@@ -244,10 +247,126 @@ QWidget#qt_tabwidget_stackedwidget {
     border: 1px solid #555555;
     border-top: none;
 }
+
+/* 表格视图 */
+QTableWidget, QTableView {
+    background-color: #444444;
+    color: #CCCCCC;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    gridline-color: #555555;
+    alternate-background-color: #3a3a3a;
+    selection-background-color: #0078D4;
+    selection-color: white;
+    outline: 0;                   /* 去除虚线焦点框 */
+}
+QTableWidget::item, QTableView::item {
+    padding: 2px 6px;
+}
+QTableWidget::item:hover, QTableView::item:hover {
+    background-color: #505050;
+}
+QTableWidget::item:selected, QTableView::item:selected {
+    background-color: #0078D4;
+    color: white;
+}
+
+/* 列表/树视图 (覆盖 QListView 与 QTreeView; QFontDialog/QFileDialog 等系统对话框内部用) */
+QListView, QTreeView {
+    background-color: #444444;
+    color: #CCCCCC;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    alternate-background-color: #3a3a3a;
+    selection-background-color: #0078D4;
+    selection-color: white;
+    outline: 0;
+}
+QListView::item, QTreeView::item {
+    padding: 2px 6px;
+}
+QListView::item:hover, QTreeView::item:hover {
+    background-color: #505050;
+}
+QListView::item:selected, QTreeView::item:selected {
+    background-color: #0078D4;
+    color: white;
+}
+QTreeView::branch {
+    background-color: #444444;
+}
+
+/* 数值输入 */
+QSpinBox, QDoubleSpinBox, QAbstractSpinBox {
+    background-color: #444444;
+    color: #CCCCCC;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    padding: 2px 4px;
+    selection-background-color: #0078D4;
+    selection-color: white;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    background-color: #555555;
+    border: 1px solid #666666;
+    border-bottom: none;
+    width: 14px;
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    background-color: #555555;
+    border: 1px solid #666666;
+    border-top: none;
+    width: 14px;
+}
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover,
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #666666;
+}
+
+/* 表格表头 */
+QHeaderView {
+    background-color: #444444;
+    border: none;
+}
+QHeaderView::section {
+    background-color: #555555;
+    color: #FFFFFF;
+    border: none;
+    border-right: 1px solid #666666;
+    border-bottom: 1px solid #666666;
+    padding: 4px 8px;
+    min-height: 24px;
+}
+QHeaderView::section:hover {
+    background-color: #666666;
+}
+QHeaderView::section:pressed {
+    background-color: #777777;
+}
+
+/* 表格左上角按钮 */
+QTableCornerButton::section {
+    background-color: #555555;
+    border: none;
+    border-right: 1px solid #666666;
+    border-bottom: 1px solid #666666;
+}
+QTableCornerButton::section:hover {
+    background-color: #666666;
+}
+
+/* 表格内滚动条视口透明，露出交替行色 */
+QTableWidget QScrollBar:vertical, QTableView QScrollBar:vertical {
+    background: #333333;
+    width: 12px;
+}
 )";
 
 // same as dark_mode_stylesheet but with white text for better contrast
 static const char* dark_mode2_stylesheet = R"(
+QWidget {
+    background-color: #333333;
+}
 QDialog QFrame {
     background-color: #333333;
     font-family: 'SimHei', 'Microsoft YaHei', 'Arial', sans-serif;
@@ -431,6 +550,119 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
 }
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
+}
+
+/* 表格视图 */
+QTableWidget, QTableView {
+    background-color: #444444;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    gridline-color: #555555;
+    alternate-background-color: #3a3a3a;
+    selection-background-color: #0078D4;
+    selection-color: white;
+    outline: 0;                   /* 去除虚线焦点框 */
+}
+QTableWidget::item, QTableView::item {
+    padding: 2px 6px;
+}
+QTableWidget::item:hover, QTableView::item:hover {
+    background-color: #505050;
+}
+QTableWidget::item:selected, QTableView::item:selected {
+    background-color: #0078D4;
+    color: white;
+}
+
+/* 列表/树视图 */
+QListView, QTreeView {
+    background-color: #444444;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    alternate-background-color: #3a3a3a;
+    selection-background-color: #0078D4;
+    selection-color: white;
+    outline: 0;
+}
+QListView::item, QTreeView::item {
+    padding: 2px 6px;
+}
+QListView::item:hover, QTreeView::item:hover {
+    background-color: #505050;
+}
+QListView::item:selected, QTreeView::item:selected {
+    background-color: #0078D4;
+    color: white;
+}
+QTreeView::branch {
+    background-color: #444444;
+}
+
+/* 数值输入 */
+QSpinBox, QDoubleSpinBox, QAbstractSpinBox {
+    background-color: #444444;
+    color: #FFFFFF;
+    border: 1px solid #555555;
+    border-radius: 3px;
+    padding: 2px 4px;
+    selection-background-color: #0078D4;
+    selection-color: white;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    background-color: #555555;
+    border: 1px solid #666666;
+    border-bottom: none;
+    width: 14px;
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    background-color: #555555;
+    border: 1px solid #666666;
+    border-top: none;
+    width: 14px;
+}
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover,
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #666666;
+}
+
+/* 表格表头 */
+QHeaderView {
+    background-color: #444444;
+    border: none;
+}
+QHeaderView::section {
+    background-color: #555555;
+    color: #FFFFFF;
+    border: none;
+    border-right: 1px solid #666666;
+    border-bottom: 1px solid #666666;
+    padding: 4px 8px;
+    min-height: 24px;
+}
+QHeaderView::section:hover {
+    background-color: #666666;
+}
+QHeaderView::section:pressed {
+    background-color: #777777;
+}
+
+/* 表格左上角按钮 */
+QTableCornerButton::section {
+    background-color: #555555;
+    border: none;
+    border-right: 1px solid #666666;
+    border-bottom: 1px solid #666666;
+}
+QTableCornerButton::section:hover {
+    background-color: #666666;
+}
+
+/* 表格内滚动条视口透明，露出交替行色 */
+QTableWidget QScrollBar:vertical, QTableView QScrollBar:vertical {
+    background: #333333;
+    width: 12px;
 }
 )";
 
