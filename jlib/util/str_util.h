@@ -394,4 +394,29 @@ inline std::string dword2bits(uint32_t dword, bool with_prefix = true) {
     return str + word2bits((uint16_t)(dword >> 16), false) + " " + word2bits((uint16_t)(dword & 0xFFFF), false);
 }
 
+/**************************** reverse ***************************/
+/**
+ * @brief 原地反转字符串
+ * @note StringType 可以为 std::string 或 std::wstring
+ */
+template <typename StringType>
+inline void reverse(StringType& s) {
+    if (s.size() < 2) {
+        return;
+    }
+    std::reverse(s.begin(), s.end());
+}
+
+/**
+ * @brief 反转字符串并返回副本，不修改原字符串
+ * @note StringType 可以为 std::string 或 std::wstring
+ */
+template <typename StringType>
+inline StringType reverse_copy(const StringType& s) {
+    StringType result;
+    result.reserve(s.size());
+    result.assign(s.rbegin(), s.rend());
+    return result;
+}
+
 }  // namespace jlib
