@@ -343,7 +343,7 @@ inline std::string toString(const char* data, size_t len,                       
             }
             str.push_back(Dec2Hex((c >> 4) & 0x0F));
             str.push_back(Dec2Hex(c & 0x0F));
-            if (show_space_between_hex) {
+            if (show_space_between_hex && i != len - 1) {
                 str.push_back(' ');
             }
         }
